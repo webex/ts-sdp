@@ -21,7 +21,7 @@ function replacer(key, value) {
 }
 
 export abstract class Line {
-    //abstract toSdpLine(): string;
+    abstract toSdpLine(): string;
 }
 
 class VersionLine extends Line {
@@ -56,7 +56,6 @@ class OriginLine extends Line {
     addrType: string;
     ipAddr: string;
 
-    //private static regex: RegExp = /^(\S*) (\d*) (\d*) (\S*) (\S*) (\S*)/;
     private static regex: RegExp = new RegExp(`^(${TOKEN}) (${NUM}) (${NUM}) (${TOKEN}) (${TOKEN}) (${TOKEN})`);
 
     constructor(
@@ -131,6 +130,10 @@ class ConnectionLine extends Line {
 
         return new ConnectionLine(netType, addrType, ipAddr);
     }
+
+    toSdpLine(): string {
+        return `c=${this.netType} ${this.addrType} ${this.ipAddr}`;
+    }
 }
 
 type MediaType = 'audio' | 'video' | 'application';
@@ -173,6 +176,10 @@ class MediaLine extends Line {
         const protocol = tokens[3];
         const formats = tokens[4].split(' ');
         return new MediaLine(type, port, protocol, formats);
+    }
+
+    toSdpLine(): string {
+        return `m=${this.type} ${this.port} ${this.protocol} ${this.formats.join(' ')}`;
     }
 }
 
@@ -218,6 +225,15 @@ class RtpMapLine extends Line {
 
         return new RtpMapLine(payloadType, encodingName, clockRate, encodingParams);
     }
+
+    toSdpLine(): string {
+        let str = "";
+        str += `a=rtpmap:${this.payloadType} ${this.encodingName}/${this.clockRate}`;
+        if (this.encodingParams) {
+            str += `/${this.encodingParams}`;
+        }
+        return str;
+    }
 }
 
 class RtcpFbLine extends Line {
@@ -242,6 +258,10 @@ class RtcpFbLine extends Line {
         
         return new RtcpFbLine(payloadType, feedback);
     }
+
+    toSdpLine(): string {
+        return `a=rtcp-fb:${this.payloadType} ${this.feedback}`;
+    }
 }
 
 class FmtpLine extends Line {
@@ -265,6 +285,10 @@ class FmtpLine extends Line {
         const params = tokens[2];
         
         return new FmtpLine(payloadType, params);
+    }
+
+    toSdpLine(): string {
+        return `a=fmtp:${this.payloadType} ${this.params}`;
     }
 }
 
@@ -320,6 +344,10 @@ class SessionInfo implements SdpBlock {
     addLine(line: Line): void {
         this.lines.push(line);
     }
+
+    toSdpLines(): Array<string> {
+        return this.lines.map((l) => l.toSdpLine());
+    }
 }
 
 class CodecInfo {
@@ -333,6 +361,22 @@ class CodecInfo {
     
     constructor(pt: number) {
         this.pt = pt;
+    }
+
+    toSdpLines(): Array<string> {
+        const lines = [];
+        // First the RtpMap
+        lines.push(new RtpMapLine(this.pt, this.name as string, this.clockRate as number, this.encodingParams).toSdpLine());
+        // Now all RtcpFb
+        this.feedback.forEach((fb) => {
+            lines.push(new RtcpFbLine(this.pt, fb).toSdpLine());
+        });
+        // Now all Fmtp
+        this.fmtParams.forEach((fmt) => {
+            lines.push(new FmtpLine(this.pt, fmt).toSdpLine());
+        });
+
+        return lines;
     }
 }
 
@@ -353,6 +397,14 @@ class MediaInfo implements SdpBlock {
         this.pts.forEach((pt) => this.codecs.set(pt, new CodecInfo(pt)));
     }
 
+    toSdpLines(): Array<string> {
+        const lines: Array<string> = [];
+        lines.push(new MediaLine(this.type, this.port, this.protocol, this.pts.map((pt) => `${pt}`)).toSdpLine());
+        this.codecs.forEach((codec) => lines.push(...codec.toSdpLines()));
+
+        return lines;
+    }
+
     addLine(line: Line): void {
         console.log("adding line to media, codecs is: ", JSON.stringify(this.codecs));
         if (line instanceof MediaLine) {
@@ -364,9 +416,11 @@ class MediaInfo implements SdpBlock {
                 console.log("Error: got rtpmap line for unknown codec: ", line);
                 return;
             }
+            console.log("handling rtpmap line: ", line);
             codec.name = line.encodingName;
             codec.clockRate = line.clockRate;
             codec.encodingParams = line.encodingParams;
+            console.log("codec is now: ", codec);
             return;
         }
         if (line instanceof FmtpLine) {
@@ -391,6 +445,14 @@ class MediaInfo implements SdpBlock {
 class Sdp {
     session: SessionInfo = new SessionInfo();
     media: Array<MediaInfo> = [];
+
+    toSdp(): string {
+        const lines: Array<String> = [];
+        lines.push(...this.session.toSdpLines());
+        this.media.forEach((m) => lines.push(...m.toSdpLines()));
+
+        return lines.join('\r\n');
+    }
 }
 
 function postProcess(lines: Array<Line>) {
@@ -407,17 +469,19 @@ function postProcess(lines: Array<Line>) {
         }
     });
     console.log("build sdp: ", JSON.stringify(sdp, replacer, 2));
+    console.log("as string:\n", sdp.toSdp());
 }
 
 
 const input = `v=1
 o=jdoe 1234 1 IN IP4 127.0.0.1
-m=video 9 UDP/TLS/RTP/SAVPF 96 97 98 99 100 101 127
+m=video 9 UDP/TLS/RTP/SAVPF 127
 a=rtcp-fb:127 goog-remb
 a=rtcp-fb:127 transport-cc
 a=rtcp-fb:127 ccm fir
 a=rtcp-fb:127 nack
 a=rtcp-fb:127 nack pli
+a=rtpmap:127 H264/90000
 a=fmtp:127 level-asymmetry-allowed_1;packetization-mode=1;profile-level-id=42001f
 `;
 
