@@ -11,6 +11,7 @@ import { VersionLine } from './lines/version-line';
 import { MediaInfo, Sdp, SdpBlock } from './model';
 import {MidLine} from './lines/mid-line';
 import {IceUfragLine} from './lines/ice-ufrag-line';
+import {IcePwdLine} from './lines/ice-pwd-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
@@ -25,6 +26,7 @@ export const DEFAULT_SDP_GRAMMAR = {
     ExtMapLine.fromSdpLine,
     MidLine.fromSdpLine,
     IceUfragLine.fromSdpLine,
+    IcePwdLine.fromSdpLine,
   ],
 };
 
