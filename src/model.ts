@@ -13,6 +13,7 @@ import {Setup, SetupLine} from './lines/setup-line';
 import {SctpPortLine} from './lines/sctp-port-line';
 import {MaxMessageSizeLine} from './lines/max-message-size-line';
 import {RtcpMuxLine} from './lines/rtcp-mux-line';
+import {UnknownLine} from './lines/unknown-line';
 
 /**
  * A grouping of multiple related lines/information within an SDP.
@@ -22,8 +23,9 @@ export interface SdpBlock {
    * Add a parsed line to this block.
    *
    * @param line - The line to add.
+   * @return True if the line was successfully added by this block, false otherwise.
    */
-  addLine(line: Line): void;
+  addLine(line: Line): boolean;
 
   /**
    * Convert this SdpBlock to an array of Lines.
@@ -42,8 +44,9 @@ export class SessionInfo implements SdpBlock {
   /**
    * @see {@link SdpBlock#addLine}
    */
-  addLine(line: Line): void {
+  addLine(line: Line): boolean {
     this.lines.push(line);
+    return true;
   }
 
   /**
@@ -69,12 +72,12 @@ export class CodecInfo implements SdpBlock {
     this.pt = pt;
   }
 
-  addLine(line: Line): void {
+  addLine(line: Line): boolean {
     if (line instanceof RtpMapLine) {
       this.name = line.encodingName;
       this.clockRate = line.clockRate;
       this.encodingParams = line.encodingParams;
-      return;
+      return true;
     }
     if (line instanceof FmtpLine) {
       this.fmtParams.push(line.params);
@@ -82,10 +85,13 @@ export class CodecInfo implements SdpBlock {
           const apt = line.params.split('=')[1];
           this.primaryCodecPt = parseInt(apt);
       }
+      return true;
     }
     if (line instanceof RtcpFbLine) {
       this.feedback.push(line.feedback);
+      return true;
     }
+    return false;
   }
 
   toLines(): Array<Line> {
@@ -119,6 +125,7 @@ export abstract class BaseMediaInfo implements SdpBlock {
   icePwd?: string;
   fingerprint?: string;
   setup?: Setup;
+  unknownAttributes: Array<UnknownLine> = [];
 
   constructor(
       type: MediaType,
@@ -131,7 +138,35 @@ export abstract class BaseMediaInfo implements SdpBlock {
   }
 
   abstract toLines(): Array<Line>;
-  abstract addLine(line: Line): void;
+
+  addLine(line: Line): boolean {
+    if (line instanceof MidLine) {
+        this.mid = line.mid;
+        return true;
+    }
+    if (line instanceof IceUfragLine) {
+        this.iceUfrag = line.ufrag;
+        return true;
+    }
+    if (line instanceof IcePwdLine) {
+        this.icePwd = line.pwd;
+        return true;
+    }
+    if (line instanceof FingerprintLine) {
+        this.fingerprint = line.fingerprint;
+        return true;
+    }
+    if (line instanceof SetupLine) {
+        this.setup = line.setup;
+        return true;
+    }
+    if (line instanceof UnknownLine) {
+        this.unknownAttributes.push(line);
+        return true;
+    }
+
+    return false;
+  }
 }
 
 export class ApplicationMediaInfo extends BaseMediaInfo {
@@ -175,36 +210,28 @@ export class ApplicationMediaInfo extends BaseMediaInfo {
     if (this.maxMessageSize) {
         lines.push(new MaxMessageSizeLine(this.maxMessageSize as number));
     }
+    lines.push(...this.unknownAttributes);
 
     return lines;
   }
 
-  addLine(line: Line): void {
+  addLine(line: Line): boolean {
+    if (super.addLine(line)) {
+        return true;
+    }
     if (line instanceof MediaLine) {
       console.log('Error: tried passing a MediaLine to an existing MediaInfo');
-      return;
-    }
-    if (line instanceof MidLine) {
-        this.mid = line.mid;
-    }
-    if (line instanceof IceUfragLine) {
-        this.iceUfrag = line.ufrag;
-    }
-    if (line instanceof IcePwdLine) {
-        this.icePwd = line.pwd;
-    }
-    if (line instanceof FingerprintLine) {
-        this.fingerprint = line.fingerprint;
-    }
-    if (line instanceof SetupLine) {
-        this.setup = line.setup;
+      return false;
     }
     if (line instanceof SctpPortLine) {
         this.sctpPort = line.port;
+        return true;
     }
     if (line instanceof MaxMessageSizeLine) {
         this.maxMessageSize = line.maxMessageSize;
+        return true;
     }
+    return false;
   }
 }
 
@@ -260,47 +287,42 @@ export class MediaInfo extends BaseMediaInfo {
     }
     this.codecs.forEach((codec) => lines.push(...codec.toLines()));
 
+    lines.push(...this.unknownAttributes);
+
     return lines;
   }
 
-  addLine(line: Line): void {
+  addLine(line: Line): boolean {
+    if (super.addLine(line)) {
+        return true;
+    }
     if (line instanceof MediaLine) {
       console.log('Error: tried passing a MediaLine to an existing MediaInfo');
-      return;
+      return false;
     }
     if (line instanceof DirectionLine) {
       this.direction = line.direction;
+      return true;
     }
     if (line instanceof ExtMapLine) {
       this.extMaps.push(line);
-    }
-    if (line instanceof MidLine) {
-        this.mid = line.mid;
-    }
-    if (line instanceof IceUfragLine) {
-        this.iceUfrag = line.ufrag;
-    }
-    if (line instanceof IcePwdLine) {
-        this.icePwd = line.pwd;
-    }
-    if (line instanceof FingerprintLine) {
-        this.fingerprint = line.fingerprint;
-    }
-    if (line instanceof SetupLine) {
-        this.setup = line.setup;
+      return true;
     }
     if (line instanceof RtcpMuxLine) {
         this.rtcpMux = true;
+        return true;
     }
     // Lines pertaining to a specific codec
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {
       const codec = this.codecs.get(line.payloadType);
       if (!codec) {
         console.log('Error: got line for unknown codec: ', line);
-        return;
+        return false;
       }
       codec.addLine(line);
+      return true;
     }
+    return false;
   }
 
   /**

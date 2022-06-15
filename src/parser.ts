@@ -19,6 +19,7 @@ import {TimingLine} from './lines/timing-line';
 import {SctpPortLine} from './lines/sctp-port-line';
 import {MaxMessageSizeLine} from './lines/max-message-size-line';
 import {RtcpMuxLine} from './lines/rtcp-mux-line';
+import {UnknownLine} from './lines/unknown-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
@@ -80,10 +81,6 @@ export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
       const lineType = l[0];
       const lineValue = l.slice(2);
       const parser = grammar[lineType];
-      if (!parser) {
-          console.log(`No parser found for line type ${lineType}`);
-          return;
-      }
       if (Array.isArray(parser)) {
         for (const p of parser) {
           const result = p(lineValue);
@@ -99,7 +96,8 @@ export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
           return;
         }
       }
-      console.log("unable to find a parser for line ", l);
+      const result = UnknownLine.fromSdpLine(lineValue);
+      lines.push(result);
     });
   const parsed = postProcess(lines);
   return parsed;
