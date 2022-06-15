@@ -107,9 +107,9 @@ export class CodecInfo implements SdpBlock {
 }
 
 /**
- * Models all the information present within a media description block.
+ * All the elements of a media description block that are common to all media types.
  */
-export class MediaInfo implements SdpBlock {
+export abstract class BaseMediaInfo implements SdpBlock {
   type: MediaType;
   port: number;
   protocol: string;
@@ -118,17 +118,106 @@ export class MediaInfo implements SdpBlock {
   icePwd?: string;
   fingerprint?: string;
   setup?: Setup;
+
+  constructor(
+      type: MediaType,
+      port: number,
+      protocol: string
+  ) {
+      this.type = type;
+      this.port = port;
+      this.protocol = protocol;
+  }
+
+  abstract toLines(): Array<Line>;
+  abstract addLine(line: Line): void;
+}
+
+export class ApplicationMediaInfo extends BaseMediaInfo {
+  sctpPort?: number;
+  maxMessageSize?: number;
+  fmts: Array<string> = [];
+
+  constructor(mediaLine: MediaLine) {
+    super(mediaLine.type, mediaLine.port, mediaLine.protocol);
+    this.fmts = mediaLine.formats;
+  }
+
+  toLines(): Array<Line> {
+    const lines: Array<Line> = [];
+    lines.push(
+      new MediaLine(
+        this.type,
+        this.port,
+        this.protocol,
+        this.fmts
+      )
+    );
+    if (this.iceUfrag) {
+        lines.push(new IceUfragLine(this.iceUfrag as string));
+    }
+    if (this.icePwd) {
+        lines.push(new IcePwdLine(this.icePwd as string));
+    }
+    if (this.fingerprint) {
+        lines.push(new FingerprintLine(this.fingerprint as string));
+    }
+    if (this.setup) {
+        lines.push(new SetupLine(this.setup as Setup));
+    }
+    if (this.mid) {
+        lines.push(new MidLine(this.mid));
+    }
+    if (this.sctpPort) {
+        lines.push(new SctpPortLine(this.sctpPort as number));
+    }
+    if (this.maxMessageSize) {
+        lines.push(new MaxMessageSizeLine(this.maxMessageSize as number));
+    }
+
+    return lines;
+  }
+
+  addLine(line: Line): void {
+    if (line instanceof MediaLine) {
+      console.log('Error: tried passing a MediaLine to an existing MediaInfo');
+      return;
+    }
+    if (line instanceof MidLine) {
+        this.mid = line.mid;
+    }
+    if (line instanceof IceUfragLine) {
+        this.iceUfrag = line.ufrag;
+    }
+    if (line instanceof IcePwdLine) {
+        this.icePwd = line.pwd;
+    }
+    if (line instanceof FingerprintLine) {
+        this.fingerprint = line.fingerprint;
+    }
+    if (line instanceof SetupLine) {
+        this.setup = line.setup;
+    }
+    if (line instanceof SctpPortLine) {
+        this.sctpPort = line.port;
+    }
+    if (line instanceof MaxMessageSizeLine) {
+        this.maxMessageSize = line.maxMessageSize;
+    }
+  }
+}
+
+/**
+ * Models all the information present within a media description block.
+ */
+export class MediaInfo extends BaseMediaInfo {
   pts: Array<number> = [];
   extMaps: Array<ExtMapLine> = [];
   codecs: Map<number, CodecInfo> = new Map();
   direction?: MediaDirection;
-  sctpPort?: number;
-  maxMessageSize?: number;
 
   constructor(mediaLine: MediaLine) {
-    this.type = mediaLine.type;
-    this.port = mediaLine.port;
-    this.protocol = mediaLine.protocol;
+    super(mediaLine.type, mediaLine.port, mediaLine.protocol);
     this.pts = mediaLine.formats.map((fmt) => {
       return parseInt(fmt);
     });
@@ -165,12 +254,6 @@ export class MediaInfo implements SdpBlock {
         lines.push(new DirectionLine(this.direction as MediaDirection));
     }
     this.codecs.forEach((codec) => lines.push(...codec.toLines()));
-    if (this.sctpPort) {
-        lines.push(new SctpPortLine(this.sctpPort as number));
-    }
-    if (this.maxMessageSize) {
-        lines.push(new MaxMessageSizeLine(this.maxMessageSize as number));
-    }
 
     return lines;
   }
@@ -200,12 +283,6 @@ export class MediaInfo implements SdpBlock {
     }
     if (line instanceof SetupLine) {
         this.setup = line.setup;
-    }
-    if (line instanceof SctpPortLine) {
-        this.sctpPort = line.port;
-    }
-    if (line instanceof MaxMessageSizeLine) {
-        this.maxMessageSize = line.maxMessageSize;
     }
     // Lines pertaining to a specific codec
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {
@@ -251,7 +328,7 @@ export class MediaInfo implements SdpBlock {
  */
 export class Sdp {
   session: SessionInfo = new SessionInfo();
-  media: Array<MediaInfo> = [];
+  media: Array<BaseMediaInfo> = [];
 
   toSdp(): string {
     const lines: Array<Line> = [];

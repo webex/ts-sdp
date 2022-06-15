@@ -1,4 +1,4 @@
-import { NUM, SP, TOKEN } from '../regex-helpers';
+import { NUM, REST, TOKEN } from '../regex-helpers';
 import { Line } from './line';
 
 export type MediaType = 'audio' | 'video' | 'application';
@@ -16,7 +16,7 @@ export class MediaLine extends Line {
 
   private static MEDIA_TYPE = 'audio|video|application';
   private static regex: RegExp = new RegExp(
-    `^(${this.MEDIA_TYPE}) (${NUM}) (${TOKEN}) ((?:${NUM}${SP}?)*)`
+    `^(${this.MEDIA_TYPE}) (${NUM}) (${TOKEN}) (${REST})`
   );
 
   constructor(type: MediaType, port: number, protocol: string, formats: Array<string>) {

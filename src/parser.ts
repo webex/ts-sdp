@@ -8,7 +8,7 @@ import { OriginLine } from './lines/origin-line';
 import { RtcpFbLine } from './lines/rtcpfb-line';
 import { RtpMapLine } from './lines/rtpmap-line';
 import { VersionLine } from './lines/version-line';
-import { MediaInfo, Sdp, SdpBlock } from './model';
+import { ApplicationMediaInfo, BaseMediaInfo, MediaInfo, Sdp, SdpBlock } from './model';
 import {MidLine} from './lines/mid-line';
 import {IceUfragLine} from './lines/ice-ufrag-line';
 import {IcePwdLine} from './lines/ice-pwd-line';
@@ -51,7 +51,15 @@ function postProcess(lines: Array<Line>): Sdp {
   let currBlock: SdpBlock = sdp.session;
   lines.forEach((l) => {
     if (l instanceof MediaLine) {
-      const mediaInfo = new MediaInfo(l);
+      let mediaInfo: BaseMediaInfo;
+      if (l.type === 'audio' || l.type === 'video') {
+        mediaInfo = new MediaInfo(l);
+      } else if (l.type === 'application') {
+        mediaInfo = new ApplicationMediaInfo(l);
+      } else {
+          console.log(`Unhandled media type: ${l.type}`);
+          return;
+      }
       sdp.media.push(mediaInfo);
       currBlock = mediaInfo;
     } else {
@@ -78,7 +86,6 @@ export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
         for (const p of parser) {
           const result = p(lineValue);
           if (result) {
-            console.log("parsed ", lineValue);
             lines.push(result);
             return;
           }
@@ -90,6 +97,7 @@ export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
           return;
         }
       }
+      console.log("unable to find a parser for line ", l);
     });
   const parsed = postProcess(lines);
   return parsed;
