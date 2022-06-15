@@ -9,6 +9,7 @@ import { RtcpFbLine } from './lines/rtcpfb-line';
 import { RtpMapLine } from './lines/rtpmap-line';
 import { VersionLine } from './lines/version-line';
 import { MediaInfo, Sdp, SdpBlock } from './model';
+import {MidLine} from './lines/mid-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
@@ -21,6 +22,7 @@ export const DEFAULT_SDP_GRAMMAR = {
     FmtpLine.fromSdpLine,
     DirectionLine.fromSdpLine,
     ExtMapLine.fromSdpLine,
+    MidLine.fromSdpLine,
   ],
 };
 

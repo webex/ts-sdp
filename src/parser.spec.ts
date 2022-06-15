@@ -10,6 +10,7 @@ a=extmap:2 http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time
 a=extmap:3 urn:3gpp:video-orientation
 a=extmap:4 http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01
 a=extmap:5 http://www.webrtc.org/experiments/rtp-hdrext/playout-delay
+a=mid:1
 a=sendrecv
 a=rtcp-fb:127 goog-remb
 a=rtcp-fb:127 transport-cc

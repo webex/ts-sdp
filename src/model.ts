@@ -3,6 +3,7 @@ import {ExtMapLine} from './lines/extmap-line';
 import { FmtpLine } from './lines/fmtp-line';
 import { Line } from './lines/line';
 import { MediaLine, MediaType } from './lines/media-line';
+import {MidLine} from './lines/mid-line';
 import { RtcpFbLine } from './lines/rtcpfb-line';
 import { RtpMapLine } from './lines/rtpmap-line';
 
@@ -106,6 +107,7 @@ export class MediaInfo implements SdpBlock {
   type: MediaType;
   port: number;
   protocol: string;
+  mid?: string;
   pts: Array<number> = [];
   extMaps: Array<ExtMapLine> = [];
   codecs: Map<number, CodecInfo> = new Map();
@@ -131,6 +133,9 @@ export class MediaInfo implements SdpBlock {
         this.pts.map((pt) => `${pt}`)
       )
     );
+    if (this.mid) {
+        lines.push(new MidLine(this.mid));
+    }
     this.extMaps.forEach((extMap) => lines.push(extMap));
     lines.push(new DirectionLine(this.direction as MediaDirection));
     this.codecs.forEach((codec) => lines.push(...codec.toLines()));
@@ -148,6 +153,9 @@ export class MediaInfo implements SdpBlock {
     }
     if (line instanceof ExtMapLine) {
       this.extMaps.push(line);
+    }
+    if (line instanceof MidLine) {
+        this.mid = line.mid;
     }
     // Lines pertaining to a specific codec
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {
