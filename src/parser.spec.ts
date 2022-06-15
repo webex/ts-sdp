@@ -1,4 +1,3 @@
-import { disableRemb, removeCodec } from './munge';
 import { parse } from './parser';
 
 const input = `v=0
@@ -378,18 +377,9 @@ a=sctp-port:5000
 a=max-message-size:262144
 `;
 
-const input2 = `m=application 9 UDP/DTLS/SCTP webrtc-datachannel
-m=video 9 UDP/TLS/RTP/SAVPF 96 97 98 99 100 101 102 122 127 121 125 107 108 109 124 120 123 119 35 36 37 38 39 40 41 42 114 115 116 117 118 43
-`;
-
 describe('parsing', () => {
   it('should work', () => {
     const result = parse(input);
     console.log(result.toSdp());
-    //disableRemb(result);
-
-    //console.log(result.toSdp());
-    //removeCodec(result, 'vp8');
-    //console.log(result.toSdp());
   });
 });

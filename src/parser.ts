@@ -20,6 +20,7 @@ import { SctpPortLine } from './lines/sctp-port-line';
 import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import { UnknownLine } from './lines/unknown-line';
+import {BundleGroupLine} from './lines/bundle-group-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
@@ -42,6 +43,7 @@ export const DEFAULT_SDP_GRAMMAR = {
     SctpPortLine.fromSdpLine,
     MaxMessageSizeLine.fromSdpLine,
     RtcpMuxLine.fromSdpLine,
+    BundleGroupLine.fromSdpLine
   ],
 };
 
@@ -102,6 +104,7 @@ export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
       const lineValue = l.slice(2);
       const parser = grammar[lineType];
       if (Array.isArray(parser)) {
+        // eslint-disable-next-line no-restricted-syntax
         for (const p of parser) {
           const result = p(lineValue);
           if (result) {

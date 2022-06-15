@@ -14,6 +14,7 @@ import { SctpPortLine } from './lines/sctp-port-line';
 import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import { UnknownLine } from './lines/unknown-line';
+import {BundleGroupLine} from './lines/bundle-group-line';
 
 /**
  * A grouping of multiple related lines/information within an SDP.
@@ -177,6 +178,9 @@ export abstract class BaseMediaInfo implements SdpBlock {
    * @inheritdoc
    */
   addLine(line: Line): boolean {
+    if (line instanceof BundleGroupLine) {
+      throw new Error(`Error: bundle group line not allowed in media description`);
+    }
     if (line instanceof MidLine) {
       this.mid = line.mid;
       return true;
@@ -266,8 +270,7 @@ export class ApplicationMediaInfo extends BaseMediaInfo {
       return true;
     }
     if (line instanceof MediaLine) {
-      console.log('Error: tried passing a MediaLine to an existing MediaInfo');
-      return false;
+      throw new Error('Error: tried passing a MediaLine to an existing MediaInfo');
     }
     if (line instanceof SctpPortLine) {
       this.sctpPort = line.port;
@@ -358,8 +361,7 @@ export class MediaInfo extends BaseMediaInfo {
       return true;
     }
     if (line instanceof MediaLine) {
-      console.log('Error: tried passing a MediaLine to an existing MediaInfo');
-      return false;
+      throw new Error('Error: tried passing a MediaLine to an existing MediaInfo');
     }
     if (line instanceof DirectionLine) {
       this.direction = line.direction;
@@ -377,8 +379,7 @@ export class MediaInfo extends BaseMediaInfo {
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {
       const codec = this.codecs.get(line.payloadType);
       if (!codec) {
-        console.log('Error: got line for unknown codec: ', line);
-        return false;
+        throw new Error(`Error: got line for unknown codec: ${line.toSdpLine()}`);
       }
       codec.addLine(line);
       return true;

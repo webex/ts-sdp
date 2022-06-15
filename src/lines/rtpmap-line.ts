@@ -63,7 +63,7 @@ export class RtpMapLine extends Line {
     const encodingName = tokens[2];
     const clockRate = parseInt(tokens[3], 10);
     // encodingParams, if present, will be in index 4
-    const { 4: encodingParams } = tokens;
+    const encodingParams = tokens[4];
 
     return new RtpMapLine(payloadType, encodingName, clockRate, encodingParams);
   }
