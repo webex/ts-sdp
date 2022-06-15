@@ -35,20 +35,29 @@ export class OriginLine extends Line {
     this.ipAddr = ipAddr;
   }
 
+  /**
+   * Create an OriginLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns An OriginLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): OriginLine | undefined {
     if (!OriginLine.regex.test(line)) {
       return undefined;
     }
     const tokens = line.match(OriginLine.regex) as RegExpMatchArray;
     const username = tokens[1];
-    const sessionId = parseInt(tokens[2]);
-    const sessionVersion = parseInt(tokens[3]);
+    const sessionId = parseInt(tokens[2], 10);
+    const sessionVersion = parseInt(tokens[3], 10);
     const netType = tokens[4];
     const addrType = tokens[5];
     const ipAddr = tokens[6];
     return new OriginLine(username, sessionId, sessionVersion, netType, addrType, ipAddr);
   }
 
+  /**
+   * @inheritdoc
+   */
   toSdpLine(): string {
     return `o=${this.username} ${this.sessionId} ${this.sessionVersion} ${this.netType} ${this.addrType} ${this.ipAddr}`;
   }

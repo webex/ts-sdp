@@ -11,6 +11,12 @@ export class IceUfragLine extends Line {
     this.ufrag = ufrag;
   }
 
+  /**
+   * Create an IceUfragLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns An IceUfragLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): IceUfragLine | undefined {
     if (!IceUfragLine.regex.test(line)) {
       return undefined;
@@ -21,6 +27,9 @@ export class IceUfragLine extends Line {
     return new IceUfragLine(ufrag);
   }
 
+  /**
+   * @inheritdoc
+   */
   toSdpLine(): string {
     return `a=ice-ufrag:${this.ufrag}`;
   }

@@ -45,10 +45,22 @@ export const DEFAULT_SDP_GRAMMAR = {
   ],
 };
 
+/**
+ * Test for whether or not the given string appears to be a valid SDP line
+ *
+ * @param line - The line to validate.
+ * @returns True if the line appears valid, false otherwise.
+ */
 function isValidLine(line: string): boolean {
   return line.length > 2;
 }
 
+/**
+ * Convert an array of parsed lines into an Sdp instance.
+ *
+ * @param lines - The lines to process.
+ * @returns an SDP object.
+ */
 function postProcess(lines: Array<Line>): Sdp {
   const sdp = new Sdp();
   let currBlock: SdpBlock = sdp.session;
@@ -72,6 +84,14 @@ function postProcess(lines: Array<Line>): Sdp {
   return sdp;
 }
 
+/**
+ * Parse the given SDP string into an Sdp object.
+ *
+ * @param sdp - The SDP to parse.
+ * @param grammar - An optional SDP grammar map to use when parsing. Defaults to
+ * DEFAULT_SDP_GRAMMAR.
+ * @returns An Sdp object modeling the given SDP.
+ */
 export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
   const lines: Array<Line> = [];
   sdp

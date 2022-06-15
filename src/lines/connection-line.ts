@@ -30,10 +30,10 @@ export class ConnectionLine extends Line {
   }
 
   /**
-   * Create an instance of a ConnectionLine from a sdp line string.
+   * Create a ConnectionLine from the given string.
    *
-   * @param line - The SDP string.
-   * @return The ConnectionLine instance, or undefined if the given line was an invalid connection line.
+   * @param line - The line to parse.
+   * @returns A ConnectionLine instance or undefined if parsing failed.
    */
   static fromSdpLine(line: string): ConnectionLine | undefined {
     if (!ConnectionLine.regex.test(line)) {
@@ -48,7 +48,7 @@ export class ConnectionLine extends Line {
   }
 
   /**
-   * @see {@link Line#toSdpLine
+   * @inheritdoc
    */
   toSdpLine(): string {
     return `c=${this.netType} ${this.addrType} ${this.ipAddr}`;

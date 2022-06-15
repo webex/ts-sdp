@@ -16,6 +16,12 @@ export class SessionNameLine extends Line {
     this.name = name;
   }
 
+  /**
+   * Create a SessionNameLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns A SessionNameLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): SessionNameLine | undefined {
     if (!SessionNameLine.regex.test(line)) {
       return undefined;
@@ -26,6 +32,9 @@ export class SessionNameLine extends Line {
     return new SessionNameLine(name);
   }
 
+  /**
+   * @see {@link Line#toSdpLine
+   */
   toSdpLine(): string {
     return `s=${this.name}`;
   }

@@ -13,17 +13,26 @@ export class ExtMapLine extends Line {
     this.uri = uri;
   }
 
+  /**
+   * Create an ExtMapLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns An ExtMapLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): ExtMapLine | undefined {
     if (!ExtMapLine.regex.test(line)) {
       return undefined;
     }
     const tokens = line.match(ExtMapLine.regex) as RegExpMatchArray;
-    const id = parseInt(tokens[1]);
+    const id = parseInt(tokens[1], 10);
     const uri = tokens[2];
 
     return new ExtMapLine(id, uri);
   }
 
+  /**
+   * @inheritdoc
+   */
   toSdpLine(): string {
     return `a=extmap:${this.id} ${this.uri}`;
   }

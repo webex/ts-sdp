@@ -17,6 +17,12 @@ export class DirectionLine extends Line {
     this.direction = direction;
   }
 
+  /**
+   * Create a DirectionLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns A DirectionLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): DirectionLine | undefined {
     if (!DirectionLine.regex.test(line)) {
       return undefined;
@@ -27,6 +33,9 @@ export class DirectionLine extends Line {
     return new DirectionLine(direction);
   }
 
+  /**
+   * @see {@link Line#toSdpLine
+   */
   toSdpLine(): string {
     return `a=${this.direction}`;
   }

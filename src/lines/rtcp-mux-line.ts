@@ -9,6 +9,12 @@ export class RtcpMuxLine extends Line {
     super();
   }
 
+  /**
+   * Create an RtcpMuxLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns An RtcpMuxLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): RtcpMuxLine | undefined {
     if (!RtcpMuxLine.regex.test(line)) {
       return undefined;
@@ -16,6 +22,9 @@ export class RtcpMuxLine extends Line {
     return new RtcpMuxLine();
   }
 
+  /**
+   * @inheritdoc
+   */
   toSdpLine(): string {
     return `a=rtcp-mux`;
   }

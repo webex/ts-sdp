@@ -11,6 +11,12 @@ export class FingerprintLine extends Line {
     this.fingerprint = fingerprint;
   }
 
+  /**
+   * Create a FingerprintLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns A FingerprintLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): FingerprintLine | undefined {
     if (!FingerprintLine.regex.test(line)) {
       return undefined;
@@ -21,6 +27,9 @@ export class FingerprintLine extends Line {
     return new FingerprintLine(fingerprint);
   }
 
+  /**
+   * @see {@link Line#toSdpLine
+   */
   toSdpLine(): string {
     return `a=fingerprint:${this.fingerprint}`;
   }

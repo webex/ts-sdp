@@ -35,14 +35,20 @@ export class RtpMapLine extends Line {
     this.encodingParams = encodingParams;
   }
 
+  /**
+   * Create an RtpMapLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns An RtpMapLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): RtpMapLine | undefined {
     if (!RtpMapLine.regex.test(line)) {
       return undefined;
     }
     const tokens = line.match(RtpMapLine.regex) as RegExpMatchArray;
-    const payloadType = parseInt(tokens[1]);
+    const payloadType = parseInt(tokens[1], 10);
     const encodingName = tokens[2];
-    const clockRate = parseInt(tokens[3]);
+    const clockRate = parseInt(tokens[3], 10);
     let encodingParams = undefined;
     if (tokens.length === 5) {
       encodingParams = tokens[4];
@@ -51,6 +57,9 @@ export class RtpMapLine extends Line {
     return new RtpMapLine(payloadType, encodingName, clockRate, encodingParams);
   }
 
+  /**
+   * @inheritdoc
+   */
   toSdpLine(): string {
     let str = '';
     str += `a=rtpmap:${this.payloadType} ${this.encodingName}/${this.clockRate}`;

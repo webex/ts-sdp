@@ -25,18 +25,27 @@ export class MediaLine extends Line {
     this.formats = formats;
   }
 
+  /**
+   * Create a MediaLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns A MediaLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): MediaLine | undefined {
     if (!MediaLine.regex.test(line)) {
       return undefined;
     }
     const tokens = line.match(MediaLine.regex) as RegExpMatchArray;
     const type = tokens[1] as MediaType;
-    const port = parseInt(tokens[2]);
+    const port = parseInt(tokens[2], 10);
     const protocol = tokens[3];
     const formats = tokens[4].split(' ');
     return new MediaLine(type, port, protocol, formats);
   }
 
+  /**
+   * @inheritdoc
+   */
   toSdpLine(): string {
     return `m=${this.type} ${this.port} ${this.protocol} ${this.formats.join(' ')}`;
   }

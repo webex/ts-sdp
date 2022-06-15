@@ -11,6 +11,12 @@ export class IcePwdLine extends Line {
     this.pwd = pwd;
   }
 
+  /**
+   * Create an IcePwdLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns An IcePwdLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): IcePwdLine | undefined {
     if (!IcePwdLine.regex.test(line)) {
       return undefined;
@@ -21,6 +27,9 @@ export class IcePwdLine extends Line {
     return new IcePwdLine(pwd);
   }
 
+  /**
+   * @see {@link Line#toSdpLine
+   */
   toSdpLine(): string {
     return `a=ice-pwd:${this.pwd}`;
   }

@@ -23,7 +23,7 @@ export interface SdpBlock {
    * Add a parsed line to this block.
    *
    * @param line - The line to add.
-   * @return True if the line was successfully added by this block, false otherwise.
+   * @returns True if the line was successfully added by this block, false otherwise.
    */
   addLine(line: Line): boolean;
 
@@ -42,7 +42,7 @@ export class SessionInfo implements SdpBlock {
   lines: Array<Line> = [];
 
   /**
-   * @see {@link SdpBlock#addLine}
+   * @inheritdoc
    */
   addLine(line: Line): boolean {
     this.lines.push(line);
@@ -50,28 +50,45 @@ export class SessionInfo implements SdpBlock {
   }
 
   /**
-   * @see {@link SdpBlock#toSdpLines}
+   * @inheritdoc
    */
   toLines(): Array<Line> {
     return this.lines;
   }
 }
 
+/**
+ * Model all information related to a specific codec in an SDP.
+ */
 export class CodecInfo implements SdpBlock {
   pt: number;
+
   name?: string;
+
   clockRate?: number;
+
   encodingParams?: string;
+
   fmtParams: Array<string> = [];
+
   feedback: Array<string> = [];
+
   // If this codec is a 'secondary codec', this field will contain the payload type
   // of its 'primary' codec.
   primaryCodecPt?: number;
 
+  /**
+   * Create a CodecInfo from the given values.
+   *
+   * @param pt - The payload type.
+   */
   constructor(pt: number) {
     this.pt = pt;
   }
 
+  /**
+   * @inheritdoc
+   */
   addLine(line: Line): boolean {
     if (line instanceof RtpMapLine) {
       this.name = line.encodingName;
@@ -83,7 +100,7 @@ export class CodecInfo implements SdpBlock {
       this.fmtParams.push(line.params);
       if (line.params.indexOf('apt') !== -1) {
         const apt = line.params.split('=')[1];
-        this.primaryCodecPt = parseInt(apt);
+        this.primaryCodecPt = parseInt(apt, 10);
       }
       return true;
     }
@@ -94,6 +111,9 @@ export class CodecInfo implements SdpBlock {
     return false;
   }
 
+  /**
+   * @inheritdoc
+   */
   toLines(): Array<Line> {
     const lines = [];
     // First the RtpMap
@@ -118,23 +138,44 @@ export class CodecInfo implements SdpBlock {
  */
 export abstract class BaseMediaInfo implements SdpBlock {
   type: MediaType;
+
   port: number;
+
   protocol: string;
+
   mid?: string;
+
   iceUfrag?: string;
+
   icePwd?: string;
+
   fingerprint?: string;
+
   setup?: Setup;
+
   unknownAttributes: Array<UnknownLine> = [];
 
+  /**
+   * Create a BaseMediaInfo with the given values.
+   *
+   * @param type - The MediaType of this MediaInfo.
+   * @param port - The port.
+   * @param protocol - The protocol.
+   */
   constructor(type: MediaType, port: number, protocol: string) {
     this.type = type;
     this.port = port;
     this.protocol = protocol;
   }
 
+  /**
+   * @inheritdoc
+   */
   abstract toLines(): Array<Line>;
 
+  /**
+   * @inheritdoc
+   */
   addLine(line: Line): boolean {
     if (line instanceof MidLine) {
       this.mid = line.mid;
@@ -165,16 +206,29 @@ export abstract class BaseMediaInfo implements SdpBlock {
   }
 }
 
+/**
+ * Model a media description with type 'application'.
+ */
 export class ApplicationMediaInfo extends BaseMediaInfo {
   sctpPort?: number;
+
   maxMessageSize?: number;
+
   fmts: Array<string> = [];
 
+  /**
+   * Create a new ApplicationMediaInfo from the given MediaLine.
+   *
+   * @param mediaLine - The MediaLine from which to create this ApplicationMediaInfo.
+   */
   constructor(mediaLine: MediaLine) {
     super(mediaLine.type, mediaLine.port, mediaLine.protocol);
     this.fmts = mediaLine.formats;
   }
 
+  /**
+   * @inheritdoc
+   */
   toLines(): Array<Line> {
     const lines: Array<Line> = [];
     lines.push(new MediaLine(this.type, this.port, this.protocol, this.fmts));
@@ -204,6 +258,9 @@ export class ApplicationMediaInfo extends BaseMediaInfo {
     return lines;
   }
 
+  /**
+   * @inheritdoc
+   */
   addLine(line: Line): boolean {
     if (super.addLine(line)) {
       return true;
@@ -229,19 +286,31 @@ export class ApplicationMediaInfo extends BaseMediaInfo {
  */
 export class MediaInfo extends BaseMediaInfo {
   pts: Array<number> = [];
-  extMaps: Array<ExtMapLine> = [];
-  codecs: Map<number, CodecInfo> = new Map();
-  direction?: MediaDirection;
-  rtcpMux: boolean = false;
 
+  extMaps: Array<ExtMapLine> = [];
+
+  codecs: Map<number, CodecInfo> = new Map();
+
+  direction?: MediaDirection;
+
+  rtcpMux = false;
+
+  /**
+   * Create a MediaInfo instance from a MediaLine.
+   *
+   * @param mediaLine - The MediaLine to create this MediaInfo from.
+   */
   constructor(mediaLine: MediaLine) {
     super(mediaLine.type, mediaLine.port, mediaLine.protocol);
     this.pts = mediaLine.formats.map((fmt) => {
-      return parseInt(fmt);
+      return parseInt(fmt, 10);
     });
     this.pts.forEach((pt) => this.codecs.set(pt, new CodecInfo(pt)));
   }
 
+  /**
+   * @inheritdoc
+   */
   toLines(): Array<Line> {
     const lines: Array<Line> = [];
     lines.push(
@@ -281,6 +350,9 @@ export class MediaInfo extends BaseMediaInfo {
     return lines;
   }
 
+  /**
+   * @inheritdoc
+   */
   addLine(line: Line): boolean {
     if (super.addLine(line)) {
       return true;
@@ -338,17 +410,23 @@ export class MediaInfo extends BaseMediaInfo {
     allPtsToRemove.forEach((ptToRemove: number) => {
       this.codecs.delete(ptToRemove);
     });
-    this.pts = this.pts.filter((pt) => allPtsToRemove.indexOf(pt) === -1);
+    this.pts = this.pts.filter((existingPt) => allPtsToRemove.indexOf(existingPt) === -1);
   }
 }
 
 /**
- * Models an entire SDP: a session block and 0 or more media blocks
+ * Models an entire SDP: a session block and 0 or more media blocks.
  */
 export class Sdp {
   session: SessionInfo = new SessionInfo();
+
   media: Array<BaseMediaInfo> = [];
 
+  /**
+   * Convert this Sdp object to an SDP string.
+   *
+   * @returns This SDP as a string.
+   */
   toSdp(): string {
     const lines: Array<Line> = [];
     lines.push(...this.session.toLines());

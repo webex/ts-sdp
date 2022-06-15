@@ -11,6 +11,12 @@ export class MidLine extends Line {
     this.mid = mid;
   }
 
+  /**
+   * Create a MidLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns A MidLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): MidLine | undefined {
     if (!MidLine.regex.test(line)) {
       return undefined;
@@ -21,6 +27,9 @@ export class MidLine extends Line {
     return new MidLine(mid);
   }
 
+  /**
+   * @inheritdoc
+   */
   toSdpLine(): string {
     return `a=mid:${this.mid}`;
   }

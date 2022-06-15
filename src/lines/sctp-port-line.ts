@@ -11,6 +11,12 @@ export class SctpPortLine extends Line {
     this.port = port;
   }
 
+  /**
+   * Create a SctpPortLine from the given string.
+   *
+   * @param line - The line to parse.
+   * @returns A SctpPortLine instance or undefined if parsing failed.
+   */
   static fromSdpLine(line: string): SctpPortLine | undefined {
     if (!SctpPortLine.regex.test(line)) {
       return undefined;
@@ -21,6 +27,9 @@ export class SctpPortLine extends Line {
     return new SctpPortLine(port);
   }
 
+  /**
+   * @see {@link Line#toSdpLine
+   */
   toSdpLine(): string {
     return `a=sctp-port:${this.port}`;
   }
