@@ -7,8 +7,7 @@ import { BaseMediaInfo, CodecInfo, MediaInfo, Sdp } from './model';
  * @param rtcpFbValue - The rtcp-fb value to filter.
  */
 export function disableRtcpFbValue(sdp: Sdp, rtcpFbValue: string) {
-  sdp.media
-    .filter<MediaInfo>((mi: BaseMediaInfo): mi is MediaInfo => mi instanceof MediaInfo)
+  sdp.avMedia
     .forEach((media: MediaInfo) => {
       media.codecs.forEach((codec: CodecInfo) => {
         // eslint-disable-next-line no-param-reassign
@@ -34,8 +33,7 @@ export function disableRemb(sdp: Sdp) {
  * @param codecName - The name of the codec to filter.
  */
 export function removeCodec(sdp: Sdp, codecName: string) {
-  sdp.media
-    .filter<MediaInfo>((mi: BaseMediaInfo): mi is MediaInfo => mi instanceof MediaInfo)
+  sdp.avMedia
     .forEach((media: MediaInfo) => {
       const codecInfos = [...media.codecs.entries()].filter(
         ([, ci]) => ci.name?.toLowerCase() === codecName.toLowerCase()

@@ -430,6 +430,13 @@ export class Sdp {
   media: Array<BaseMediaInfo> = [];
 
   /**
+   * A helper property to retrieve just audio/video media info blocks.
+   */
+  get avMedia() {
+    return this.media.filter<MediaInfo>((mi: BaseMediaInfo): mi is MediaInfo => mi instanceof MediaInfo);
+  }
+
+  /**
    * Convert this Sdp object to an SDP string.
    *
    * @returns This SDP as a string.
