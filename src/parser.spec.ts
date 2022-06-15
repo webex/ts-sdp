@@ -1,4 +1,4 @@
-import {disableRemb, removeCodec} from './munge';
+import { disableRemb, removeCodec } from './munge';
 import { parse } from './parser';
 
 const input = `v=0
@@ -391,6 +391,5 @@ describe('parsing', () => {
     //console.log(result.toSdp());
     //removeCodec(result, 'vp8');
     //console.log(result.toSdp());
-
   });
 });

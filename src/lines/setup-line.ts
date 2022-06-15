@@ -31,4 +31,3 @@ export class SetupLine extends Line {
     return `a=setup:${this.setup}`;
   }
 }
-

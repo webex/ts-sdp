@@ -15,9 +15,7 @@ export class MediaLine extends Line {
   formats: Array<string>;
 
   private static MEDIA_TYPE = 'audio|video|application';
-  private static regex: RegExp = new RegExp(
-    `^(${this.MEDIA_TYPE}) (${NUM}) (${TOKEN}) (${REST})`
-  );
+  private static regex: RegExp = new RegExp(`^(${this.MEDIA_TYPE}) (${NUM}) (${TOKEN}) (${REST})`);
 
   constructor(type: MediaType, port: number, protocol: string, formats: Array<string>) {
     super();

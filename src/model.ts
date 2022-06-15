@@ -1,19 +1,19 @@
 import { DirectionLine, MediaDirection } from './lines/direction-line';
-import {ExtMapLine} from './lines/extmap-line';
+import { ExtMapLine } from './lines/extmap-line';
 import { FmtpLine } from './lines/fmtp-line';
-import {FingerprintLine} from './lines/fingerprint-line';
-import {IcePwdLine} from './lines/ice-pwd-line';
-import {IceUfragLine} from './lines/ice-ufrag-line';
+import { FingerprintLine } from './lines/fingerprint-line';
+import { IcePwdLine } from './lines/ice-pwd-line';
+import { IceUfragLine } from './lines/ice-ufrag-line';
 import { Line } from './lines/line';
 import { MediaLine, MediaType } from './lines/media-line';
-import {MidLine} from './lines/mid-line';
+import { MidLine } from './lines/mid-line';
 import { RtcpFbLine } from './lines/rtcpfb-line';
 import { RtpMapLine } from './lines/rtpmap-line';
-import {Setup, SetupLine} from './lines/setup-line';
-import {SctpPortLine} from './lines/sctp-port-line';
-import {MaxMessageSizeLine} from './lines/max-message-size-line';
-import {RtcpMuxLine} from './lines/rtcp-mux-line';
-import {UnknownLine} from './lines/unknown-line';
+import { Setup, SetupLine } from './lines/setup-line';
+import { SctpPortLine } from './lines/sctp-port-line';
+import { MaxMessageSizeLine } from './lines/max-message-size-line';
+import { RtcpMuxLine } from './lines/rtcp-mux-line';
+import { UnknownLine } from './lines/unknown-line';
 
 /**
  * A grouping of multiple related lines/information within an SDP.
@@ -81,9 +81,9 @@ export class CodecInfo implements SdpBlock {
     }
     if (line instanceof FmtpLine) {
       this.fmtParams.push(line.params);
-      if (line.params.indexOf("apt") !== -1) {
-          const apt = line.params.split('=')[1];
-          this.primaryCodecPt = parseInt(apt);
+      if (line.params.indexOf('apt') !== -1) {
+        const apt = line.params.split('=')[1];
+        this.primaryCodecPt = parseInt(apt);
       }
       return true;
     }
@@ -127,42 +127,38 @@ export abstract class BaseMediaInfo implements SdpBlock {
   setup?: Setup;
   unknownAttributes: Array<UnknownLine> = [];
 
-  constructor(
-      type: MediaType,
-      port: number,
-      protocol: string
-  ) {
-      this.type = type;
-      this.port = port;
-      this.protocol = protocol;
+  constructor(type: MediaType, port: number, protocol: string) {
+    this.type = type;
+    this.port = port;
+    this.protocol = protocol;
   }
 
   abstract toLines(): Array<Line>;
 
   addLine(line: Line): boolean {
     if (line instanceof MidLine) {
-        this.mid = line.mid;
-        return true;
+      this.mid = line.mid;
+      return true;
     }
     if (line instanceof IceUfragLine) {
-        this.iceUfrag = line.ufrag;
-        return true;
+      this.iceUfrag = line.ufrag;
+      return true;
     }
     if (line instanceof IcePwdLine) {
-        this.icePwd = line.pwd;
-        return true;
+      this.icePwd = line.pwd;
+      return true;
     }
     if (line instanceof FingerprintLine) {
-        this.fingerprint = line.fingerprint;
-        return true;
+      this.fingerprint = line.fingerprint;
+      return true;
     }
     if (line instanceof SetupLine) {
-        this.setup = line.setup;
-        return true;
+      this.setup = line.setup;
+      return true;
     }
     if (line instanceof UnknownLine) {
-        this.unknownAttributes.push(line);
-        return true;
+      this.unknownAttributes.push(line);
+      return true;
     }
 
     return false;
@@ -181,34 +177,27 @@ export class ApplicationMediaInfo extends BaseMediaInfo {
 
   toLines(): Array<Line> {
     const lines: Array<Line> = [];
-    lines.push(
-      new MediaLine(
-        this.type,
-        this.port,
-        this.protocol,
-        this.fmts
-      )
-    );
+    lines.push(new MediaLine(this.type, this.port, this.protocol, this.fmts));
     if (this.iceUfrag) {
-        lines.push(new IceUfragLine(this.iceUfrag as string));
+      lines.push(new IceUfragLine(this.iceUfrag as string));
     }
     if (this.icePwd) {
-        lines.push(new IcePwdLine(this.icePwd as string));
+      lines.push(new IcePwdLine(this.icePwd as string));
     }
     if (this.fingerprint) {
-        lines.push(new FingerprintLine(this.fingerprint as string));
+      lines.push(new FingerprintLine(this.fingerprint as string));
     }
     if (this.setup) {
-        lines.push(new SetupLine(this.setup as Setup));
+      lines.push(new SetupLine(this.setup as Setup));
     }
     if (this.mid) {
-        lines.push(new MidLine(this.mid));
+      lines.push(new MidLine(this.mid));
     }
     if (this.sctpPort) {
-        lines.push(new SctpPortLine(this.sctpPort as number));
+      lines.push(new SctpPortLine(this.sctpPort as number));
     }
     if (this.maxMessageSize) {
-        lines.push(new MaxMessageSizeLine(this.maxMessageSize as number));
+      lines.push(new MaxMessageSizeLine(this.maxMessageSize as number));
     }
     lines.push(...this.unknownAttributes);
 
@@ -217,19 +206,19 @@ export class ApplicationMediaInfo extends BaseMediaInfo {
 
   addLine(line: Line): boolean {
     if (super.addLine(line)) {
-        return true;
+      return true;
     }
     if (line instanceof MediaLine) {
       console.log('Error: tried passing a MediaLine to an existing MediaInfo');
       return false;
     }
     if (line instanceof SctpPortLine) {
-        this.sctpPort = line.port;
-        return true;
+      this.sctpPort = line.port;
+      return true;
     }
     if (line instanceof MaxMessageSizeLine) {
-        this.maxMessageSize = line.maxMessageSize;
-        return true;
+      this.maxMessageSize = line.maxMessageSize;
+      return true;
     }
     return false;
   }
@@ -264,26 +253,26 @@ export class MediaInfo extends BaseMediaInfo {
       )
     );
     if (this.iceUfrag) {
-        lines.push(new IceUfragLine(this.iceUfrag as string));
+      lines.push(new IceUfragLine(this.iceUfrag as string));
     }
     if (this.icePwd) {
-        lines.push(new IcePwdLine(this.icePwd as string));
+      lines.push(new IcePwdLine(this.icePwd as string));
     }
     if (this.fingerprint) {
-        lines.push(new FingerprintLine(this.fingerprint as string));
+      lines.push(new FingerprintLine(this.fingerprint as string));
     }
     if (this.setup) {
-        lines.push(new SetupLine(this.setup as Setup));
+      lines.push(new SetupLine(this.setup as Setup));
     }
     if (this.mid) {
-        lines.push(new MidLine(this.mid));
+      lines.push(new MidLine(this.mid));
     }
     if (this.rtcpMux) {
-        lines.push(new RtcpMuxLine());
+      lines.push(new RtcpMuxLine());
     }
     this.extMaps.forEach((extMap) => lines.push(extMap));
     if (this.direction) {
-        lines.push(new DirectionLine(this.direction as MediaDirection));
+      lines.push(new DirectionLine(this.direction as MediaDirection));
     }
     this.codecs.forEach((codec) => lines.push(...codec.toLines()));
 
@@ -294,7 +283,7 @@ export class MediaInfo extends BaseMediaInfo {
 
   addLine(line: Line): boolean {
     if (super.addLine(line)) {
-        return true;
+      return true;
     }
     if (line instanceof MediaLine) {
       console.log('Error: tried passing a MediaLine to an existing MediaInfo');
@@ -309,8 +298,8 @@ export class MediaInfo extends BaseMediaInfo {
       return true;
     }
     if (line instanceof RtcpMuxLine) {
-        this.rtcpMux = true;
-        return true;
+      this.rtcpMux = true;
+      return true;
     }
     // Lines pertaining to a specific codec
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {
@@ -342,14 +331,14 @@ export class MediaInfo extends BaseMediaInfo {
    * @param pt - The payload type of the codec to remove.
    */
   removePt(pt: number) {
-      const associatedPts = [...this.codecs.values()]
-        .filter((ci: CodecInfo) => ci.primaryCodecPt === pt)
-        .map((ci: CodecInfo) => ci.pt);
-      const allPtsToRemove = [pt, ...associatedPts];
-      allPtsToRemove.forEach((ptToRemove: number) => {
-          this.codecs.delete(ptToRemove)
-      });
-      this.pts = this.pts.filter((pt) => allPtsToRemove.indexOf(pt) === -1);
+    const associatedPts = [...this.codecs.values()]
+      .filter((ci: CodecInfo) => ci.primaryCodecPt === pt)
+      .map((ci: CodecInfo) => ci.pt);
+    const allPtsToRemove = [pt, ...associatedPts];
+    allPtsToRemove.forEach((ptToRemove: number) => {
+      this.codecs.delete(ptToRemove);
+    });
+    this.pts = this.pts.filter((pt) => allPtsToRemove.indexOf(pt) === -1);
   }
 }
 

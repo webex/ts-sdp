@@ -1,28 +1,27 @@
-import {REST} from "../regex-helpers";
-import {Line} from "./line";
+import { REST } from '../regex-helpers';
+import { Line } from './line';
 
 export class FingerprintLine extends Line {
-    fingerprint: string;
+  fingerprint: string;
 
-    private static regex = new RegExp(`^fingerprint:(${REST})`);
+  private static regex = new RegExp(`^fingerprint:(${REST})`);
 
-    constructor(fingerprint: string) {
-        super();
-        this.fingerprint = fingerprint;
+  constructor(fingerprint: string) {
+    super();
+    this.fingerprint = fingerprint;
+  }
+
+  static fromSdpLine(line: string): FingerprintLine | undefined {
+    if (!FingerprintLine.regex.test(line)) {
+      return undefined;
     }
+    const tokens = line.match(FingerprintLine.regex) as RegExpMatchArray;
+    const fingerprint = tokens[1];
 
-    static fromSdpLine(line: string): FingerprintLine | undefined {
-        if (!FingerprintLine.regex.test(line)) {
-            return undefined;
-        }
-        const tokens = line.match(FingerprintLine.regex) as RegExpMatchArray;
-        const fingerprint = tokens[1];
+    return new FingerprintLine(fingerprint);
+  }
 
-        return new FingerprintLine(fingerprint);
-    }
-
-    toSdpLine(): string {
-        return `a=fingerprint:${this.fingerprint}`;
-    }
+  toSdpLine(): string {
+    return `a=fingerprint:${this.fingerprint}`;
+  }
 }
-

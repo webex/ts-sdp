@@ -1,4 +1,4 @@
-import {ExtMapLine} from './lines/extmap-line';
+import { ExtMapLine } from './lines/extmap-line';
 import { ConnectionLine } from './lines/connection-line';
 import { DirectionLine } from './lines/direction-line';
 import { FmtpLine } from './lines/fmtp-line';
@@ -9,17 +9,17 @@ import { RtcpFbLine } from './lines/rtcpfb-line';
 import { RtpMapLine } from './lines/rtpmap-line';
 import { VersionLine } from './lines/version-line';
 import { ApplicationMediaInfo, BaseMediaInfo, MediaInfo, Sdp, SdpBlock } from './model';
-import {MidLine} from './lines/mid-line';
-import {IceUfragLine} from './lines/ice-ufrag-line';
-import {IcePwdLine} from './lines/ice-pwd-line';
-import {FingerprintLine} from './lines/fingerprint-line';
-import {SetupLine} from './lines/setup-line';
-import {SessionNameLine} from './lines/session-name-line';
-import {TimingLine} from './lines/timing-line';
-import {SctpPortLine} from './lines/sctp-port-line';
-import {MaxMessageSizeLine} from './lines/max-message-size-line';
-import {RtcpMuxLine} from './lines/rtcp-mux-line';
-import {UnknownLine} from './lines/unknown-line';
+import { MidLine } from './lines/mid-line';
+import { IceUfragLine } from './lines/ice-ufrag-line';
+import { IcePwdLine } from './lines/ice-pwd-line';
+import { FingerprintLine } from './lines/fingerprint-line';
+import { SetupLine } from './lines/setup-line';
+import { SessionNameLine } from './lines/session-name-line';
+import { TimingLine } from './lines/timing-line';
+import { SctpPortLine } from './lines/sctp-port-line';
+import { MaxMessageSizeLine } from './lines/max-message-size-line';
+import { RtcpMuxLine } from './lines/rtcp-mux-line';
+import { UnknownLine } from './lines/unknown-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
@@ -60,8 +60,8 @@ function postProcess(lines: Array<Line>): Sdp {
       } else if (l.type === 'application') {
         mediaInfo = new ApplicationMediaInfo(l);
       } else {
-          console.log(`Unhandled media type: ${l.type}`);
-          return;
+        console.log(`Unhandled media type: ${l.type}`);
+        return;
       }
       sdp.media.push(mediaInfo);
       currBlock = mediaInfo;
