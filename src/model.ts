@@ -161,7 +161,9 @@ export class MediaInfo implements SdpBlock {
         lines.push(new MidLine(this.mid));
     }
     this.extMaps.forEach((extMap) => lines.push(extMap));
-    lines.push(new DirectionLine(this.direction as MediaDirection));
+    if (this.direction) {
+        lines.push(new DirectionLine(this.direction as MediaDirection));
+    }
     this.codecs.forEach((codec) => lines.push(...codec.toLines()));
     if (this.sctpPort) {
         lines.push(new SctpPortLine(this.sctpPort as number));
