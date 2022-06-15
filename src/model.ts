@@ -11,6 +11,7 @@ import { RtcpFbLine } from './lines/rtcpfb-line';
 import { RtpMapLine } from './lines/rtpmap-line';
 import {Setup, SetupLine} from './lines/setup-line';
 import {SctpPortLine} from './lines/sctp-port-line';
+import {MaxMessageSizeLine} from './lines/max-message-size-line';
 
 /**
  * A grouping of multiple related lines/information within an SDP.
@@ -122,6 +123,7 @@ export class MediaInfo implements SdpBlock {
   codecs: Map<number, CodecInfo> = new Map();
   direction?: MediaDirection;
   sctpPort?: number;
+  maxMessageSize?: number;
 
   constructor(mediaLine: MediaLine) {
     this.type = mediaLine.type;
@@ -164,6 +166,9 @@ export class MediaInfo implements SdpBlock {
     if (this.sctpPort) {
         lines.push(new SctpPortLine(this.sctpPort as number));
     }
+    if (this.maxMessageSize) {
+        lines.push(new MaxMessageSizeLine(this.maxMessageSize as number));
+    }
 
     return lines;
   }
@@ -196,6 +201,9 @@ export class MediaInfo implements SdpBlock {
     }
     if (line instanceof SctpPortLine) {
         this.sctpPort = line.port;
+    }
+    if (line instanceof MaxMessageSizeLine) {
+        this.maxMessageSize = line.maxMessageSize;
     }
     // Lines pertaining to a specific codec
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {

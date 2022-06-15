@@ -17,6 +17,7 @@ import {SetupLine} from './lines/setup-line';
 import {SessionNameLine} from './lines/session-name-line';
 import {TimingLine} from './lines/timing-line';
 import {SctpPortLine} from './lines/sctp-port-line';
+import {MaxMessageSizeLine} from './lines/max-message-size-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
@@ -37,6 +38,7 @@ export const DEFAULT_SDP_GRAMMAR = {
     FingerprintLine.fromSdpLine,
     SetupLine.fromSdpLine,
     SctpPortLine.fromSdpLine,
+    MaxMessageSizeLine.fromSdpLine,
   ],
 };
 
@@ -76,6 +78,7 @@ export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
         for (const p of parser) {
           const result = p(lineValue);
           if (result) {
+            console.log("parsed ", lineValue);
             lines.push(result);
             return;
           }
