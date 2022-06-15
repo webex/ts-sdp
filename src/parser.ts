@@ -14,12 +14,14 @@ import {IceUfragLine} from './lines/ice-ufrag-line';
 import {IcePwdLine} from './lines/ice-pwd-line';
 import {FingerprintLine} from './lines/fingerprint-line';
 import {SetupLine} from './lines/setup-line';
+import {SessionNameLine} from './lines/session-name-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
   o: OriginLine.fromSdpLine,
   c: ConnectionLine.fromSdpLine,
   m: MediaLine.fromSdpLine,
+  s: SessionNameLine.fromSdpLine,
   a: [
     RtpMapLine.fromSdpLine,
     RtcpFbLine.fromSdpLine,
@@ -62,6 +64,10 @@ export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
       const lineType = l[0];
       const lineValue = l.slice(2);
       const parser = grammar[lineType];
+      if (!parser) {
+          console.log(`No parser found for line type ${lineType}`);
+          return;
+      }
       if (Array.isArray(parser)) {
         for (const p of parser) {
           const result = p(lineValue);
@@ -74,6 +80,7 @@ export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
         const result = parser(lineValue) as Line;
         if (result) {
           lines.push(result);
+          return;
         }
       }
     });
