@@ -12,6 +12,7 @@ import { RtpMapLine } from './lines/rtpmap-line';
 import {Setup, SetupLine} from './lines/setup-line';
 import {SctpPortLine} from './lines/sctp-port-line';
 import {MaxMessageSizeLine} from './lines/max-message-size-line';
+import {RtcpMuxLine} from './lines/rtcp-mux-line';
 
 /**
  * A grouping of multiple related lines/information within an SDP.
@@ -215,6 +216,7 @@ export class MediaInfo extends BaseMediaInfo {
   extMaps: Array<ExtMapLine> = [];
   codecs: Map<number, CodecInfo> = new Map();
   direction?: MediaDirection;
+  rtcpMux: boolean = false;
 
   constructor(mediaLine: MediaLine) {
     super(mediaLine.type, mediaLine.port, mediaLine.protocol);
@@ -248,6 +250,9 @@ export class MediaInfo extends BaseMediaInfo {
     }
     if (this.mid) {
         lines.push(new MidLine(this.mid));
+    }
+    if (this.rtcpMux) {
+        lines.push(new RtcpMuxLine());
     }
     this.extMaps.forEach((extMap) => lines.push(extMap));
     if (this.direction) {
@@ -283,6 +288,9 @@ export class MediaInfo extends BaseMediaInfo {
     }
     if (line instanceof SetupLine) {
         this.setup = line.setup;
+    }
+    if (line instanceof RtcpMuxLine) {
+        this.rtcpMux = true;
     }
     // Lines pertaining to a specific codec
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {

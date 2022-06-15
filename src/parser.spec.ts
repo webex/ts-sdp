@@ -384,7 +384,7 @@ m=video 9 UDP/TLS/RTP/SAVPF 96 97 98 99 100 101 102 122 127 121 125 107 108 109 
 
 describe('parsing', () => {
   it('should work', () => {
-    const result = parse(input2);
+    const result = parse(input);
     console.log(result.toSdp());
     //disableRemb(result);
 

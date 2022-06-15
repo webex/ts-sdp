@@ -18,6 +18,7 @@ import {SessionNameLine} from './lines/session-name-line';
 import {TimingLine} from './lines/timing-line';
 import {SctpPortLine} from './lines/sctp-port-line';
 import {MaxMessageSizeLine} from './lines/max-message-size-line';
+import {RtcpMuxLine} from './lines/rtcp-mux-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
@@ -39,6 +40,7 @@ export const DEFAULT_SDP_GRAMMAR = {
     SetupLine.fromSdpLine,
     SctpPortLine.fromSdpLine,
     MaxMessageSizeLine.fromSdpLine,
+    RtcpMuxLine.fromSdpLine,
   ],
 };
 
