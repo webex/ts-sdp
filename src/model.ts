@@ -52,7 +52,9 @@ export class CodecInfo implements SdpBlock {
   encodingParams?: string;
   fmtParams: Array<string> = [];
   feedback: Array<string> = [];
-  //TODO: associated PTs
+  // If this codec is a 'secondary codec', this field will contain the payload type
+  // of its 'primary' codec.
+  primaryCodecPt?: number;
 
   constructor(pt: number) {
     this.pt = pt;
@@ -67,6 +69,10 @@ export class CodecInfo implements SdpBlock {
     }
     if (line instanceof FmtpLine) {
       this.fmtParams.push(line.params);
+      if (line.params.indexOf("apt") !== -1) {
+          const apt = line.params.split('=')[1];
+          this.primaryCodecPt = parseInt(apt);
+      }
     }
     if (line instanceof RtcpFbLine) {
       this.feedback.push(line.feedback);
@@ -146,6 +152,33 @@ export class MediaInfo implements SdpBlock {
       }
       codec.addLine(line);
     }
+  }
+
+  /**
+   * Get the CodecInfo associated with the given payload type, if one exists.
+   *
+   * @param pt - The payload type.
+   * @returns The corresponding CodecInfo, or undefined if none was found.
+   */
+  getCodecByPt(pt: number): CodecInfo | undefined {
+    return this.codecs.get(pt);
+  }
+
+  /**
+   * Remove all references to the given payload type.  This includes removing any secondary codecs
+   * that may be associated with this payload type.
+   *
+   * @param pt - The payload type of the codec to remove.
+   */
+  removePt(pt: number) {
+      const associatedPts = [...this.codecs.values()]
+        .filter((ci: CodecInfo) => ci.primaryCodecPt === pt)
+        .map((ci: CodecInfo) => ci.pt);
+      const allPtsToRemove = [pt, ...associatedPts];
+      allPtsToRemove.forEach((ptToRemove: number) => {
+          this.codecs.delete(ptToRemove)
+      });
+      this.pts = this.pts.filter((pt) => allPtsToRemove.indexOf(pt) === -1);
   }
 }
 
