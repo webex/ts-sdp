@@ -5,6 +5,7 @@ import { parse } from './parser';
 const input = `v=1
 o=jdoe 1234 1 IN IP4 127.0.0.1
 m=video 9 UDP/TLS/RTP/SAVPF 127 121 96 97
+a=ice-ufrag:J/UT
 a=extmap:1 urn:ietf:params:rtp-hdrext:toffset
 a=extmap:2 http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time
 a=extmap:3 urn:3gpp:video-orientation

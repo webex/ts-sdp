@@ -1,6 +1,7 @@
 import { DirectionLine, MediaDirection } from './lines/direction-line';
 import {ExtMapLine} from './lines/extmap-line';
 import { FmtpLine } from './lines/fmtp-line';
+import {IceUfragLine} from './lines/ice-ufrag-line';
 import { Line } from './lines/line';
 import { MediaLine, MediaType } from './lines/media-line';
 import {MidLine} from './lines/mid-line';
@@ -108,6 +109,7 @@ export class MediaInfo implements SdpBlock {
   port: number;
   protocol: string;
   mid?: string;
+  iceUfrag?: string;
   pts: Array<number> = [];
   extMaps: Array<ExtMapLine> = [];
   codecs: Map<number, CodecInfo> = new Map();
@@ -133,6 +135,9 @@ export class MediaInfo implements SdpBlock {
         this.pts.map((pt) => `${pt}`)
       )
     );
+    if (this.iceUfrag) {
+        lines.push(new IceUfragLine(this.iceUfrag as string));
+    }
     if (this.mid) {
         lines.push(new MidLine(this.mid));
     }
@@ -156,6 +161,9 @@ export class MediaInfo implements SdpBlock {
     }
     if (line instanceof MidLine) {
         this.mid = line.mid;
+    }
+    if (line instanceof IceUfragLine) {
+        this.iceUfrag = line.ufrag;
     }
     // Lines pertaining to a specific codec
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {
