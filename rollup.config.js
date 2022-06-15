@@ -32,7 +32,7 @@ export default [
       format: 'es',
       file: 'dist/types.d.ts',
     },
-    plugins: [dts(), execute(['rm -f dist/types/*', 'mv dist/types.d.ts dist/types/index.d.ts'])],
+    plugins: [dts(), execute(['rm -rf dist/types/*', 'mv dist/types.d.ts dist/types/index.d.ts'])],
     watch: true,
   },
 ];
