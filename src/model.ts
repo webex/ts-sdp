@@ -1,6 +1,7 @@
 import { DirectionLine, MediaDirection } from './lines/direction-line';
 import {ExtMapLine} from './lines/extmap-line';
 import { FmtpLine } from './lines/fmtp-line';
+import {FingerprintLine} from './lines/fingerprint-line';
 import {IcePwdLine} from './lines/ice-pwd-line';
 import {IceUfragLine} from './lines/ice-ufrag-line';
 import { Line } from './lines/line';
@@ -112,6 +113,7 @@ export class MediaInfo implements SdpBlock {
   mid?: string;
   iceUfrag?: string;
   icePwd?: string;
+  fingerprint?: string;
   pts: Array<number> = [];
   extMaps: Array<ExtMapLine> = [];
   codecs: Map<number, CodecInfo> = new Map();
@@ -143,6 +145,9 @@ export class MediaInfo implements SdpBlock {
     if (this.icePwd) {
         lines.push(new IcePwdLine(this.icePwd as string));
     }
+    if (this.fingerprint) {
+        lines.push(new FingerprintLine(this.fingerprint as string));
+    }
     if (this.mid) {
         lines.push(new MidLine(this.mid));
     }
@@ -172,6 +177,9 @@ export class MediaInfo implements SdpBlock {
     }
     if (line instanceof IcePwdLine) {
         this.icePwd = line.pwd;
+    }
+    if (line instanceof FingerprintLine) {
+        this.fingerprint = line.fingerprint;
     }
     // Lines pertaining to a specific codec
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {

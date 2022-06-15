@@ -12,6 +12,7 @@ import { MediaInfo, Sdp, SdpBlock } from './model';
 import {MidLine} from './lines/mid-line';
 import {IceUfragLine} from './lines/ice-ufrag-line';
 import {IcePwdLine} from './lines/ice-pwd-line';
+import {FingerprintLine} from './lines/fingerprint-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
@@ -27,6 +28,7 @@ export const DEFAULT_SDP_GRAMMAR = {
     MidLine.fromSdpLine,
     IceUfragLine.fromSdpLine,
     IcePwdLine.fromSdpLine,
+    FingerprintLine.fromSdpLine,
   ],
 };
 

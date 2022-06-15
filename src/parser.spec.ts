@@ -1,4 +1,3 @@
-import {CodecInfo, MediaInfo} from 'model';
 import {disableRemb, removeCodec} from './munge';
 import { parse } from './parser';
 
@@ -7,6 +6,7 @@ o=jdoe 1234 1 IN IP4 127.0.0.1
 m=video 9 UDP/TLS/RTP/SAVPF 127 121 96 97
 a=ice-ufrag:J/UT
 a=ice-pwd:4U8uDB4oX2Oa1tM566bbj/wD
+a=fingerprint:sha-256 EB:06:86:81:9C:4A:13:17:A8:44:A9:BD:3A:82:67:F0:FF:49:41:EE:5D:C2:D2:D4:C0:03:AB:24:13:E7:E9:1B
 a=extmap:1 urn:ietf:params:rtp-hdrext:toffset
 a=extmap:2 http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time
 a=extmap:3 urn:3gpp:video-orientation
