@@ -15,6 +15,7 @@ import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import { UnknownLine } from './lines/unknown-line';
 import {BundleGroupLine} from './lines/bundle-group-line';
+import {BandwidthLine} from './lines/bandwidth-line';
 
 /**
  * A grouping of multiple related lines/information within an SDP.
@@ -154,6 +155,8 @@ export abstract class BaseMediaInfo implements SdpBlock {
 
   setup?: Setup;
 
+  bandwidth?: BandwidthLine;
+
   unknownAttributes: Array<UnknownLine> = [];
 
   /**
@@ -180,6 +183,9 @@ export abstract class BaseMediaInfo implements SdpBlock {
   addLine(line: Line): boolean {
     if (line instanceof BundleGroupLine) {
       throw new Error(`Error: bundle group line not allowed in media description`);
+    }
+    if (line instanceof BandwidthLine) {
+      this.bandwidth = line;
     }
     if (line instanceof MidLine) {
       this.mid = line.mid;

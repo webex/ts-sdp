@@ -7,6 +7,7 @@ t=0 0
 a=group:BUNDLE 0 1 2 3 4
 a=extmap-allow-mixed
 a=msid-semantic: WMS
+b=TIAS:2000000
 m=video 9 UDP/TLS/RTP/SAVPF 96 97 98 99 100 101 127 121 125 107 108 109 124 120 123 119 35 36 41 42 114 115 116 117 118
 c=IN IP4 0.0.0.0
 a=rtcp:9 IN IP4 0.0.0.0

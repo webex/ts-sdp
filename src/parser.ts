@@ -21,6 +21,7 @@ import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import { UnknownLine } from './lines/unknown-line';
 import {BundleGroupLine} from './lines/bundle-group-line';
+import {BandwidthLine} from './lines/bandwidth-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
@@ -29,6 +30,7 @@ export const DEFAULT_SDP_GRAMMAR = {
   m: MediaLine.fromSdpLine,
   s: SessionNameLine.fromSdpLine,
   t: TimingLine.fromSdpLine,
+  b: BandwidthLine.fromSdpLine,
   a: [
     RtpMapLine.fromSdpLine,
     RtcpFbLine.fromSdpLine,
