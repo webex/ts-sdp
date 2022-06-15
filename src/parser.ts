@@ -9,17 +9,6 @@ import { RtpMapLine } from './lines/rtpmap-line';
 import { VersionLine } from './lines/version-line';
 import { MediaInfo, Sdp, SdpBlock } from './model';
 
-function replacer(key: any, value: any) {
-  if (value instanceof Map) {
-    return {
-      dataType: 'Map',
-      value: Array.from(value.entries()), // or with spread: value: [...value]
-    };
-  } else {
-    return value;
-  }
-}
-
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
   o: OriginLine.fromSdpLine,
@@ -79,19 +68,3 @@ export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
   const parsed = postProcess(lines);
   return parsed;
 }
-
-//const input = `v=1
-//o=jdoe 1234 1 IN IP4 127.0.0.1
-//m=video 9 UDP/TLS/RTP/SAVPF 127
-//a=sendrecv
-//a=rtcp-fb:127 goog-remb
-//a=rtcp-fb:127 transport-cc
-//a=rtcp-fb:127 ccm fir
-//a=rtcp-fb:127 nack
-//a=rtcp-fb:127 nack pli
-//a=rtpmap:127 H264/90000
-//a=fmtp:127 level-asymmetry-allowed_1;packetization-mode=1;profile-level-id=42001f
-//`;
-//
-//const lines = parse(input);
-//postProcess(lines);
