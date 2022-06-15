@@ -16,6 +16,7 @@ import {FingerprintLine} from './lines/fingerprint-line';
 import {SetupLine} from './lines/setup-line';
 import {SessionNameLine} from './lines/session-name-line';
 import {TimingLine} from './lines/timing-line';
+import {SctpPortLine} from './lines/sctp-port-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
@@ -35,6 +36,7 @@ export const DEFAULT_SDP_GRAMMAR = {
     IcePwdLine.fromSdpLine,
     FingerprintLine.fromSdpLine,
     SetupLine.fromSdpLine,
+    SctpPortLine.fromSdpLine,
   ],
 };
 
