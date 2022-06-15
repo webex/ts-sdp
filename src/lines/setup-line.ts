@@ -3,9 +3,10 @@ import { Line } from './line';
 export type Setup = 'actpass' | 'active' | 'passive';
 
 /**
- * Definition of a setup attribute
+ * Definition of a setup attribute.
  *
- * Ex: a=setup:actpass
+ * @example
+ * a=setup:actpass
  */
 export class SetupLine extends Line {
   setup: Setup;

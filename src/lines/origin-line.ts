@@ -2,22 +2,38 @@ import { NUM, TOKEN } from '../regex-helpers';
 import { Line } from './line';
 
 /**
- * Definition of an origin line as defined by https://datatracker.ietf.org/doc/html/rfc4566#section-5.2
+ * Definition of an origin line as defined by https://datatracker.ietf.org/doc/html/rfc4566#section-5.2.
  *
- * Ex: o=- 3510072484341496656 2 IN IP4 127.0.0.1
+ * @example
+ * o=- 3510072484341496656 2 IN IP4 127.0.0.1
  */
 export class OriginLine extends Line {
   username: string;
+
   sessionId: number;
+
   sessionVersion: number;
+
   netType: string;
+
   addrType: string;
+
   ipAddr: string;
 
-  private static regex: RegExp = new RegExp(
+  private static regex = new RegExp(
     `^(${TOKEN}) (${NUM}) (${NUM}) (${TOKEN}) (${TOKEN}) (${TOKEN})`
   );
 
+  /**
+   * Create an OriginLine from the given values.
+   *
+   * @param username - The username.
+   * @param sessionId - The session ID.
+   * @param sessionVersion - The session version.
+   * @param netType - The network type.
+   * @param addrType - The network address type.
+   * @param ipAddr - The network address.
+   */
   constructor(
     username: string,
     sessionId: number,

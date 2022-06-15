@@ -4,7 +4,8 @@ import { Line } from './line';
 /**
  * Definition of a connection description as defined by https://datatracker.ietf.org/doc/html/rfc4566#section-5.7.
  *
- * Ex: c=IN IP4 0.0.0.0
+ * @example
+ * c=IN IP4 0.0.0.0
  */
 export class ConnectionLine extends Line {
   netType: string;

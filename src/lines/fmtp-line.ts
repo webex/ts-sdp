@@ -2,16 +2,24 @@ import { NUM, REST } from '../regex-helpers';
 import { Line } from './line';
 
 /**
- * Definition of a fmtp attribute line as defined in https://datatracker.ietf.org/doc/html/rfc4566#section-6
+ * Definition of a fmtp attribute line as defined in https://datatracker.ietf.org/doc/html/rfc4566#section-6.
  *
- * Ex: a=fmtp:97 apt=96
+ * @example
+ * a=fmtp:97 apt=96
  */
 export class FmtpLine extends Line {
   payloadType: number;
+
   params: string;
 
-  private static regex: RegExp = new RegExp(`^fmtp:(${NUM}) (${REST})`);
+  private static regex = new RegExp(`^fmtp:(${NUM}) (${REST})`);
 
+  /**
+   * Create an FmtpLine from the given values.
+   *
+   * @param payloadType - The payload type.
+   * @param params - The fmtp parameters.
+   */
   constructor(payloadType: number, params: string) {
     super();
     this.payloadType = payloadType;
@@ -36,7 +44,7 @@ export class FmtpLine extends Line {
   }
 
   /**
-   * @see {@link Line#toSdpLine
+   * @inheritdoc
    */
   toSdpLine(): string {
     return `a=fmtp:${this.payloadType} ${this.params}`;

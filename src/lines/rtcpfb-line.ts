@@ -4,14 +4,22 @@ import { Line } from './line';
 /**
  * Definition of an rtcp-fb attribute.
  *
- * Ex: a=rtcp-fb:96 goog-remb
+ * @example
+ * a=rtcp-fb:96 goog-remb
  */
 export class RtcpFbLine extends Line {
   payloadType: number;
+
   feedback: string;
 
-  private static regex: RegExp = new RegExp(`^rtcp-fb:(${NUM}) (${REST})`);
+  private static regex = new RegExp(`^rtcp-fb:(${NUM}) (${REST})`);
 
+  /**
+   * Create an RtcpFbLine from the given values.
+   *
+   * @param payloadType - The payload type.
+   * @param feedback - The feedback name.
+   */
   constructor(payloadType: number, feedback: string) {
     super();
     this.payloadType = payloadType;

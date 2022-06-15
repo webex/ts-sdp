@@ -1,12 +1,25 @@
 import { NUM, REST } from '../regex-helpers';
 import { Line } from './line';
 
+/**
+ * Model an extmap line from an SDP.
+ *
+ * @example
+ * a=extmap:1 urn:ietf:params:rtp-hdrext:toffset
+ */
 export class ExtMapLine extends Line {
   id: number;
+
   uri: string;
 
   private static regex = new RegExp(`^extmap:(${NUM}) (${REST})`);
 
+  /**
+   * Create an ExtMapLine from the given values.
+   *
+   * @param id - The ID.
+   * @param uri - The URI.
+   */
   constructor(id: number, uri: string) {
     super();
     this.id = id;

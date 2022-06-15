@@ -1,11 +1,22 @@
 import { TOKEN } from '../regex-helpers';
 import { Line } from './line';
 
+/**
+ * Model the ice-pwd line from an SDP.
+ *
+ * @example
+ * a=ice-pwd:JHSDJHSDLK
+ */
 export class IcePwdLine extends Line {
   pwd: string;
 
   private static regex = new RegExp(`^ice-pwd:(${TOKEN})$`);
 
+  /**
+   * Create an IcePwdLine from the given values.
+   *
+   * @param pwd - The ICE password.
+   */
   constructor(pwd: string) {
     super();
     this.pwd = pwd;
@@ -28,7 +39,7 @@ export class IcePwdLine extends Line {
   }
 
   /**
-   * @see {@link Line#toSdpLine
+   * @inheritdoc
    */
   toSdpLine(): string {
     return `a=ice-pwd:${this.pwd}`;

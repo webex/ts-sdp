@@ -1,13 +1,13 @@
 import { Line } from './line';
 
 /**
- * Ex: a=rtcp-mux
+ * Models an rtcp-mux attribute.
+ *
+ * @example
+ * a=rtcp-mux
  */
 export class RtcpMuxLine extends Line {
-  private static regex = new RegExp(`^rtcp-mux$`);
-  constructor() {
-    super();
-  }
+  private static regex = /^rtcp-mux$/;
 
   /**
    * Create an RtcpMuxLine from the given string.
@@ -25,6 +25,7 @@ export class RtcpMuxLine extends Line {
   /**
    * @inheritdoc
    */
+  // eslint-disable-next-line class-methods-use-this
   toSdpLine(): string {
     return `a=rtcp-mux`;
   }

@@ -46,7 +46,7 @@ export const DEFAULT_SDP_GRAMMAR = {
 };
 
 /**
- * Test for whether or not the given string appears to be a valid SDP line
+ * Test whether or not the given string appears to be a valid SDP line.
  *
  * @param line - The line to validate.
  * @returns True if the line appears valid, false otherwise.
@@ -59,7 +59,7 @@ function isValidLine(line: string): boolean {
  * Convert an array of parsed lines into an Sdp instance.
  *
  * @param lines - The lines to process.
- * @returns an SDP object.
+ * @returns An SDP object.
  */
 function postProcess(lines: Array<Line>): Sdp {
   const sdp = new Sdp();

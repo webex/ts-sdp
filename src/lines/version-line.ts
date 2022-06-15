@@ -4,7 +4,8 @@ import { Line } from './line';
 /**
  * Definition of a version as defined by https://datatracker.ietf.org/doc/html/rfc4566#section-5.1.
  *
- * Ex: v=0
+ * @example
+ * v=0
  */
 export class VersionLine extends Line {
   version: number;

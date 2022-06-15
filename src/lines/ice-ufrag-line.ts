@@ -1,11 +1,22 @@
 import { TOKEN } from '../regex-helpers';
 import { Line } from './line';
 
+/**
+ * Models an ICE ufrag line.
+ *
+ * @example
+ * a=ice-ufrag:LJmN
+ */
 export class IceUfragLine extends Line {
   ufrag: string;
 
   private static regex = new RegExp(`^ice-ufrag:(${TOKEN})$`);
 
+  /**
+   * Create an IceUfragLine from the given values.
+   *
+   * @param ufrag - The ufrag.
+   */
   constructor(ufrag: string) {
     super();
     this.ufrag = ufrag;

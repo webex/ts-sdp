@@ -4,7 +4,8 @@ import { Line } from './line';
 /**
  * Timing as defined by https://datatracker.ietf.org/doc/html/rfc4566#section-5.9.
  *
- * Ex: t=0 0
+ * @example
+ * t=0 0
  */
 export class TimingLine extends Line {
   startTime: number;
@@ -17,7 +18,7 @@ export class TimingLine extends Line {
    * Create a new TimingLine from the given values.
    *
    * @param startTime - The start time.
-   * @param endTime - The end time.
+   * @param stopTime - The stop time.
    */
   constructor(startTime: number, stopTime: number) {
     super();

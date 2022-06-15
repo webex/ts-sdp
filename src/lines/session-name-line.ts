@@ -4,13 +4,19 @@ import { Line } from './line';
 /**
  * Session name as defined by https://datatracker.ietf.org/doc/html/rfc4566#section-5.3.
  *
- * Ex: s=session_name
+ * @example
+ * s=session_name
  */
 export class SessionNameLine extends Line {
   name: string;
 
   private static regex = new RegExp(`^(${REST})`);
 
+  /**
+   * Create a SessionNameLine from the given values.
+   *
+   * @param name - The name.
+   */
   constructor(name: string) {
     super();
     this.name = name;
@@ -33,7 +39,7 @@ export class SessionNameLine extends Line {
   }
 
   /**
-   * @see {@link Line#toSdpLine
+   * @inheritdoc
    */
   toSdpLine(): string {
     return `s=${this.name}`;

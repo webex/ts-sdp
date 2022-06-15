@@ -3,15 +3,21 @@ import { Line } from './line';
 export type MediaDirection = 'sendrecv' | 'sendonly' | 'recvonly' | 'inactive';
 
 /**
- * Definition of a direction attribute line as defined in https://datatracker.ietf.org/doc/html/rfc4566#section-6
+ * Definition of a direction attribute line as defined in https://datatracker.ietf.org/doc/html/rfc4566#section-6.
  *
- * Ex: a=sendrecv
+ * @example
+ * a=sendrecv
  */
 export class DirectionLine extends Line {
   direction: MediaDirection;
 
-  private static regex: RegExp = new RegExp(`^(sendrecv|sendonly|recvonly|inactive)$`);
+  private static regex = /^(sendrecv|sendonly|recvonly|inactive)$/;
 
+  /**
+   * Create a DirectionLine from the given values.
+   *
+   * @param direction - The direction.
+   */
   constructor(direction: MediaDirection) {
     super();
     this.direction = direction;
@@ -34,7 +40,7 @@ export class DirectionLine extends Line {
   }
 
   /**
-   * @see {@link Line#toSdpLine
+   * @inheritdoc
    */
   toSdpLine(): string {
     return `a=${this.direction}`;

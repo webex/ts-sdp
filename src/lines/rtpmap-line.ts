@@ -2,14 +2,18 @@ import { NUM } from '../regex-helpers';
 import { Line } from './line';
 
 /**
- * Definition of an rtpmap attribute line as defined in https://datatracker.ietf.org/doc/html/rfc4566#section-6
+ * Definition of an rtpmap attribute line as defined in https://datatracker.ietf.org/doc/html/rfc4566#section-6.
  *
- * Ex: a=rtpmap:96 VP8/90000
+ * @example
+ * a=rtpmap:96 VP8/90000
  */
 export class RtpMapLine extends Line {
   payloadType: number;
+
   encodingName: string;
+
   clockRate: number;
+
   encodingParams?: string;
 
   // Note: RtpMap params are separated by a slash ('/').  We can't use a 'TOKEN' to capture
@@ -18,10 +22,19 @@ export class RtpMapLine extends Line {
   // Instead, we define a special 'NON_SLASH_TOKEN' helper here, which matches everything but whitespace and
   // a slash.
   private static NON_SLASH_TOKEN = '[^\\s/]+';
-  private static regex: RegExp = new RegExp(
+
+  private static regex = new RegExp(
     `^rtpmap:(${NUM}) (${this.NON_SLASH_TOKEN})/(${this.NON_SLASH_TOKEN})(?:/(${this.NON_SLASH_TOKEN}))?`
   );
 
+  /**
+   * Create an RtpMapLine from the given values.
+   *
+   * @param payloadType - The payload type.
+   * @param encodingName - The encoding name.
+   * @param clockRate - The encoding clockrate.
+   * @param encodingParams - Optional additional encoding parameters.
+   */
   constructor(
     payloadType: number,
     encodingName: string,
@@ -49,10 +62,8 @@ export class RtpMapLine extends Line {
     const payloadType = parseInt(tokens[1], 10);
     const encodingName = tokens[2];
     const clockRate = parseInt(tokens[3], 10);
-    let encodingParams = undefined;
-    if (tokens.length === 5) {
-      encodingParams = tokens[4];
-    }
+    // encodingParams, if present, will be in index 4
+    const { 4: encodingParams } = tokens;
 
     return new RtpMapLine(payloadType, encodingName, clockRate, encodingParams);
   }

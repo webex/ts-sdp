@@ -1,11 +1,22 @@
 import { REST } from '../regex-helpers';
 import { Line } from './line';
 
+/**
+ * Models a fingerprint line from an SDP.
+ *
+ * @example
+ * a=fingerprint:sha-256 DE:AD:BE:EF
+ */
 export class FingerprintLine extends Line {
   fingerprint: string;
 
   private static regex = new RegExp(`^fingerprint:(${REST})`);
 
+  /**
+   * Create a FingerprintLine from the given values.
+   *
+   * @param fingerprint - The hash and fingerprint.
+   */
   constructor(fingerprint: string) {
     super();
     this.fingerprint = fingerprint;
@@ -28,7 +39,7 @@ export class FingerprintLine extends Line {
   }
 
   /**
-   * @see {@link Line#toSdpLine
+   * @inheritdoc
    */
   toSdpLine(): string {
     return `a=fingerprint:${this.fingerprint}`;

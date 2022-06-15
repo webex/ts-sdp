@@ -1,11 +1,22 @@
 import { TOKEN } from '../regex-helpers';
 import { Line } from './line';
 
+/**
+ * Models a mid line.
+ *
+ * @example
+ * a=mid:1
+ */
 export class MidLine extends Line {
   mid: string;
 
   private static regex = new RegExp(`^mid:(${TOKEN})$`);
 
+  /**
+   * Create a MidLine from the given values.
+   *
+   * @param mid - The MID.
+   */
   constructor(mid: string) {
     super();
     this.mid = mid;
