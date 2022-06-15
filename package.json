@@ -1,5 +1,5 @@
 {
-  "name": "typescript-boilerplate",
+  "name": "ts-sdp",
   "version": "0.1.0",
   "description": "",
   "main": "dist/cjs/index.js",
