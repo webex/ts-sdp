@@ -1,3 +1,4 @@
+import {ExtMapLine} from './lines/extmap-line';
 import { ConnectionLine } from './lines/connection-line';
 import { DirectionLine } from './lines/direction-line';
 import { FmtpLine } from './lines/fmtp-line';
@@ -19,6 +20,7 @@ export const DEFAULT_SDP_GRAMMAR = {
     RtcpFbLine.fromSdpLine,
     FmtpLine.fromSdpLine,
     DirectionLine.fromSdpLine,
+    ExtMapLine.fromSdpLine,
   ],
 };
 

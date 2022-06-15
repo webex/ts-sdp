@@ -1,4 +1,5 @@
 import { DirectionLine, MediaDirection } from './lines/direction-line';
+import {ExtMapLine} from './lines/extmap-line';
 import { FmtpLine } from './lines/fmtp-line';
 import { Line } from './lines/line';
 import { MediaLine, MediaType } from './lines/media-line';
@@ -106,6 +107,7 @@ export class MediaInfo implements SdpBlock {
   port: number;
   protocol: string;
   pts: Array<number> = [];
+  extMaps: Array<ExtMapLine> = [];
   codecs: Map<number, CodecInfo> = new Map();
   direction?: MediaDirection;
 
@@ -129,6 +131,7 @@ export class MediaInfo implements SdpBlock {
         this.pts.map((pt) => `${pt}`)
       )
     );
+    this.extMaps.forEach((extMap) => lines.push(extMap));
     lines.push(new DirectionLine(this.direction as MediaDirection));
     this.codecs.forEach((codec) => lines.push(...codec.toLines()));
 
@@ -142,6 +145,9 @@ export class MediaInfo implements SdpBlock {
     }
     if (line instanceof DirectionLine) {
       this.direction = line.direction;
+    }
+    if (line instanceof ExtMapLine) {
+      this.extMaps.push(line);
     }
     // Lines pertaining to a specific codec
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {
