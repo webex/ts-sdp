@@ -10,7 +10,7 @@ export type MediaDirection = 'sendrecv' | 'sendonly' | 'recvonly' | 'inactive';
 export class DirectionLine extends Line {
   direction: MediaDirection;
 
-  private static regex: RegExp = new RegExp(`(sendrecv|sendonly|recvonly|inactive)`);
+  private static regex: RegExp = new RegExp(`^(sendrecv|sendonly|recvonly|inactive)$`);
 
   constructor(direction: MediaDirection) {
     super();
