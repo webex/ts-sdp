@@ -1,3 +1,5 @@
+export * from './bandwidth-line';
+export * from './bundle-group-line';
 export * from './connection-line';
 export * from './direction-line';
 export * from './fmtp-line';
