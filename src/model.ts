@@ -356,8 +356,6 @@ export class AvMediaDescription extends MediaDescription {
         this.pts.map((pt) => `${pt}`)
       )
     );
-    this.ifHaveLine(ConnectionLine, (cline) => lines.push(cline));
-
     if (this.iceUfrag) {
       lines.push(new IceUfragLine(this.iceUfrag as string));
     }
