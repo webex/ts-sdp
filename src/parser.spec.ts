@@ -83,7 +83,7 @@ describe('parsing', () => {
     DefaultSdpGrammar.addParser('a', CustomLine.fromSdpLine);
     it('should parse the custom attribute', () => {
       expect.hasAssertions();
-      const parsed = parse(sdpWithCustom, DefaultSdpGrammar);
+      const parsed = parse(sdpWithCustom);
       const custom = parsed.media[0].otherLines.find(
         (ol): ol is CustomLine => ol instanceof CustomLine
       ) as CustomLine;
