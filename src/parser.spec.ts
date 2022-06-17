@@ -55,15 +55,21 @@ function compareSdps(actual: string, expected: string) {
   const actualLines = actual.split(/\r\n|\n|\r/).filter((l) => l.length);
   const expectedLines = expected.split(/\r\n|\n|\r/).filter((l) => l.length);
 
+  const expectedLinesCopy = [...expectedLines];
   actualLines.forEach((actualLine) => {
-    const matchingLine = expectedLines.find((l) => l === actualLine);
-    if (!matchingLine) {
+    const matchingLineIndex = expectedLinesCopy.indexOf(actualLine);
+    if (matchingLineIndex !== -1) {
+      expectedLinesCopy.splice(matchingLineIndex, 1);
+    } else {
       throw new Error(`Actual line not found in expected sdp: '${actualLine}'`);
     }
   });
+  const actualLinesCopy = [...actualLines];
   expectedLines.forEach((expectedLine) => {
-    const matchingLine = actualLines.find((l) => l === expectedLine);
-    if (!matchingLine) {
+    const actualLineIndex = actualLinesCopy.indexOf(expectedLine);
+    if (actualLineIndex !== -1) {
+      actualLinesCopy.splice(actualLineIndex, 1);
+    } else {
       throw new Error(`Expected line not found in actual sdp: '${expectedLine}'`);
     }
   });
@@ -95,7 +101,9 @@ describe('parsing', () => {
   describe('ffox default offer', () => {
     it('should parse correctly', () => {
       const file = fs.readFileSync('./src/sdp-corpus/ffox_101_a_v_dc_offer.sdp', 'utf-8');
-      parse(file);
+      const result = parse(file);
+      const str = result.toSdp();
+      compareSdps(str, file);
     });
   });
 });
