@@ -1,4 +1,4 @@
-import { BaseMediaInfo, CodecInfo, MediaInfo, Sdp } from './model';
+import { MediaDescription, CodecInfo, MediaInfo, Sdp } from './model';
 
 /**
  * Disable an rtcp-fb value from all media blocks in the given SDP.

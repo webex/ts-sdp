@@ -138,7 +138,7 @@ export class CodecInfo implements SdpBlock {
 /**
  * All the elements of a media description block that are common to all media types.
  */
-export abstract class BaseMediaInfo implements SdpBlock {
+export abstract class MediaDescription implements SdpBlock {
   type: MediaType;
 
   port: number;
@@ -219,7 +219,7 @@ export abstract class BaseMediaInfo implements SdpBlock {
 /**
  * Model a media description with type 'application'.
  */
-export class ApplicationMediaInfo extends BaseMediaInfo {
+export class ApplicationMediaInfo extends MediaDescription {
   sctpPort?: number;
 
   maxMessageSize?: number;
@@ -293,7 +293,7 @@ export class ApplicationMediaInfo extends BaseMediaInfo {
 /**
  * Models all the information present within a media description block.
  */
-export class MediaInfo extends BaseMediaInfo {
+export class MediaInfo extends MediaDescription {
   pts: Array<number> = [];
 
   extMaps: Array<ExtMapLine> = [];
@@ -427,13 +427,13 @@ export class MediaInfo extends BaseMediaInfo {
 export class Sdp {
   session: SessionInfo = new SessionInfo();
 
-  media: Array<BaseMediaInfo> = [];
+  media: Array<MediaDescription> = [];
 
   /**
    * A helper property to retrieve just audio/video media info blocks.
    */
   get avMedia() {
-    return this.media.filter<MediaInfo>((mi: BaseMediaInfo): mi is MediaInfo => mi instanceof MediaInfo);
+    return this.media.filter<MediaInfo>((mi: MediaDescription): mi is MediaInfo => mi instanceof MediaInfo);
   }
 
   /**

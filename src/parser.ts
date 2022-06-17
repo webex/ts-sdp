@@ -8,7 +8,7 @@ import { OriginLine } from './lines/origin-line';
 import { RtcpFbLine } from './lines/rtcpfb-line';
 import { RtpMapLine } from './lines/rtpmap-line';
 import { VersionLine } from './lines/version-line';
-import { ApplicationMediaInfo, BaseMediaInfo, MediaInfo, Sdp, SdpBlock } from './model';
+import { ApplicationMediaInfo, MediaDescription, MediaInfo, Sdp, SdpBlock } from './model';
 import { MidLine } from './lines/mid-line';
 import { IceUfragLine } from './lines/ice-ufrag-line';
 import { IcePwdLine } from './lines/ice-pwd-line';
@@ -70,7 +70,7 @@ function postProcess(lines: Array<Line>): Sdp {
   let currBlock: SdpBlock = sdp.session;
   lines.forEach((l) => {
     if (l instanceof MediaLine) {
-      let mediaInfo: BaseMediaInfo;
+      let mediaInfo: MediaDescription;
       if (l.type === 'audio' || l.type === 'video') {
         mediaInfo = new MediaInfo(l);
       } else if (l.type === 'application') {
