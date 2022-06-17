@@ -15,6 +15,7 @@ import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import {BundleGroupLine} from './lines/bundle-group-line';
 import {BandwidthLine} from './lines/bandwidth-line';
+import {ConnectionLine} from './lines';
 
 /**
  * A grouping of multiple related lines/information within an SDP.
@@ -184,6 +185,29 @@ export abstract class MediaDescription implements SdpBlock {
   abstract toLines(): Array<Line>;
 
   /**
+   * Find a line amongst 'otherLines' that has the given type, if any.
+   *
+   * @param cls - The type being searched for.
+   * @returns The line in 'otherLines' matching that type, or undefined if none
+   * was found.
+   */
+  findLine<T extends Line>(cls: new (...a: any) => T): T | undefined {
+    return this.otherLines.find((l): l is T => l instanceof cls);
+  }
+
+  /**
+   * If a line with the given type is found in 'otherLines', invoke the given callback with it.
+   * @param cls - The type being searched for.
+   * @param callback - The callback to invoke with the type, if it's found.
+   */
+  ifHaveLine<T extends Line>(cls: new (...a: any) => T, callback: (line: T) => void): void {
+    const line = this.findLine(cls);
+    if (line) {
+      callback(line);
+    }
+  }
+
+  /**
    * @inheritdoc
    */
   addLine(line: Line): boolean {
@@ -332,6 +356,8 @@ export class AvMediaDescription extends MediaDescription {
         this.pts.map((pt) => `${pt}`)
       )
     );
+    this.ifHaveLine(ConnectionLine, (cline) => lines.push(cline));
+
     if (this.iceUfrag) {
       lines.push(new IceUfragLine(this.iceUfrag as string));
     }
