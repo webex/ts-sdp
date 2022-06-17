@@ -5,7 +5,7 @@ import { Line } from './line';
  * Model the ice-pwd line from an SDP.
  *
  * @example
- * a=ice-pwd:JHSDJHSDLK
+ * a=ice-pwd:password
  */
 export class IcePwdLine extends Line {
   pwd: string;

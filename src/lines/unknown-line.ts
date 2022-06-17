@@ -23,7 +23,7 @@ export class UnknownLine extends Line {
    * Create an UnknownLine from the given string.
    *
    * @param line - The line to parse.
-   * @returns A UnknownLine instance (parsing shoudl always succeed).
+   * @returns A UnknownLine instance (parsing should always succeed).
    */
   static fromSdpLine(line: string): UnknownLine {
     const tokens = line.match(UnknownLine.regex) as RegExpMatchArray;

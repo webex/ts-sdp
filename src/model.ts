@@ -159,7 +159,7 @@ export abstract class MediaDescription implements SdpBlock {
   bandwidth?: BandwidthLine;
 
   /**
-   * Any line that doesn't have explict parsing support in the lib
+   * Any line that doesn't have explicit parsing support in the lib
    * (which includes both lines that fall through and are parsed as
    * 'UnknownLine's, as well as any types that the user has extended
    * the grammar with) will be held here.  When serializing, they are
