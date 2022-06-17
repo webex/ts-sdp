@@ -219,7 +219,7 @@ export abstract class MediaDescription implements SdpBlock {
 /**
  * Model a media description with type 'application'.
  */
-export class ApplicationMediaInfo extends MediaDescription {
+export class ApplicationMediaDescription extends MediaDescription {
   sctpPort?: number;
 
   maxMessageSize?: number;
