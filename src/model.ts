@@ -13,7 +13,6 @@ import { Setup, SetupLine } from './lines/setup-line';
 import { SctpPortLine } from './lines/sctp-port-line';
 import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
-import { UnknownLine } from './lines/unknown-line';
 import {BundleGroupLine} from './lines/bundle-group-line';
 import {BandwidthLine} from './lines/bandwidth-line';
 
@@ -157,7 +156,14 @@ export abstract class MediaDescription implements SdpBlock {
 
   bandwidth?: BandwidthLine;
 
-  unknownAttributes: Array<UnknownLine> = [];
+  /**
+   * Any line that doesn't have explict parsing support in the lib
+   * (which includes both lines that fall through and are parsed as
+   * 'UnknownLine's, as well as any types that the user has extended
+   * the grammar with) will be held here.  When serializing, they are
+   * added to the end of the block.
+   */
+  otherLines: Array<Line> = [];
 
   /**
    * Create a BaseMediaInfo with the given values.
@@ -205,10 +211,6 @@ export abstract class MediaDescription implements SdpBlock {
     }
     if (line instanceof SetupLine) {
       this.setup = line.setup;
-      return true;
-    }
-    if (line instanceof UnknownLine) {
-      this.unknownAttributes.push(line);
       return true;
     }
 
@@ -263,7 +265,7 @@ export class ApplicationMediaDescription extends MediaDescription {
     if (this.maxMessageSize) {
       lines.push(new MaxMessageSizeLine(this.maxMessageSize as number));
     }
-    lines.push(...this.unknownAttributes);
+    lines.push(...this.otherLines);
 
     return lines;
   }
@@ -286,7 +288,8 @@ export class ApplicationMediaDescription extends MediaDescription {
       this.maxMessageSize = line.maxMessageSize;
       return true;
     }
-    return false;
+    this.otherLines.push(line);
+    return true;
   }
 }
 /**
@@ -353,7 +356,7 @@ export class AvMediaDescription extends MediaDescription {
     }
     this.codecs.forEach((codec) => lines.push(...codec.toLines()));
 
-    lines.push(...this.unknownAttributes);
+    lines.push(...this.otherLines);
 
     return lines;
   }
@@ -389,7 +392,8 @@ export class AvMediaDescription extends MediaDescription {
       codec.addLine(line);
       return true;
     }
-    return false;
+    this.otherLines.push(line);
+    return true;
   }
 
   /**
