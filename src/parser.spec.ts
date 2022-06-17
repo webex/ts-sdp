@@ -1,6 +1,8 @@
-import { Line } from './lines/line';
-import { DEFAULT_SDP_GRAMMAR, parse } from './parser';
+/* eslint-disable jsdoc/require-jsdoc, jsdoc/require-param */
+
 import * as fs from 'fs';
+import { Line } from './lines/line';
+import { DefaultSdpGrammar, parse } from './parser';
 
 class CustomLine extends Line {
   value: number;
@@ -73,16 +75,15 @@ function compareSdps(actual: string, expected: string) {
       throw new Error(`Expected line not found in actual sdp: '${expectedLine}'`);
     }
   });
-  expect(actualLines.length).toBe(expectedLines.length);
+  expect(actualLines).toHaveLength(expectedLines.length);
 }
 
 describe('parsing', () => {
   describe('with a custom grammar', () => {
-    var newGrammar = { ...DEFAULT_SDP_GRAMMAR };
-    newGrammar.a.push(CustomLine.fromSdpLine);
+    DefaultSdpGrammar.addParser('a', CustomLine.fromSdpLine);
     it('should parse the custom attribute', () => {
       expect.hasAssertions();
-      const parsed = parse(sdpWithCustom, newGrammar);
+      const parsed = parse(sdpWithCustom, DefaultSdpGrammar);
       const custom = parsed.media[0].otherLines.find(
         (ol): ol is CustomLine => ol instanceof CustomLine
       ) as CustomLine;
@@ -92,6 +93,7 @@ describe('parsing', () => {
   });
   describe('chrome default offer', () => {
     it('should parse correctly', () => {
+      expect.hasAssertions();
       const file = fs.readFileSync('./src/sdp-corpus/chrome_102_a_v_dc_offer.sdp', 'utf-8');
       const result = parse(file);
       const str = result.toSdp();
@@ -100,6 +102,7 @@ describe('parsing', () => {
   });
   describe('ffox default offer', () => {
     it('should parse correctly', () => {
+      expect.hasAssertions();
       const file = fs.readFileSync('./src/sdp-corpus/ffox_101_a_v_dc_offer.sdp', 'utf-8');
       const result = parse(file);
       const str = result.toSdp();

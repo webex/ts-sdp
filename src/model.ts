@@ -15,7 +15,6 @@ import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import { BundleGroupLine } from './lines/bundle-group-line';
 import { BandwidthLine } from './lines/bandwidth-line';
-import { ConnectionLine } from './lines';
 
 /**
  * A grouping of multiple related lines/information within an SDP.
@@ -197,6 +196,7 @@ export abstract class MediaDescription implements SdpBlock {
 
   /**
    * If a line with the given type is found in 'otherLines', invoke the given callback with it.
+   *
    * @param cls - The type being searched for.
    * @param callback - The callback to invoke with the type, if it's found.
    */
@@ -458,6 +458,8 @@ export class Sdp {
 
   /**
    * A helper property to retrieve just audio/video media info blocks.
+   *
+   * @returns Any AvMediaDescriptions in this SDP.
    */
   get avMedia() {
     return this.media.filter<AvMediaDescription>(

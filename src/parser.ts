@@ -29,31 +29,77 @@ import { UnknownLine } from './lines/unknown-line';
 import { BundleGroupLine } from './lines/bundle-group-line';
 import { BandwidthLine } from './lines/bandwidth-line';
 
-export const DEFAULT_SDP_GRAMMAR = {
-  v: VersionLine.fromSdpLine,
-  o: OriginLine.fromSdpLine,
-  c: ConnectionLine.fromSdpLine,
-  m: MediaLine.fromSdpLine,
-  s: SessionNameLine.fromSdpLine,
-  t: TimingLine.fromSdpLine,
-  b: BandwidthLine.fromSdpLine,
-  a: [
-    RtpMapLine.fromSdpLine,
-    RtcpFbLine.fromSdpLine,
-    FmtpLine.fromSdpLine,
-    DirectionLine.fromSdpLine,
-    ExtMapLine.fromSdpLine,
-    MidLine.fromSdpLine,
-    IceUfragLine.fromSdpLine,
-    IcePwdLine.fromSdpLine,
-    FingerprintLine.fromSdpLine,
-    SetupLine.fromSdpLine,
-    SctpPortLine.fromSdpLine,
-    MaxMessageSizeLine.fromSdpLine,
-    RtcpMuxLine.fromSdpLine,
-    BundleGroupLine.fromSdpLine,
-  ],
-};
+type Parser = (line: string) => Line | undefined;
+type LineType =
+  | 'a'
+  | 'b'
+  | 'c'
+  | 'd'
+  | 'e'
+  | 'f'
+  | 'g'
+  | 'h'
+  | 'i'
+  | 'j'
+  | 'k'
+  | 'l'
+  | 'm'
+  | 'n'
+  | 'o'
+  | 'p'
+  | 'q'
+  | 'r'
+  | 's'
+  | 't'
+  | 'u'
+  | 'v'
+  | 'w'
+  | 'x'
+  | 'y'
+  | 'z';
+
+export class Grammar {
+  parsers: Map<LineType, Parser[]> = new Map();
+
+  addParser(lineType: LineType, parser: Parser) {
+    const parsers = this.parsers.get(lineType) || [];
+    parsers.push(parser);
+    this.parsers.set(lineType, parsers);
+  }
+
+  getParsers(lineType: LineType): Parser[] {
+    return this.parsers.get(lineType) || [];
+  }
+}
+
+class SdpGrammar extends Grammar {
+  constructor() {
+    super();
+    this.addParser('v', VersionLine.fromSdpLine);
+    this.addParser('o', OriginLine.fromSdpLine);
+    this.addParser('c', ConnectionLine.fromSdpLine);
+    this.addParser('m', MediaLine.fromSdpLine);
+    this.addParser('s', SessionNameLine.fromSdpLine);
+    this.addParser('t', TimingLine.fromSdpLine);
+    this.addParser('b', BandwidthLine.fromSdpLine);
+    this.addParser('a', RtpMapLine.fromSdpLine);
+    this.addParser('a', RtcpFbLine.fromSdpLine);
+    this.addParser('a', FmtpLine.fromSdpLine);
+    this.addParser('a', DirectionLine.fromSdpLine);
+    this.addParser('a', ExtMapLine.fromSdpLine);
+    this.addParser('a', MidLine.fromSdpLine);
+    this.addParser('a', IceUfragLine.fromSdpLine);
+    this.addParser('a', IcePwdLine.fromSdpLine);
+    this.addParser('a', FingerprintLine.fromSdpLine);
+    this.addParser('a', SetupLine.fromSdpLine);
+    this.addParser('a', SctpPortLine.fromSdpLine);
+    this.addParser('a', MaxMessageSizeLine.fromSdpLine);
+    this.addParser('a', RtcpMuxLine.fromSdpLine);
+    this.addParser('a', BundleGroupLine.fromSdpLine);
+  }
+}
+
+export const DefaultSdpGrammar = new SdpGrammar();
 
 /**
  * Test whether or not the given string appears to be a valid SDP line.
@@ -82,8 +128,7 @@ function postProcess(lines: Array<Line>): Sdp {
       } else if (l.type === 'application') {
         mediaInfo = new ApplicationMediaDescription(l);
       } else {
-        console.log(`Unhandled media type: ${l.type}`);
-        return;
+        throw new Error(`Unhandled media type: ${l.type}`);
       }
       sdp.media.push(mediaInfo);
       currBlock = mediaInfo;
@@ -102,7 +147,7 @@ function postProcess(lines: Array<Line>): Sdp {
  * DEFAULT_SDP_GRAMMAR.
  * @returns An Sdp object modeling the given SDP.
  */
-export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
+export function parse(sdp: string, grammar: Grammar = DefaultSdpGrammar): Sdp {
   const lines: Array<Line> = [];
   sdp
     .split(/(\r\n|\r|\n)/)
@@ -110,23 +155,16 @@ export function parse(sdp: string, grammar: any = DEFAULT_SDP_GRAMMAR): Sdp {
     .forEach((l) => {
       const lineType = l[0];
       const lineValue = l.slice(2);
-      const parser = grammar[lineType];
-      if (Array.isArray(parser)) {
-        // eslint-disable-next-line no-restricted-syntax
-        for (const p of parser) {
-          const result = p(lineValue);
-          if (result) {
-            lines.push(result);
-            return;
-          }
-        }
-      } else {
-        const result = parser(lineValue) as Line;
+      const parsers = grammar.getParsers(lineType as LineType);
+      // eslint-disable-next-line no-restricted-syntax
+      for (const parser of parsers) {
+        const result = parser(lineValue);
         if (result) {
           lines.push(result);
           return;
         }
       }
+
       const result = UnknownLine.fromSdpLine(lineValue);
       lines.push(result);
     });

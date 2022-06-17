@@ -4,7 +4,7 @@ import { Line } from './line';
 export type BandwidthType = 'CT' | 'AS' | 'TIAS';
 
 /**
- * Model a bandwidth line in SDP. https://datatracker.ietf.org/doc/html/rfc4566#section-5.8.
+ * Model a bandwidth line in SDP as defined by https://datatracker.ietf.org/doc/html/rfc4566#section-5.8.
  *
  * @example
  * b=TIAS:20000000
