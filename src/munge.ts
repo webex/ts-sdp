@@ -1,4 +1,4 @@
-import { MediaDescription, CodecInfo, MediaInfo, Sdp } from './model';
+import { MediaDescription, CodecInfo, AvMediaDescription, Sdp } from './model';
 
 /**
  * Disable an rtcp-fb value from all media blocks in the given SDP.
@@ -8,7 +8,7 @@ import { MediaDescription, CodecInfo, MediaInfo, Sdp } from './model';
  */
 export function disableRtcpFbValue(sdp: Sdp, rtcpFbValue: string) {
   sdp.avMedia
-    .forEach((media: MediaInfo) => {
+    .forEach((media: AvMediaDescription) => {
       media.codecs.forEach((codec: CodecInfo) => {
         // eslint-disable-next-line no-param-reassign
         codec.feedback = codec.feedback.filter((fb) => fb !== rtcpFbValue);
@@ -34,7 +34,7 @@ export function disableRemb(sdp: Sdp) {
  */
 export function removeCodec(sdp: Sdp, codecName: string) {
   sdp.avMedia
-    .forEach((media: MediaInfo) => {
+    .forEach((media: AvMediaDescription) => {
       const codecInfos = [...media.codecs.entries()].filter(
         ([, ci]) => ci.name?.toLowerCase() === codecName.toLowerCase()
       );

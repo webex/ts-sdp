@@ -8,7 +8,7 @@ import { OriginLine } from './lines/origin-line';
 import { RtcpFbLine } from './lines/rtcpfb-line';
 import { RtpMapLine } from './lines/rtpmap-line';
 import { VersionLine } from './lines/version-line';
-import { ApplicationMediaDescription, MediaDescription, MediaInfo, Sdp, SdpBlock } from './model';
+import { ApplicationMediaDescription, MediaDescription, AvMediaDescription, Sdp, SdpBlock } from './model';
 import { MidLine } from './lines/mid-line';
 import { IceUfragLine } from './lines/ice-ufrag-line';
 import { IcePwdLine } from './lines/ice-pwd-line';
@@ -72,7 +72,7 @@ function postProcess(lines: Array<Line>): Sdp {
     if (l instanceof MediaLine) {
       let mediaInfo: MediaDescription;
       if (l.type === 'audio' || l.type === 'video') {
-        mediaInfo = new MediaInfo(l);
+        mediaInfo = new AvMediaDescription(l);
       } else if (l.type === 'application') {
         mediaInfo = new ApplicationMediaDescription(l);
       } else {

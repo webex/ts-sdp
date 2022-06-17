@@ -289,11 +289,10 @@ export class ApplicationMediaDescription extends MediaDescription {
     return false;
   }
 }
-
 /**
- * Models all the information present within a media description block.
+ * Model a media description with type 'audio' or 'video'.
  */
-export class MediaInfo extends MediaDescription {
+export class AvMediaDescription extends MediaDescription {
   pts: Array<number> = [];
 
   extMaps: Array<ExtMapLine> = [];
@@ -433,7 +432,7 @@ export class Sdp {
    * A helper property to retrieve just audio/video media info blocks.
    */
   get avMedia() {
-    return this.media.filter<MediaInfo>((mi: MediaDescription): mi is MediaInfo => mi instanceof MediaInfo);
+    return this.media.filter<AvMediaDescription>((mi: MediaDescription): mi is AvMediaDescription => mi instanceof AvMediaDescription);
   }
 
   /**
