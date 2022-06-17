@@ -41,7 +41,7 @@ export interface SdpBlock {
 /**
  * The information in the session section of an SDP.
  */
-export class SessionInfo implements SdpBlock {
+export class SessionDescription implements SdpBlock {
   lines: Array<Line> = [];
 
   /**
@@ -430,7 +430,7 @@ export class AvMediaDescription extends MediaDescription {
  * Models an entire SDP: a session block and 0 or more media blocks.
  */
 export class Sdp {
-  session: SessionInfo = new SessionInfo();
+  session: SessionDescription = new SessionDescription();
 
   media: Array<MediaDescription> = [];
 
