@@ -1,4 +1,4 @@
-import {Line} from './lines/line';
+import { Line } from './lines/line';
 import { DEFAULT_SDP_GRAMMAR, parse } from './parser';
 import * as fs from 'fs';
 
@@ -77,7 +77,9 @@ describe('parsing', () => {
     it('should parse the custom attribute', () => {
       expect.hasAssertions();
       const parsed = parse(sdpWithCustom, newGrammar);
-      const custom = parsed.media[0].otherLines.find((ol): ol is CustomLine => ol instanceof CustomLine) as CustomLine;
+      const custom = parsed.media[0].otherLines.find(
+        (ol): ol is CustomLine => ol instanceof CustomLine
+      ) as CustomLine;
       expect(custom).toBeTruthy();
       expect(custom.value).toBe(42);
     });

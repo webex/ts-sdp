@@ -8,7 +8,13 @@ import { OriginLine } from './lines/origin-line';
 import { RtcpFbLine } from './lines/rtcpfb-line';
 import { RtpMapLine } from './lines/rtpmap-line';
 import { VersionLine } from './lines/version-line';
-import { ApplicationMediaDescription, MediaDescription, AvMediaDescription, Sdp, SdpBlock } from './model';
+import {
+  ApplicationMediaDescription,
+  MediaDescription,
+  AvMediaDescription,
+  Sdp,
+  SdpBlock,
+} from './model';
 import { MidLine } from './lines/mid-line';
 import { IceUfragLine } from './lines/ice-ufrag-line';
 import { IcePwdLine } from './lines/ice-pwd-line';
@@ -20,8 +26,8 @@ import { SctpPortLine } from './lines/sctp-port-line';
 import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import { UnknownLine } from './lines/unknown-line';
-import {BundleGroupLine} from './lines/bundle-group-line';
-import {BandwidthLine} from './lines/bandwidth-line';
+import { BundleGroupLine } from './lines/bundle-group-line';
+import { BandwidthLine } from './lines/bandwidth-line';
 
 export const DEFAULT_SDP_GRAMMAR = {
   v: VersionLine.fromSdpLine,
@@ -45,7 +51,7 @@ export const DEFAULT_SDP_GRAMMAR = {
     SctpPortLine.fromSdpLine,
     MaxMessageSizeLine.fromSdpLine,
     RtcpMuxLine.fromSdpLine,
-    BundleGroupLine.fromSdpLine
+    BundleGroupLine.fromSdpLine,
   ],
 };
 

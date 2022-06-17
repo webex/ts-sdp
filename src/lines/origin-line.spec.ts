@@ -1,4 +1,4 @@
-import {OriginLine} from "./origin-line";
+import { OriginLine } from './origin-line';
 
 describe('origin line', () => {
   it('should parse correctly', () => {

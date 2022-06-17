@@ -13,9 +13,9 @@ import { Setup, SetupLine } from './lines/setup-line';
 import { SctpPortLine } from './lines/sctp-port-line';
 import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
-import {BundleGroupLine} from './lines/bundle-group-line';
-import {BandwidthLine} from './lines/bandwidth-line';
-import {ConnectionLine} from './lines';
+import { BundleGroupLine } from './lines/bundle-group-line';
+import { BandwidthLine } from './lines/bandwidth-line';
+import { ConnectionLine } from './lines';
 
 /**
  * A grouping of multiple related lines/information within an SDP.
@@ -462,7 +462,9 @@ export class Sdp {
    * A helper property to retrieve just audio/video media info blocks.
    */
   get avMedia() {
-    return this.media.filter<AvMediaDescription>((mi: MediaDescription): mi is AvMediaDescription => mi instanceof AvMediaDescription);
+    return this.media.filter<AvMediaDescription>(
+      (mi: MediaDescription): mi is AvMediaDescription => mi instanceof AvMediaDescription
+    );
   }
 
   /**

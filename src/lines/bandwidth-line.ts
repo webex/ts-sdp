@@ -1,5 +1,5 @@
-import {NUM} from "../regex-helpers";
-import {Line} from "./line";
+import { NUM } from '../regex-helpers';
+import { Line } from './line';
 
 export type BandwidthType = 'CT' | 'AS' | 'TIAS';
 

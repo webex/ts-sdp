@@ -1,5 +1,5 @@
-import {REST} from "../regex-helpers";
-import {Line} from "./line";
+import { REST } from '../regex-helpers';
+import { Line } from './line';
 
 /**
  * Model a bundle group line in SDP.
