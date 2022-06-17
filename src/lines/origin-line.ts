@@ -10,7 +10,8 @@ import { Line } from './line';
 export class OriginLine extends Line {
   username: string;
 
-  sessionId: number;
+  // Values are usually too large to be held in a number, so store it in a string
+  sessionId: string;
 
   sessionVersion: number;
 
@@ -21,7 +22,7 @@ export class OriginLine extends Line {
   ipAddr: string;
 
   private static regex = new RegExp(
-    `^(${TOKEN}) (${NUM}) (${NUM}) (${TOKEN}) (${TOKEN}) (${TOKEN})`
+    `^(${TOKEN}) (${TOKEN}) (${NUM}) (${TOKEN}) (${TOKEN}) (${TOKEN})`
   );
 
   /**
@@ -36,7 +37,7 @@ export class OriginLine extends Line {
    */
   constructor(
     username: string,
-    sessionId: number,
+    sessionId: string,
     sessionVersion: number,
     netType: string,
     addrType: string,
@@ -63,7 +64,7 @@ export class OriginLine extends Line {
     }
     const tokens = line.match(OriginLine.regex) as RegExpMatchArray;
     const username = tokens[1];
-    const sessionId = parseInt(tokens[2], 10);
+    const sessionId = tokens[2];
     const sessionVersion = parseInt(tokens[3], 10);
     const netType = tokens[4];
     const addrType = tokens[5];
