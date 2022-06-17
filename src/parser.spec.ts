@@ -96,7 +96,7 @@ describe('parsing', () => {
       expect.hasAssertions();
       const file = fs.readFileSync('./src/sdp-corpus/chrome_102_a_v_dc_offer.sdp', 'utf-8');
       const result = parse(file);
-      const str = result.toSdp();
+      const str = result.toString();
       compareSdps(str, file);
     });
   });
@@ -105,7 +105,7 @@ describe('parsing', () => {
       expect.hasAssertions();
       const file = fs.readFileSync('./src/sdp-corpus/ffox_101_a_v_dc_offer.sdp', 'utf-8');
       const result = parse(file);
-      const str = result.toSdp();
+      const str = result.toString();
       compareSdps(str, file);
     });
   });

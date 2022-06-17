@@ -450,7 +450,7 @@ export class Sdp {
    *
    * @returns This SDP as a string.
    */
-  toSdp(): string {
+  toString(): string {
     const lines: Array<Line> = [];
     lines.push(...this.session.toLines());
     this.media.forEach((m) => lines.push(...m.toLines()));
