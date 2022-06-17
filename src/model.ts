@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 import { DirectionLine, MediaDirection } from './lines/direction-line';
 import { ExtMapLine } from './lines/extmap-line';
 import { FmtpLine } from './lines/fmtp-line';
@@ -182,30 +184,6 @@ export abstract class MediaDescription implements SdpBlock {
    * @inheritdoc
    */
   abstract toLines(): Array<Line>;
-
-  /**
-   * Find a line amongst 'otherLines' that has the given type, if any.
-   *
-   * @param cls - The type being searched for.
-   * @returns The line in 'otherLines' matching that type, or undefined if none
-   * was found.
-   */
-  findLine<T extends Line>(cls: new (...a: any) => T): T | undefined {
-    return this.otherLines.find((l): l is T => l instanceof cls);
-  }
-
-  /**
-   * If a line with the given type is found in 'otherLines', invoke the given callback with it.
-   *
-   * @param cls - The type being searched for.
-   * @param callback - The callback to invoke with the type, if it's found.
-   */
-  ifHaveLine<T extends Line>(cls: new (...a: any) => T, callback: (line: T) => void): void {
-    const line = this.findLine(cls);
-    if (line) {
-      callback(line);
-    }
-  }
 
   /**
    * @inheritdoc

@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { ExtMapLine } from './lines/extmap-line';
 import { ConnectionLine } from './lines/connection-line';
 import { DirectionLine } from './lines/direction-line';
@@ -58,21 +59,45 @@ type LineType =
   | 'y'
   | 'z';
 
+/**
+ * Defines a grammar interface, which supports adding and retrieving parsers
+ * for line types.
+ */
 export class Grammar {
   parsers: Map<LineType, Parser[]> = new Map();
 
+  /**
+   * Add a parser for the given LineType.  Parsers will be attempted
+   * in the order in which they're added.
+   *
+   * @param lineType - The LineType this parser should be used for.
+   * @param parser - The parser.
+   */
   addParser(lineType: LineType, parser: Parser) {
     const parsers = this.parsers.get(lineType) || [];
     parsers.push(parser);
     this.parsers.set(lineType, parsers);
   }
 
+  /**
+   * Get all existing parsers for the given LineType.
+   *
+   * @param lineType - The LineType.
+   * @returns The Parsers for that LineType.
+   */
   getParsers(lineType: LineType): Parser[] {
     return this.parsers.get(lineType) || [];
   }
 }
 
+/**
+ * An extension of the Grammar class which adds the appropriate Parsers
+ * for parsing an SDP.
+ */
 class SdpGrammar extends Grammar {
+  /**
+   * Create an SdpGrammar instance.
+   */
   constructor() {
     super();
     this.addParser('v', VersionLine.fromSdpLine);
