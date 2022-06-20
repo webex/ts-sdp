@@ -17,6 +17,9 @@ import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import { BundleGroupLine } from './lines/bundle-group-line';
 import { BandwidthLine } from './lines/bandwidth-line';
+import { ConnectionLine, OriginLine, VersionLine } from './lines';
+import { SessionNameLine } from './lines/session-name-line';
+import { TimingLine } from './lines/timing-line';
 
 /**
  * A grouping of multiple related lines/information within an SDP.
@@ -42,13 +45,52 @@ export interface SdpBlock {
  * The information in the session section of an SDP.
  */
 export class SessionDescription implements SdpBlock {
-  lines: Array<Line> = [];
+  version?: VersionLine;
+
+  origin?: OriginLine;
+
+  sessionName?: SessionNameLine;
+
+  connection?: ConnectionLine;
+
+  timing?: TimingLine;
+
+  groups: Array<BundleGroupLine> = [];
+
+  /**
+   * Any line that doesn't have explicit parsing support in the lib
+   * (which includes both lines that fall through and are parsed as
+   * 'UnknownLine's, as well as any types that the user has extended
+   * the grammar with) will be held here.  When serializing, they are
+   * added to the end of the block.
+   */
+  otherLines: Array<Line> = [];
 
   /**
    * @inheritdoc
    */
   addLine(line: Line): boolean {
-    this.lines.push(line);
+    if (line instanceof VersionLine) {
+      this.version = line;
+      return true;
+    }
+    if (line instanceof OriginLine) {
+      this.origin = line;
+      return true;
+    }
+    if (line instanceof SessionNameLine) {
+      this.sessionName = line;
+      return true;
+    }
+    if (line instanceof TimingLine) {
+      this.timing = line;
+      return true;
+    }
+    if (line instanceof BundleGroupLine) {
+      this.groups.push(line);
+      return true;
+    }
+    this.otherLines.push(line);
     return true;
   }
 
@@ -56,7 +98,24 @@ export class SessionDescription implements SdpBlock {
    * @inheritdoc
    */
   toLines(): Array<Line> {
-    return this.lines;
+    const lines: Array<Line> = [];
+    if (this.version) {
+      lines.push(this.version);
+    }
+    if (this.origin) {
+      lines.push(this.origin);
+    }
+    if (this.sessionName) {
+      lines.push(this.sessionName);
+    }
+    if (this.timing) {
+      lines.push(this.timing);
+    }
+    if (this.groups) {
+      lines.push(...this.groups);
+    }
+    lines.push(...this.otherLines);
+    return lines;
   }
 }
 
@@ -294,6 +353,7 @@ export class ApplicationMediaDescription extends MediaDescription {
     return true;
   }
 }
+
 /**
  * Model a media description with type 'audio' or 'video'.
  */
