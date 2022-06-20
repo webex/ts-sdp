@@ -515,6 +515,6 @@ export class Sdp {
     lines.push(...this.session.toLines());
     this.media.forEach((m) => lines.push(...m.toLines()));
 
-    return lines.map((l) => l.toSdpLine()).join('\r\n');
+    return `${lines.map((l) => l.toSdpLine()).join('\r\n')}\r\n`;
   }
 }
