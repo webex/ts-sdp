@@ -190,7 +190,9 @@ export function parse(sdp: string, grammar: Grammar = DefaultSdpGrammar): Sdp {
         }
       }
 
-      const result = UnknownLine.fromSdpLine(lineValue);
+      // When parsing an unknown line, we need to preserve the line type as well, so
+      // pass the entire line in here.
+      const result = UnknownLine.fromSdpLine(l);
       lines.push(result);
     });
   const parsed = postProcess(lines);

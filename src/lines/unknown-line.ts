@@ -37,6 +37,6 @@ export class UnknownLine extends Line {
    * @inheritdoc
    */
   toSdpLine(): string {
-    return `a=${this.value}`;
+    return `${this.value}`;
   }
 }
