@@ -1,5 +1,5 @@
 {
-  "name": "ts-sdp",
+  "name": "@webex-connect/ts-sdp",
   "version": "1.0.0",
   "description": "",
   "main": "dist/cjs/index.js",
