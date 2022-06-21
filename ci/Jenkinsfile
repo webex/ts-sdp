@@ -1,0 +1,65 @@
+#!/usr/bin/groovy
+// https://engit.cisco.com/build/cloudbees-jenkins/documentation-central-jenkins-build-agents
+pipeline {
+  agent any
+
+  tools {nodejs "Node v14"}
+
+  options {
+    ansiColor('xterm')
+  }
+  environment {
+    PATH="/usr/cisco/bin/:$PATH"
+  }
+
+  stages {
+    stage('Setup & Install Dependencies') {
+      steps {
+        sh 'node -v'
+        sh 'npm -v'
+        echo 'Install Local Yarn'
+        sh 'npm install yarn -D'
+        echo " current workspace ${env.WORKSPACE}"
+        echo "PATH=$PATH"
+        sh './node_modules/yarn/bin/yarn install'
+      }
+    }
+    stage('Validate Lint') {
+      steps {
+        // Validate lint: Fail on warnings & errors.
+        sh './node_modules/yarn/bin/yarn test:lint'
+      }
+    }
+    stage('Run Unit Test') {
+      steps {
+        sh './node_modules/yarn/bin/yarn test:coverage'
+        publishHTML([
+          allowMissing: false,
+          alwaysLinkToLastBuild: false,
+          keepAll: true,
+          reportDir: 'src/coverage',
+          reportFiles: 'index.html',
+          reportName: 'Jest Coverage Report',
+          reportTitles: 'All Tests'
+        ])
+      }
+    }
+    stage('Build Package') {
+      steps {
+        sh './node_modules/yarn/bin/yarn build'
+      }
+    }
+    stage('Publish Release') {
+      steps {
+        script  {
+            if (env.BRANCH_NAME == "main") {
+              echo 'Publishing to npm and creating release'
+              sh "./node_modules/yarn/bin/yarn release"
+            } else {
+              echo "Skipping publish - This build is not occurring on a publish-able branch!"
+            }
+        }
+      }
+    }
+  }
+}
