@@ -1,3 +1,10 @@
+## [1.0.1](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.0.0...v1.0.1) (2022-06-21)
+
+
+### Bug Fixes
+
+* add missing exports ([24dafe2](https://sqbu-github.cisco.com/CPaaS/ts-sdp/commit/24dafe22d430491ee26e95b7cba327bfdb6c76ab))
+
 # 1.0.0 (2022-06-21)
 
 
