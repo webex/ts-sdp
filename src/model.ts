@@ -20,6 +20,7 @@ import { BandwidthLine } from './lines/bandwidth-line';
 import { ConnectionLine, OriginLine, VersionLine } from './lines';
 import { SessionNameLine } from './lines/session-name-line';
 import { TimingLine } from './lines/timing-line';
+import { SessionInformationLine } from './lines/session-information-line';
 
 /**
  * A grouping of multiple related lines/information within an SDP.
@@ -50,6 +51,8 @@ export class SessionDescription implements SdpBlock {
   origin?: OriginLine;
 
   sessionName?: SessionNameLine;
+
+  information?: SessionInformationLine;
 
   connection?: ConnectionLine;
 
@@ -82,6 +85,10 @@ export class SessionDescription implements SdpBlock {
       this.sessionName = line;
       return true;
     }
+    if (line instanceof SessionInformationLine) {
+      this.information = line;
+      return true;
+    }
     if (line instanceof TimingLine) {
       this.timing = line;
       return true;
@@ -107,6 +114,12 @@ export class SessionDescription implements SdpBlock {
     }
     if (this.sessionName) {
       lines.push(this.sessionName);
+    }
+    if (this.information) {
+      lines.push(this.information);
+    }
+    if (this.connection) {
+      lines.push(this.connection);
     }
     if (this.timing) {
       lines.push(this.timing);
@@ -253,6 +266,7 @@ export abstract class MediaDescription implements SdpBlock {
     }
     if (line instanceof BandwidthLine) {
       this.bandwidth = line;
+      return true;
     }
     if (line instanceof MidLine) {
       this.mid = line.mid;
@@ -305,6 +319,9 @@ export class ApplicationMediaDescription extends MediaDescription {
   toLines(): Array<Line> {
     const lines: Array<Line> = [];
     lines.push(new MediaLine(this.type, this.port, this.protocol, this.fmts));
+    if (this.bandwidth) {
+      lines.push(this.bandwidth);
+    }
     if (this.iceUfrag) {
       lines.push(new IceUfragLine(this.iceUfrag as string));
     }
@@ -394,6 +411,9 @@ export class AvMediaDescription extends MediaDescription {
         this.pts.map((pt) => `${pt}`)
       )
     );
+    if (this.bandwidth) {
+      lines.push(this.bandwidth);
+    }
     if (this.iceUfrag) {
       lines.push(new IceUfragLine(this.iceUfrag as string));
     }

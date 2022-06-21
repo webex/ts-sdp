@@ -17,7 +17,7 @@ export class ConnectionLine extends Line {
   private static regex = new RegExp(`^(${TOKEN}) (${TOKEN}) (${TOKEN})`);
 
   /**
-   * Create a ConnectionLine from values.
+   * Create a ConnectionLine from the given values.
    *
    * @param netType - The network type.
    * @param addrType - The network address type.

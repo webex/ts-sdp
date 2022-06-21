@@ -7,4 +7,6 @@ export * from './media-line';
 export * from './origin-line';
 export * from './rtcpfb-line';
 export * from './rtpmap-line';
+export * from './session-information-line';
+export * from './session-name-line';
 export * from './version-line';

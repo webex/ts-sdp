@@ -29,6 +29,7 @@ import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import { UnknownLine } from './lines/unknown-line';
 import { BundleGroupLine } from './lines/bundle-group-line';
 import { BandwidthLine } from './lines/bandwidth-line';
+import { SessionInformationLine } from './lines/session-information-line';
 
 type Parser = (line: string) => Line | undefined;
 type LineType =
@@ -103,6 +104,7 @@ class SdpGrammar extends Grammar {
     this.addParser('v', VersionLine.fromSdpLine);
     this.addParser('o', OriginLine.fromSdpLine);
     this.addParser('c', ConnectionLine.fromSdpLine);
+    this.addParser('i', SessionInformationLine.fromSdpLine);
     this.addParser('m', MediaLine.fromSdpLine);
     this.addParser('s', SessionNameLine.fromSdpLine);
     this.addParser('t', TimingLine.fromSdpLine);
