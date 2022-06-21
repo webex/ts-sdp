@@ -58,6 +58,8 @@ export class SessionDescription implements SdpBlock {
 
   timing?: TimingLine;
 
+  bandwidth?: BandwidthLine;
+
   groups: Array<BundleGroupLine> = [];
 
   /**
@@ -93,6 +95,14 @@ export class SessionDescription implements SdpBlock {
       this.timing = line;
       return true;
     }
+    if (line instanceof ConnectionLine) {
+      this.connection = line;
+      return true;
+    }
+    if (line instanceof BandwidthLine) {
+      this.bandwidth = line;
+      return true;
+    }
     if (line instanceof BundleGroupLine) {
       this.groups.push(line);
       return true;
@@ -120,6 +130,9 @@ export class SessionDescription implements SdpBlock {
     }
     if (this.connection) {
       lines.push(this.connection);
+    }
+    if (this.bandwidth) {
+      lines.push(this.bandwidth);
     }
     if (this.timing) {
       lines.push(this.timing);
