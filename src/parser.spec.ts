@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc, jsdoc/require-param */
 
 import * as fs from 'fs';
+import { ConnectionLine } from './lines';
 import { Line } from './lines/line';
 import { DefaultSdpGrammar, parse } from './parser';
 
@@ -108,5 +109,20 @@ describe('parsing', () => {
       const str = result.toString();
       compareSdps(str, file);
     });
+  });
+  it('should parse connection line at session level and media level', () => {
+    expect.assertions(4);
+    const sdpWithCLines = fs.readFileSync('./src/sdp-corpus/c_lines_in_media.sdp', 'utf-8');
+    const parsed = parse(sdpWithCLines);
+    expect(parsed.session.connection).toStrictEqual(new ConnectionLine('IN', 'IP4', '192.168.0.1'));
+    expect(parsed.media[0].connection).toStrictEqual(
+      new ConnectionLine('IN', 'IP4', '192.168.0.2')
+    );
+    expect(parsed.media[1].connection).toStrictEqual(
+      new ConnectionLine('IN', 'IP6', '2001::5ef5:79fd:1cdf:b0f:b981:52c7')
+    );
+    expect(parsed.media[2].connection).toStrictEqual(
+      new ConnectionLine('IN', 'IP6', '2a02:c7f:60d6:2600:4157:2f9c:198b:80a3')
+    );
   });
 });

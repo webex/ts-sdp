@@ -1,6 +1,6 @@
 # ts-sdp
 
-`ts-sdp` is a library which allows for parsing, manipuation, and serialization of SDP.
+`ts-sdp` is a library which allows for parsing, manipulation, and serialization of SDP.
 
 ### Examples
 ##### Parsing

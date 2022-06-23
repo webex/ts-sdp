@@ -243,6 +243,8 @@ export abstract class MediaDescription implements SdpBlock {
 
   bandwidth?: BandwidthLine;
 
+  connection?: ConnectionLine;
+
   /**
    * Any line that doesn't have explicit parsing support in the lib
    * (which includes both lines that fall through and are parsed as
@@ -301,6 +303,10 @@ export abstract class MediaDescription implements SdpBlock {
       this.setup = line.setup;
       return true;
     }
+    if (line instanceof ConnectionLine) {
+      this.connection = line;
+      return true;
+    }
 
     return false;
   }
@@ -332,6 +338,9 @@ export class ApplicationMediaDescription extends MediaDescription {
   toLines(): Array<Line> {
     const lines: Array<Line> = [];
     lines.push(new MediaLine(this.type, this.port, this.protocol, this.fmts));
+    if (this.connection) {
+      lines.push(this.connection);
+    }
     if (this.bandwidth) {
       lines.push(this.bandwidth);
     }
@@ -424,6 +433,9 @@ export class AvMediaDescription extends MediaDescription {
         this.pts.map((pt) => `${pt}`)
       )
     );
+    if (this.connection) {
+      lines.push(this.connection);
+    }
     if (this.bandwidth) {
       lines.push(this.bandwidth);
     }
