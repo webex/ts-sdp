@@ -1,3 +1,10 @@
+## [1.0.2](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.0.1...v1.0.2) (2022-06-23)
+
+
+### Bug Fixes
+
+* c-lines were only parsed at session level, not in media sections ([#4](https://sqbu-github.cisco.com/CPaaS/ts-sdp/issues/4)) ([6585333](https://sqbu-github.cisco.com/CPaaS/ts-sdp/commit/6585333c32b03b3211b9fafaff3111ff713aa00e))
+
 ## [1.0.1](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.0.0...v1.0.1) (2022-06-21)
 
 
