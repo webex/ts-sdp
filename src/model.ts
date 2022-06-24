@@ -17,7 +17,7 @@ import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import { BundleGroupLine } from './lines/bundle-group-line';
 import { BandwidthLine } from './lines/bandwidth-line';
-import { ConnectionLine, OriginLine, VersionLine } from './lines';
+import { ConnectionLine, IceOptionsLine, OriginLine, VersionLine } from './lines';
 import { SessionNameLine } from './lines/session-name-line';
 import { TimingLine } from './lines/timing-line';
 import { SessionInformationLine } from './lines/session-information-line';
@@ -40,6 +40,53 @@ export interface SdpBlock {
    * @returns - An array containing all the lines for this block.
    */
   toLines(): Array<Line>;
+}
+
+/**
+ * Model all of the ICE-related information.
+ */
+export class IceInfo implements SdpBlock {
+  ufrag?: IceUfragLine;
+
+  pwd?: IcePwdLine;
+
+  options?: IceOptionsLine;
+
+  /**
+   * @inheritdoc
+   */
+  addLine(line: Line): boolean {
+    if (line instanceof IceUfragLine) {
+      this.ufrag = line;
+      return true;
+    }
+    if (line instanceof IcePwdLine) {
+      this.pwd = line;
+      return true;
+    }
+    if (line instanceof IceOptionsLine) {
+      this.options = line;
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  toLines(): Array<Line> {
+    const lines: Array<Line> = [];
+    if (this.ufrag) {
+      lines.push(this.ufrag);
+    }
+    if (this.pwd) {
+      lines.push(this.pwd);
+    }
+    if (this.options) {
+      lines.push(this.options);
+    }
+    return lines;
+  }
 }
 
 /**
@@ -233,9 +280,7 @@ export abstract class MediaDescription implements SdpBlock {
 
   mid?: string;
 
-  iceUfrag?: string;
-
-  icePwd?: string;
+  iceInfo: IceInfo = new IceInfo();
 
   fingerprint?: string;
 
@@ -287,14 +332,6 @@ export abstract class MediaDescription implements SdpBlock {
       this.mid = line.mid;
       return true;
     }
-    if (line instanceof IceUfragLine) {
-      this.iceUfrag = line.ufrag;
-      return true;
-    }
-    if (line instanceof IcePwdLine) {
-      this.icePwd = line.pwd;
-      return true;
-    }
     if (line instanceof FingerprintLine) {
       this.fingerprint = line.fingerprint;
       return true;
@@ -308,7 +345,8 @@ export abstract class MediaDescription implements SdpBlock {
       return true;
     }
 
-    return false;
+    // If it didn't match anything else, see if IceInfo wants it.
+    return this.iceInfo.addLine(line);
   }
 }
 
@@ -344,12 +382,7 @@ export class ApplicationMediaDescription extends MediaDescription {
     if (this.bandwidth) {
       lines.push(this.bandwidth);
     }
-    if (this.iceUfrag) {
-      lines.push(new IceUfragLine(this.iceUfrag as string));
-    }
-    if (this.icePwd) {
-      lines.push(new IcePwdLine(this.icePwd as string));
-    }
+    lines.push(...this.iceInfo.toLines());
     if (this.fingerprint) {
       lines.push(new FingerprintLine(this.fingerprint as string));
     }
@@ -439,12 +472,7 @@ export class AvMediaDescription extends MediaDescription {
     if (this.bandwidth) {
       lines.push(this.bandwidth);
     }
-    if (this.iceUfrag) {
-      lines.push(new IceUfragLine(this.iceUfrag as string));
-    }
-    if (this.icePwd) {
-      lines.push(new IcePwdLine(this.icePwd as string));
-    }
+    lines.push(...this.iceInfo.toLines());
     if (this.fingerprint) {
       lines.push(new FingerprintLine(this.fingerprint as string));
     }

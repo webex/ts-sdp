@@ -30,6 +30,7 @@ import { UnknownLine } from './lines/unknown-line';
 import { BundleGroupLine } from './lines/bundle-group-line';
 import { BandwidthLine } from './lines/bandwidth-line';
 import { SessionInformationLine } from './lines/session-information-line';
+import { IceOptionsLine } from './lines';
 
 type Parser = (line: string) => Line | undefined;
 type LineType =
@@ -117,6 +118,7 @@ class SdpGrammar extends Grammar {
     this.addParser('a', MidLine.fromSdpLine);
     this.addParser('a', IceUfragLine.fromSdpLine);
     this.addParser('a', IcePwdLine.fromSdpLine);
+    this.addParser('a', IceOptionsLine.fromSdpLine);
     this.addParser('a', FingerprintLine.fromSdpLine);
     this.addParser('a', SetupLine.fromSdpLine);
     this.addParser('a', SctpPortLine.fromSdpLine);

@@ -76,7 +76,7 @@
     "node_modules/**",
     "eslintrc.js",
     ".vscode/**",
-    "src/mocks/sample-sdp.ts"
+    "src/sdp-corpus/**"
   ],
   "ignoreWords": [
     "HEAPF",
