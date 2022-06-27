@@ -2,7 +2,7 @@ import { NUM, REST } from '../regex-helpers';
 import { Line } from './line';
 
 /**
- * Definition of an rtcp-fb attribute.
+ * Implementation of an rtcp-fb attribute as defined by https://datatracker.ietf.org/doc/html/rfc4585#section-4.2.
  *
  * @example
  * a=rtcp-fb:96 goog-remb

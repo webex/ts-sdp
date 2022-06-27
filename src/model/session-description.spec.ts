@@ -5,12 +5,10 @@ import {
   OriginLine,
   SessionInformationLine,
   SessionNameLine,
+  TimingLine,
   VersionLine,
-} from './lines';
-import { TimingLine } from './lines/timing-line';
-import { SessionDescription } from './model';
-import { parse } from './parser';
-import { expectedOutputMediaDescription, inputMediaDescription } from './sdp-corpus/ordering';
+} from '../lines';
+import { SessionDescription } from './session-description';
 
 describe('session description', () => {
   it('should put the lines in the correct order', () => {
@@ -32,15 +30,5 @@ describe('session description', () => {
     expect(lines.indexOf(sd.connection)).toBe(4);
     expect(lines.indexOf(sd.bandwidth)).toBe(5);
     expect(lines.indexOf(sd.timing)).toBe(6);
-  });
-});
-
-describe('media description', () => {
-  it('should put the lines in the correct order', () => {
-    expect.hasAssertions();
-    const sdp = parse(inputMediaDescription);
-    const result = sdp.toString();
-
-    expect(result).toBe(expectedOutputMediaDescription);
   });
 });

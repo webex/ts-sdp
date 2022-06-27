@@ -2,7 +2,7 @@ import { NUM, REST } from '../regex-helpers';
 import { Line } from './line';
 
 /**
- * Model an extmap line from an SDP.
+ * Model an extmap line from an SDP as defined by https://datatracker.ietf.org/doc/html/rfc5285#section-5.
  *
  * @example
  * a=extmap:1 urn:ietf:params:rtp-hdrext:toffset

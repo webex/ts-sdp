@@ -146,7 +146,7 @@ function isValidLine(line: string): boolean {
  * @param lines - The lines to process.
  * @returns An SDP object.
  */
-function postProcess(lines: Array<Line>): Sdp {
+export function parseToModel(lines: Array<Line>): Sdp {
   const sdp = new Sdp();
   let currBlock: SdpBlock = sdp.session;
   lines.forEach((l) => {
@@ -169,14 +169,13 @@ function postProcess(lines: Array<Line>): Sdp {
 }
 
 /**
- * Parse the given SDP string into an Sdp object.
+ * Parse the given SDP string into an array of Line instances.
  *
  * @param sdp - The SDP to parse.
- * @param grammar - An optional SDP grammar map to use when parsing. Defaults to
- * DEFAULT_SDP_GRAMMAR.
- * @returns An Sdp object modeling the given SDP.
+ * @param grammar - The Grammar instance to use for parsing.
+ * @returns - An array of Line instances representing the given SDP.
  */
-export function parse(sdp: string, grammar: Grammar = DefaultSdpGrammar): Sdp {
+export function parseToLines(sdp: string, grammar: Grammar): Array<Line> {
   const lines: Array<Line> = [];
   sdp
     .split(/(\r\n|\r|\n)/)
@@ -199,6 +198,19 @@ export function parse(sdp: string, grammar: Grammar = DefaultSdpGrammar): Sdp {
       const result = UnknownLine.fromSdpLine(l);
       lines.push(result);
     });
-  const parsed = postProcess(lines);
+  return lines;
+}
+
+/**
+ * Parse the given SDP string into an Sdp object.
+ *
+ * @param sdp - The SDP to parse.
+ * @param grammar - An optional Grammar instance to use when parsing. Defaults to
+ * DefaultSdpGrammar.
+ * @returns An Sdp object modeling the given SDP.
+ */
+export function parse(sdp: string, grammar: Grammar = DefaultSdpGrammar): Sdp {
+  const lines: Array<Line> = parseToLines(sdp, grammar);
+  const parsed = parseToModel(lines);
   return parsed;
 }
