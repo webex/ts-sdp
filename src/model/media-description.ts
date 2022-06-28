@@ -2,6 +2,7 @@ import {
   BandwidthLine,
   BundleGroupLine,
   ConnectionLine,
+  ContentLine,
   FingerprintLine,
   Line,
   MediaType,
@@ -33,6 +34,8 @@ export abstract class MediaDescription implements SdpBlock {
   bandwidth?: BandwidthLine;
 
   connection?: ConnectionLine;
+
+  content?: ContentLine;
 
   /**
    * Any line that doesn't have explicit parsing support in the lib
@@ -86,6 +89,10 @@ export abstract class MediaDescription implements SdpBlock {
     }
     if (line instanceof ConnectionLine) {
       this.connection = line;
+      return true;
+    }
+    if (line instanceof ContentLine) {
+      this.content = line;
       return true;
     }
 

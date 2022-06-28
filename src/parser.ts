@@ -1,36 +1,37 @@
 /* eslint-disable max-classes-per-file */
-import { ExtMapLine } from './lines/extmap-line';
+import { BandwidthLine } from './lines/bandwidth-line';
+import { BundleGroupLine } from './lines/bundle-group-line';
 import { ConnectionLine } from './lines/connection-line';
+import { ContentLine } from './lines/content-line';
 import { DirectionLine } from './lines/direction-line';
+import { ExtMapLine } from './lines/extmap-line';
+import { FingerprintLine } from './lines/fingerprint-line';
 import { FmtpLine } from './lines/fmtp-line';
+import { IceOptionsLine } from './lines';
+import { IcePwdLine } from './lines/ice-pwd-line';
+import { IceUfragLine } from './lines/ice-ufrag-line';
 import { Line } from './lines/line';
+import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { MediaLine } from './lines/media-line';
+import { MidLine } from './lines/mid-line';
 import { OriginLine } from './lines/origin-line';
+import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import { RtcpFbLine } from './lines/rtcpfb-line';
 import { RtpMapLine } from './lines/rtpmap-line';
+import { SctpPortLine } from './lines/sctp-port-line';
+import { SessionInformationLine } from './lines/session-information-line';
+import { SessionNameLine } from './lines/session-name-line';
+import { SetupLine } from './lines/setup-line';
+import { TimingLine } from './lines/timing-line';
+import { UnknownLine } from './lines/unknown-line';
 import { VersionLine } from './lines/version-line';
 import {
   ApplicationMediaDescription,
-  MediaDescription,
   AvMediaDescription,
+  MediaDescription,
   Sdp,
   SdpBlock,
 } from './model';
-import { MidLine } from './lines/mid-line';
-import { IceUfragLine } from './lines/ice-ufrag-line';
-import { IcePwdLine } from './lines/ice-pwd-line';
-import { FingerprintLine } from './lines/fingerprint-line';
-import { SetupLine } from './lines/setup-line';
-import { SessionNameLine } from './lines/session-name-line';
-import { TimingLine } from './lines/timing-line';
-import { SctpPortLine } from './lines/sctp-port-line';
-import { MaxMessageSizeLine } from './lines/max-message-size-line';
-import { RtcpMuxLine } from './lines/rtcp-mux-line';
-import { UnknownLine } from './lines/unknown-line';
-import { BundleGroupLine } from './lines/bundle-group-line';
-import { BandwidthLine } from './lines/bandwidth-line';
-import { SessionInformationLine } from './lines/session-information-line';
-import { IceOptionsLine } from './lines';
 
 type Parser = (line: string) => Line | undefined;
 type LineType =
@@ -125,6 +126,7 @@ class SdpGrammar extends Grammar {
     this.addParser('a', MaxMessageSizeLine.fromSdpLine);
     this.addParser('a', RtcpMuxLine.fromSdpLine);
     this.addParser('a', BundleGroupLine.fromSdpLine);
+    this.addParser('a', ContentLine.fromSdpLine);
   }
 }
 

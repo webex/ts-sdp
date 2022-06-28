@@ -1,6 +1,7 @@
 export * from './bandwidth-line';
 export * from './bundle-group-line';
 export * from './connection-line';
+export * from './content-line';
 export * from './direction-line';
 export * from './extmap-line';
 export * from './fingerprint-line';

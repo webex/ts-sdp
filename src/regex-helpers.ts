@@ -7,4 +7,4 @@ export const SP = '\\s';
 // 0 or more whitespace chars
 export const WS = '\\w*';
 // The rest of the line
-export const REST = '.*';
+export const REST = '.+';
