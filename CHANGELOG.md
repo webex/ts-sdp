@@ -1,3 +1,10 @@
+# [1.1.0](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.0.2...v1.1.0) (2022-06-29)
+
+
+### Features
+
+* added support for content line ([#6](https://sqbu-github.cisco.com/CPaaS/ts-sdp/issues/6)) ([6ca4a68](https://sqbu-github.cisco.com/CPaaS/ts-sdp/commit/6ca4a68afcc340740f492d87bbee68b3d7d3ffdf))
+
 ## [1.0.2](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.0.1...v1.0.2) (2022-06-23)
 
 
