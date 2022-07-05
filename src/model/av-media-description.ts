@@ -75,6 +75,9 @@ export class AvMediaDescription extends MediaDescription {
     if (this.rtcpMux) {
       lines.push(new RtcpMuxLine());
     }
+    if (this.content) {
+      lines.push(this.content);
+    }
     this.extMaps.forEach((extMap) => lines.push(extMap));
     if (this.direction) {
       lines.push(new DirectionLine(this.direction as MediaDirection));

@@ -52,6 +52,9 @@ export class ApplicationMediaDescription extends MediaDescription {
     if (this.mid) {
       lines.push(new MidLine(this.mid));
     }
+    if (this.content) {
+      lines.push(this.content);
+    }
     if (this.sctpPort) {
       lines.push(new SctpPortLine(this.sctpPort as number));
     }
