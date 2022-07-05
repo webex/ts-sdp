@@ -1,3 +1,10 @@
+## [1.1.1](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.1.0...v1.1.1) (2022-07-05)
+
+
+### Bug Fixes
+
+* serialize content line ([#8](https://sqbu-github.cisco.com/CPaaS/ts-sdp/issues/8)) ([1aa8e99](https://sqbu-github.cisco.com/CPaaS/ts-sdp/commit/1aa8e996d398011bdc89258ed43c52b2a1ab7f77))
+
 # [1.1.0](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.0.2...v1.1.0) (2022-06-29)
 
 
