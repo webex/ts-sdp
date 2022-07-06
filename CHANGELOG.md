@@ -1,3 +1,10 @@
+## [1.1.2](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.1.1...v1.1.2) (2022-07-06)
+
+
+### Bug Fixes
+
+* update node version to use v16 ([#9](https://sqbu-github.cisco.com/CPaaS/ts-sdp/issues/9)) ([89d4203](https://sqbu-github.cisco.com/CPaaS/ts-sdp/commit/89d4203c4b8f3b0e18933b3759594fda5f34529a))
+
 ## [1.1.1](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.1.0...v1.1.1) (2022-07-05)
 
 
