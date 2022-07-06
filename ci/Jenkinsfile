@@ -3,7 +3,7 @@
 pipeline {
   agent any
 
-  tools {nodejs "Node v14"}
+  tools {nodejs "Node v16"}
 
   options {
     ansiColor('xterm')
