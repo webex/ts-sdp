@@ -65,6 +65,17 @@ export abstract class MediaDescription implements SdpBlock {
   abstract toLines(): Array<Line>;
 
   /**
+   * Find a line amongst 'otherLines' that is of the given type.
+   *
+   * @param ty - The type of the line to find.
+   * @returns The first line found of that instance, or undefined if there are none.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  findOtherLine<T extends Line, U extends new (...args: any[]) => T>(ty: U): T | undefined {
+    return this.otherLines.find<T>((line: Line): line is T => line instanceof ty);
+  }
+
+  /**
    * @inheritdoc
    */
   addLine(line: Line): boolean {
