@@ -1,3 +1,10 @@
+# [1.2.0](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.1.2...v1.2.0) (2022-07-07)
+
+
+### Features
+
+* add API to search other lines for a given type ([#10](https://sqbu-github.cisco.com/CPaaS/ts-sdp/issues/10)) ([1b814fc](https://sqbu-github.cisco.com/CPaaS/ts-sdp/commit/1b814fced054811d17e3a3e57956dd916b23fc38))
+
 ## [1.1.2](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.1.1...v1.1.2) (2022-07-06)
 
 
