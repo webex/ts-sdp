@@ -15,6 +15,7 @@ import { MaxMessageSizeLine } from './lines/max-message-size-line';
 import { MediaLine } from './lines/media-line';
 import { MidLine } from './lines/mid-line';
 import { OriginLine } from './lines/origin-line';
+import { RidLine } from './lines/rid-line';
 import { RtcpMuxLine } from './lines/rtcp-mux-line';
 import { RtcpFbLine } from './lines/rtcpfb-line';
 import { RtpMapLine } from './lines/rtpmap-line';
@@ -127,6 +128,7 @@ class SdpGrammar extends Grammar {
     this.addParser('a', RtcpMuxLine.fromSdpLine);
     this.addParser('a', BundleGroupLine.fromSdpLine);
     this.addParser('a', ContentLine.fromSdpLine);
+    this.addParser('a', RidLine.fromSdpLine);
   }
 }
 

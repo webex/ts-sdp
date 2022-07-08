@@ -7,6 +7,7 @@ import {
   MediaDirection,
   MediaLine,
   MidLine,
+  RidLine,
   RtcpFbLine,
   RtcpMuxLine,
   RtpMapLine,
@@ -23,6 +24,8 @@ export class AvMediaDescription extends MediaDescription {
   pts: Array<number> = [];
 
   extMaps: Array<ExtMapLine> = [];
+
+  rids: Array<RidLine> = [];
 
   codecs: Map<number, CodecInfo> = new Map();
 
@@ -79,6 +82,7 @@ export class AvMediaDescription extends MediaDescription {
       lines.push(this.content);
     }
     this.extMaps.forEach((extMap) => lines.push(extMap));
+    this.rids.forEach((rid) => lines.push(rid));
     if (this.direction) {
       lines.push(new DirectionLine(this.direction as MediaDirection));
     }
@@ -105,6 +109,10 @@ export class AvMediaDescription extends MediaDescription {
     }
     if (line instanceof ExtMapLine) {
       this.extMaps.push(line);
+      return true;
+    }
+    if (line instanceof RidLine) {
+      this.rids.push(line);
       return true;
     }
     if (line instanceof RtcpMuxLine) {
