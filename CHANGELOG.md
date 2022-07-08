@@ -1,3 +1,10 @@
+# [1.3.0](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.2.0...v1.3.0) (2022-07-08)
+
+
+### Features
+
+* add support for rid lines ([#11](https://sqbu-github.cisco.com/CPaaS/ts-sdp/issues/11)) ([6664641](https://sqbu-github.cisco.com/CPaaS/ts-sdp/commit/6664641e5adfd923ff34fb64d5f1faa349eb5c95))
+
 # [1.2.0](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.1.2...v1.2.0) (2022-07-07)
 
 
