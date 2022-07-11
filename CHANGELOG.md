@@ -1,3 +1,10 @@
+# [1.4.0](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.3.0...v1.4.0) (2022-07-11)
+
+
+### Features
+
+* add support for candidate lines ([#13](https://sqbu-github.cisco.com/CPaaS/ts-sdp/issues/13)) ([3ce7585](https://sqbu-github.cisco.com/CPaaS/ts-sdp/commit/3ce7585e0a091230bd8fbdb96f08ba3790a04cd5))
+
 # [1.3.0](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.2.0...v1.3.0) (2022-07-08)
 
 
