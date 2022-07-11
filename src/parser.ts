@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { BandwidthLine } from './lines/bandwidth-line';
 import { BundleGroupLine } from './lines/bundle-group-line';
+import { CandidateLine } from './lines/candidate-line';
 import { ConnectionLine } from './lines/connection-line';
 import { ContentLine } from './lines/content-line';
 import { DirectionLine } from './lines/direction-line';
@@ -129,6 +130,7 @@ class SdpGrammar extends Grammar {
     this.addParser('a', BundleGroupLine.fromSdpLine);
     this.addParser('a', ContentLine.fromSdpLine);
     this.addParser('a', RidLine.fromSdpLine);
+    this.addParser('a', CandidateLine.fromSdpLine);
   }
 }
 

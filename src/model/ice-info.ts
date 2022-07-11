@@ -1,4 +1,4 @@
-import { IceOptionsLine, IcePwdLine, IceUfragLine, Line } from '../lines';
+import { CandidateLine, IceOptionsLine, IcePwdLine, IceUfragLine, Line } from '../lines';
 import { SdpBlock } from './sdp-block';
 
 /**
@@ -10,6 +10,8 @@ export class IceInfo implements SdpBlock {
   pwd?: IcePwdLine;
 
   options?: IceOptionsLine;
+
+  candidates: Array<CandidateLine> = [];
 
   /**
    * @inheritdoc
@@ -25,6 +27,10 @@ export class IceInfo implements SdpBlock {
     }
     if (line instanceof IceOptionsLine) {
       this.options = line;
+      return true;
+    }
+    if (line instanceof CandidateLine) {
+      this.candidates.push(line);
       return true;
     }
     return false;
@@ -44,6 +50,7 @@ export class IceInfo implements SdpBlock {
     if (this.options) {
       lines.push(this.options);
     }
+    this.candidates.forEach((candidate) => lines.push(candidate));
     return lines;
   }
 }
