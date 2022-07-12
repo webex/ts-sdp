@@ -1,3 +1,10 @@
+# [1.5.0](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.4.0...v1.5.0) (2022-07-12)
+
+
+### Features
+
+* add support for a=simulcast line ([#12](https://sqbu-github.cisco.com/CPaaS/ts-sdp/issues/12)) ([88776c5](https://sqbu-github.cisco.com/CPaaS/ts-sdp/commit/88776c55e9010077f82bb6cb7ec37170c1dbf59d))
+
 # [1.4.0](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.3.0...v1.4.0) (2022-07-11)
 
 
