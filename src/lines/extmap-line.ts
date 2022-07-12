@@ -1,4 +1,4 @@
-import { NUM, REST } from '../regex-helpers';
+import { NUM, REST, TOKEN } from '../regex-helpers';
 import { Line } from './line';
 
 /**
@@ -10,20 +10,37 @@ import { Line } from './line';
 export class ExtMapLine extends Line {
   id: number;
 
+  direction?: 'sendonly' | 'recvonly' | 'sendrecv' | 'inactive';
+
   uri: string;
 
-  private static regex = new RegExp(`^extmap:(${NUM}) (${REST})`);
+  extensionAttributes?: string;
+
+  private static EXTMAP_DIRECTION = `sendonly|recvonly|sendrecv|inactive`;
+
+  private static regex = new RegExp(
+    `^extmap:(${NUM})(?:/(${this.EXTMAP_DIRECTION}))? (${TOKEN})(?: (${REST}))?`
+  );
 
   /**
    * Create an ExtMapLine from the given values.
    *
    * @param id - The ID.
    * @param uri - The URI.
+   * @param direction - The stream direction.
+   * @param extensionAttributes - The attributes of the extension.
    */
-  constructor(id: number, uri: string) {
+  constructor(
+    id: number,
+    uri: string,
+    direction?: 'sendonly' | 'recvonly' | 'sendrecv' | 'inactive',
+    extensionAttributes?: string
+  ) {
     super();
     this.id = id;
     this.uri = uri;
+    this.direction = direction;
+    this.extensionAttributes = extensionAttributes;
   }
 
   /**
@@ -38,15 +55,26 @@ export class ExtMapLine extends Line {
     }
     const tokens = line.match(ExtMapLine.regex) as RegExpMatchArray;
     const id = parseInt(tokens[1], 10);
-    const uri = tokens[2];
+    const direction = tokens[2] as 'sendonly' | 'recvonly' | 'sendrecv' | 'inactive';
+    const uri = tokens[3];
+    const extensionAttributes = tokens[4];
 
-    return new ExtMapLine(id, uri);
+    return new ExtMapLine(id, uri, direction, extensionAttributes);
   }
 
   /**
    * @inheritdoc
    */
   toSdpLine(): string {
-    return `a=extmap:${this.id} ${this.uri}`;
+    let str = '';
+    str += `a=extmap:${this.id}`;
+    if (this.direction) {
+      str += `/${this.direction}`;
+    }
+    str += ` ${this.uri}`;
+    if (this.extensionAttributes) {
+      str += ` ${this.extensionAttributes}`;
+    }
+    return str;
   }
 }
