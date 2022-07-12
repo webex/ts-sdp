@@ -1,3 +1,10 @@
+## [1.5.1](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.5.0...v1.5.1) (2022-07-12)
+
+
+### Bug Fixes
+
+* add missing direction and extension attributes to ExtMapLine ([#14](https://sqbu-github.cisco.com/CPaaS/ts-sdp/issues/14)) ([23a816d](https://sqbu-github.cisco.com/CPaaS/ts-sdp/commit/23a816d41beac16585ecb05cd3f7bee3a840b210))
+
 # [1.5.0](https://sqbu-github.cisco.com/CPaaS/ts-sdp/compare/v1.4.0...v1.5.0) (2022-07-12)
 
 
