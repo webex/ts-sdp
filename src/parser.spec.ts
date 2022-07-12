@@ -101,6 +101,7 @@ describe('parsing', () => {
       compareSdps(str, file);
     });
   });
+
   describe('ffox default offer', () => {
     it('should parse correctly', () => {
       expect.hasAssertions();
@@ -110,6 +111,20 @@ describe('parsing', () => {
       compareSdps(str, file);
     });
   });
+
+  describe('chrome offer with simulcast', () => {
+    it('should parse correctly', () => {
+      expect.hasAssertions();
+      const file = fs.readFileSync(
+        './src/sdp-corpus/chrome_102_a_v_dc_offer_simulcast.sdp',
+        'utf-8'
+      );
+      const result = parse(file);
+      const str = result.toString();
+      compareSdps(str, file);
+    });
+  });
+
   it('should parse connection line at session level and media level', () => {
     expect.assertions(4);
     const sdpWithCLines = fs.readFileSync('./src/sdp-corpus/c_lines_in_media.sdp', 'utf-8');

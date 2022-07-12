@@ -34,6 +34,7 @@ import {
   Sdp,
   SdpBlock,
 } from './model';
+import { SimulcastLine } from './lines/simulcast-line';
 
 type Parser = (line: string) => Line | undefined;
 type LineType =
@@ -131,6 +132,7 @@ class SdpGrammar extends Grammar {
     this.addParser('a', ContentLine.fromSdpLine);
     this.addParser('a', RidLine.fromSdpLine);
     this.addParser('a', CandidateLine.fromSdpLine);
+    this.addParser('a', SimulcastLine.fromSdpLine);
   }
 }
 

@@ -23,5 +23,6 @@ export * from './sctp-port-line';
 export * from './session-information-line';
 export * from './session-name-line';
 export * from './setup-line';
+export * from './simulcast-line';
 export * from './timing-line';
 export * from './version-line';

@@ -93,6 +93,8 @@
     "handlep",
     "malloc",
     "plusplus",
+    "simulcastlayerlist",
+    "simulcastline",
     "wasm",
     "wasmmodule"
   ]

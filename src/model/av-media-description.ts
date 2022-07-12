@@ -13,6 +13,7 @@ import {
   RtpMapLine,
   Setup,
   SetupLine,
+  SimulcastLine,
 } from '../lines';
 import { CodecInfo } from './codec-info';
 import { MediaDescription } from './media-description';
@@ -26,6 +27,8 @@ export class AvMediaDescription extends MediaDescription {
   extMaps: Array<ExtMapLine> = [];
 
   rids: Array<RidLine> = [];
+
+  simulcast?: SimulcastLine;
 
   codecs: Map<number, CodecInfo> = new Map();
 
@@ -83,6 +86,9 @@ export class AvMediaDescription extends MediaDescription {
     }
     this.extMaps.forEach((extMap) => lines.push(extMap));
     this.rids.forEach((rid) => lines.push(rid));
+    if (this.simulcast) {
+      lines.push(this.simulcast);
+    }
     if (this.direction) {
       lines.push(new DirectionLine(this.direction as MediaDirection));
     }
@@ -117,6 +123,10 @@ export class AvMediaDescription extends MediaDescription {
     }
     if (line instanceof RtcpMuxLine) {
       this.rtcpMux = true;
+      return true;
+    }
+    if (line instanceof SimulcastLine) {
+      this.simulcast = line;
       return true;
     }
     // Lines pertaining to a specific codec
