@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { IceOptionsLine } from './lines';
 import { BandwidthLine } from './lines/bandwidth-line';
 import { BundleGroupLine } from './lines/bundle-group-line';
 import { CandidateLine } from './lines/candidate-line';
@@ -8,7 +9,6 @@ import { DirectionLine } from './lines/direction-line';
 import { ExtMapLine } from './lines/extmap-line';
 import { FingerprintLine } from './lines/fingerprint-line';
 import { FmtpLine } from './lines/fmtp-line';
-import { IceOptionsLine } from './lines';
 import { IcePwdLine } from './lines/ice-pwd-line';
 import { IceUfragLine } from './lines/ice-ufrag-line';
 import { Line } from './lines/line';
@@ -24,17 +24,11 @@ import { SctpPortLine } from './lines/sctp-port-line';
 import { SessionInformationLine } from './lines/session-information-line';
 import { SessionNameLine } from './lines/session-name-line';
 import { SetupLine } from './lines/setup-line';
+import { SimulcastLine } from './lines/simulcast-line';
 import { TimingLine } from './lines/timing-line';
 import { UnknownLine } from './lines/unknown-line';
 import { VersionLine } from './lines/version-line';
-import {
-  ApplicationMediaDescription,
-  AvMediaDescription,
-  MediaDescription,
-  Sdp,
-  SdpBlock,
-} from './model';
-import { SimulcastLine } from './lines/simulcast-line';
+import { ApplicationMediaDescription, AvMediaDescription, MediaDescription, Sdp, SdpBlock } from './model';
 
 type Parser = (line: string) => Line | undefined;
 type LineType =
