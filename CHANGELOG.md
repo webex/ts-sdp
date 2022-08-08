@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/webex/ts-sdp/compare/v1.0.0...v1.0.1) (2022-08-08)
+
+
+### Bug Fixes
+
+* linting on the parser file ([d8a9635](https://github.com/webex/ts-sdp/commit/d8a9635c5a1444f122e9bddd1ff6b7c1b3c0ba0d))
+
 # 1.0.0 (2022-08-08)
 
 

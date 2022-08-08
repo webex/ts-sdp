@@ -1,6 +1,6 @@
 {
   "name": "@webex/ts-sdp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Provides a simple interface to parse and munge SDP(session description protocol)",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
