@@ -36,7 +36,8 @@
     "url": "https://github.com/webex/ts-sdp"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   },
   "files": [
     "dist/**/*"
