@@ -1,5 +1,5 @@
 {
-  "name": "@webex-connect/ts-sdp",
+  "name": "@webex/ts-sdp",
   "version": "1.5.1",
   "description": "",
   "main": "dist/cjs/index.js",
@@ -33,11 +33,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://sqbu-github.cisco.com/CPaaS/ts-sdp"
+    "url": "https://github.com/webex/ts-sdp"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
-    "access": "restricted"
+    "registry": "https://registry.npmjs.org"
   },
   "files": [
     "dist/**/*"
