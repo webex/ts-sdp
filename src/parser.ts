@@ -28,7 +28,13 @@ import { SimulcastLine } from './lines/simulcast-line';
 import { TimingLine } from './lines/timing-line';
 import { UnknownLine } from './lines/unknown-line';
 import { VersionLine } from './lines/version-line';
-import { ApplicationMediaDescription, AvMediaDescription, MediaDescription, Sdp, SdpBlock } from './model';
+import {
+  ApplicationMediaDescription,
+  AvMediaDescription,
+  MediaDescription,
+  Sdp,
+  SdpBlock,
+} from './model';
 
 type Parser = (line: string) => Line | undefined;
 type LineType =
@@ -127,6 +133,7 @@ class SdpGrammar extends Grammar {
     this.addParser('a', RidLine.fromSdpLine);
     this.addParser('a', CandidateLine.fromSdpLine);
     this.addParser('a', SimulcastLine.fromSdpLine);
+    this.addParser('a', RidLine.fromSdpLine);
   }
 }
 
