@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/webex/ts-sdp/compare/v1.0.1...v1.1.0) (2022-10-13)
+
+
+### Bug Fixes
+
+* fix build ([a15ea0b](https://github.com/webex/ts-sdp/commit/a15ea0b2c466f427fa7c8f7bd019bfd9e12fc245))
+
+
+### Features
+
+* add support for a:ssrc and a:ssrc-group ([#3](https://github.com/webex/ts-sdp/issues/3)) ([9d50ef2](https://github.com/webex/ts-sdp/commit/9d50ef29690b40274f22082f89edb8280b96d3ba))
+
 ## [1.0.1](https://github.com/webex/ts-sdp/compare/v1.0.0...v1.0.1) (2022-08-08)
 
 
