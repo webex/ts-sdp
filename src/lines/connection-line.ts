@@ -1,4 +1,4 @@
-import { TOKEN } from '../regex-helpers';
+import { ANY_NON_WS } from '../regex-helpers';
 import { Line } from './line';
 
 /**
@@ -14,7 +14,7 @@ export class ConnectionLine extends Line {
 
   ipAddr: string;
 
-  private static regex = new RegExp(`^(${TOKEN}) (${TOKEN}) (${TOKEN})`);
+  private static regex = new RegExp(`^(${ANY_NON_WS}) (${ANY_NON_WS}) (${ANY_NON_WS})`);
 
   /**
    * Create a ConnectionLine from the given values.

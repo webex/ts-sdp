@@ -1,4 +1,4 @@
-import { NUM, TOKEN } from '../regex-helpers';
+import { NUM, ANY_NON_WS } from '../regex-helpers';
 import { Line } from './line';
 
 /**
@@ -22,7 +22,7 @@ export class OriginLine extends Line {
   ipAddr: string;
 
   private static regex = new RegExp(
-    `^(${TOKEN}) (${TOKEN}) (${NUM}) (${TOKEN}) (${TOKEN}) (${TOKEN})`
+    `^(${ANY_NON_WS}) (${ANY_NON_WS}) (${NUM}) (${ANY_NON_WS}) (${ANY_NON_WS}) (${ANY_NON_WS})`
   );
 
   /**

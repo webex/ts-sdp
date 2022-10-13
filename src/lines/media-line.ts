@@ -1,4 +1,4 @@
-import { NUM, REST, TOKEN } from '../regex-helpers';
+import { NUM, REST, ANY_NON_WS } from '../regex-helpers';
 import { Line } from './line';
 
 export type MediaType = 'audio' | 'video' | 'application';
@@ -20,7 +20,7 @@ export class MediaLine extends Line {
 
   private static MEDIA_TYPE = 'audio|video|application';
 
-  private static regex = new RegExp(`^(${this.MEDIA_TYPE}) (${NUM}) (${TOKEN}) (${REST})`);
+  private static regex = new RegExp(`^(${this.MEDIA_TYPE}) (${NUM}) (${ANY_NON_WS}) (${REST})`);
 
   /**
    * Create a new MediaLine from the given values.
