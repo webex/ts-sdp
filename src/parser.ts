@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { IceOptionsLine } from './lines';
+import { IceOptionsLine, SsrcGroupLine, SsrcLine } from './lines';
 import { BandwidthLine } from './lines/bandwidth-line';
 import { BundleGroupLine } from './lines/bundle-group-line';
 import { CandidateLine } from './lines/candidate-line';
@@ -133,7 +133,8 @@ class SdpGrammar extends Grammar {
     this.addParser('a', RidLine.fromSdpLine);
     this.addParser('a', CandidateLine.fromSdpLine);
     this.addParser('a', SimulcastLine.fromSdpLine);
-    this.addParser('a', RidLine.fromSdpLine);
+    this.addParser('a', SsrcLine.fromSdpLine);
+    this.addParser('a', SsrcGroupLine.fromSdpLine);
   }
 }
 

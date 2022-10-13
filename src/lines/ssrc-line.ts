@@ -5,7 +5,7 @@ import { Line } from './line';
  * Model an SSRC line in SDP as defined by https://datatracker.ietf.org/doc/html/rfc5576#section-4.1.
  *
  * @example
- * a=ssrc:1234567 cname=foo
+ * a=ssrc:1234567 cname:foo
  */
 export class SsrcLine extends Line {
   ssrcId: number;
