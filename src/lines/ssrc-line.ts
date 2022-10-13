@@ -1,4 +1,4 @@
-import { NUM, SDP_TOKEN, TOKEN } from '../regex-helpers';
+import { ANY_NON_WS, NUM, SDP_TOKEN } from '../regex-helpers';
 import { Line } from './line';
 
 /**
@@ -17,7 +17,7 @@ export class SsrcLine extends Line {
   attributeData: string | undefined;
 
   private static regex = new RegExp(
-    `^ssrc:(${NUM}) (${SDP_TOKEN})(?::(${SDP_TOKEN})?(?: (${TOKEN}))?)?$`
+    `^ssrc:(${NUM}) (${SDP_TOKEN})(?::(${SDP_TOKEN})?(?: (${ANY_NON_WS}))?)?$`
   );
 
   /**
