@@ -1,4 +1,4 @@
-import { NUM, REST, TOKEN } from '../regex-helpers';
+import { NUM, REST, ANY_NON_WS } from '../regex-helpers';
 import { Line } from './line';
 
 /**
@@ -31,7 +31,7 @@ export class CandidateLine extends Line {
   private static ICE_CHARS = `[a-zA-Z0-9+/]+`;
 
   private static regex = new RegExp(
-    `^candidate:(${this.ICE_CHARS}) (${NUM}) (${TOKEN}) (${NUM}) (${TOKEN}) (${NUM}) typ (${TOKEN})(?: raddr (${TOKEN}))?(?: rport (${NUM}))?(?: (${REST}))?`
+    `^candidate:(${this.ICE_CHARS}) (${NUM}) (${ANY_NON_WS}) (${NUM}) (${ANY_NON_WS}) (${NUM}) typ (${ANY_NON_WS})(?: raddr (${ANY_NON_WS}))?(?: rport (${NUM}))?(?: (${REST}))?`
   );
 
   /**

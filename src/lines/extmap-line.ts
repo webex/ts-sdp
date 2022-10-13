@@ -1,4 +1,4 @@
-import { NUM, REST, TOKEN } from '../regex-helpers';
+import { NUM, REST, ANY_NON_WS } from '../regex-helpers';
 import { Line } from './line';
 
 /**
@@ -19,7 +19,7 @@ export class ExtMapLine extends Line {
   private static EXTMAP_DIRECTION = `sendonly|recvonly|sendrecv|inactive`;
 
   private static regex = new RegExp(
-    `^extmap:(${NUM})(?:/(${this.EXTMAP_DIRECTION}))? (${TOKEN})(?: (${REST}))?`
+    `^extmap:(${NUM})(?:/(${this.EXTMAP_DIRECTION}))? (${ANY_NON_WS})(?: (${REST}))?`
   );
 
   /**

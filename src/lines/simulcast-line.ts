@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
-import { TOKEN } from '../regex-helpers';
+import { ANY_NON_WS } from '../regex-helpers';
 import { Line } from './line';
 
 /**
@@ -132,7 +132,7 @@ export class SimulcastLine extends Line {
   recvLayers: SimulcastLayerList;
 
   private static regex = new RegExp(
-    `^simulcast:(send|recv) (${TOKEN})(?: (send|recv) (${TOKEN}))?`
+    `^simulcast:(send|recv) (${ANY_NON_WS})(?: (send|recv) (${ANY_NON_WS}))?`
   );
 
   /**

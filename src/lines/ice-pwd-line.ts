@@ -1,4 +1,4 @@
-import { TOKEN } from '../regex-helpers';
+import { ANY_NON_WS } from '../regex-helpers';
 import { Line } from './line';
 
 /**
@@ -10,7 +10,7 @@ import { Line } from './line';
 export class IcePwdLine extends Line {
   pwd: string;
 
-  private static regex = new RegExp(`^ice-pwd:(${TOKEN})$`);
+  private static regex = new RegExp(`^ice-pwd:(${ANY_NON_WS})$`);
 
   /**
    * Create an IcePwdLine from the given values.

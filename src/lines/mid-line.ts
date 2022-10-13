@@ -1,4 +1,4 @@
-import { TOKEN } from '../regex-helpers';
+import { ANY_NON_WS } from '../regex-helpers';
 import { Line } from './line';
 
 /**
@@ -10,7 +10,7 @@ import { Line } from './line';
 export class MidLine extends Line {
   mid: string;
 
-  private static regex = new RegExp(`^mid:(${TOKEN})$`);
+  private static regex = new RegExp(`^mid:(${ANY_NON_WS})$`);
 
   /**
    * Create a MidLine from the given values.

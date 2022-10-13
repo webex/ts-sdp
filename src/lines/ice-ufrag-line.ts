@@ -1,4 +1,4 @@
-import { TOKEN } from '../regex-helpers';
+import { ANY_NON_WS } from '../regex-helpers';
 import { Line } from './line';
 
 /**
@@ -10,7 +10,7 @@ import { Line } from './line';
 export class IceUfragLine extends Line {
   ufrag: string;
 
-  private static regex = new RegExp(`^ice-ufrag:(${TOKEN})$`);
+  private static regex = new RegExp(`^ice-ufrag:(${ANY_NON_WS})$`);
 
   /**
    * Create an IceUfragLine from the given values.
