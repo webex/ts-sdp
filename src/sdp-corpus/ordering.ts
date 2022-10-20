@@ -69,10 +69,10 @@ a=rtpmap:110 telephone-event/48000\r
 a=rtpmap:112 telephone-event/32000\r
 a=rtpmap:113 telephone-event/16000\r
 a=rtpmap:126 telephone-event/8000\r
-a=rtcp:9 IN IP4 0.0.0.0\r
-a=msid:- a8a17466-0c31-4198-bbd1-20fb6ca2fac6\r
 a=ssrc:4013544331 cname:OfAxmTLksFb12Jj3\r
 a=ssrc:4013544331 msid:- a8a17466-0c31-4198-bbd1-20fb6ca2fac6\r
 a=ssrc:4013544331 mslabel:-\r
 a=ssrc:4013544331 label:a8a17466-0c31-4198-bbd1-20fb6ca2fac6\r
+a=rtcp:9 IN IP4 0.0.0.0\r
+a=msid:- a8a17466-0c31-4198-bbd1-20fb6ca2fac6\r
 `;

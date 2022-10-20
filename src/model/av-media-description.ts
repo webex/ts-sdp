@@ -14,6 +14,8 @@ import {
   Setup,
   SetupLine,
   SimulcastLine,
+  SsrcGroupLine,
+  SsrcLine,
 } from '../lines';
 import { CodecInfo } from './codec-info';
 import { MediaDescription } from './media-description';
@@ -35,6 +37,10 @@ export class AvMediaDescription extends MediaDescription {
   direction?: MediaDirection;
 
   rtcpMux = false;
+
+  ssrcs: Array<SsrcLine> = [];
+
+  ssrcGroups: Array<SsrcGroupLine> = [];
 
   /**
    * Create a MediaInfo instance from a MediaLine.
@@ -94,6 +100,9 @@ export class AvMediaDescription extends MediaDescription {
     }
     this.codecs.forEach((codec) => lines.push(...codec.toLines()));
 
+    lines.push(...this.ssrcs);
+    lines.push(...this.ssrcGroups);
+
     lines.push(...this.otherLines);
 
     return lines;
@@ -136,6 +145,14 @@ export class AvMediaDescription extends MediaDescription {
         throw new Error(`Error: got line for unknown codec: ${line.toSdpLine()}`);
       }
       codec.addLine(line);
+      return true;
+    }
+    if (line instanceof SsrcLine) {
+      this.ssrcs.push(line);
+      return true;
+    }
+    if (line instanceof SsrcGroupLine) {
+      this.ssrcGroups.push(line);
       return true;
     }
     this.otherLines.push(line);
