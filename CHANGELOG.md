@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/webex/ts-sdp/compare/v1.1.0...v1.2.0) (2022-10-25)
+
+
+### Features
+
+* add 'hasCodec' helper ([#6](https://github.com/webex/ts-sdp/issues/6)) ([75c0b3a](https://github.com/webex/ts-sdp/commit/75c0b3a9c2bdcca5e8c24e0d4a7c38036ae7b745))
+* explicitly model ssrc and ssrc groups in avmediadescription ([#5](https://github.com/webex/ts-sdp/issues/5)) ([061b693](https://github.com/webex/ts-sdp/commit/061b693b8bd743328dd5b30f0233590d6ca051fa))
+
 # [1.1.0](https://github.com/webex/ts-sdp/compare/v1.0.1...v1.1.0) (2022-10-13)
 
 
