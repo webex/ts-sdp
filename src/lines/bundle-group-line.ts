@@ -8,7 +8,7 @@ import { Line } from './line';
  * a=group:BUNDLE 0 1 2
  */
 export class BundleGroupLine extends Line {
-  private mids: Array<string>;
+  mids: Array<string>;
 
   private static regex = new RegExp(`^group:BUNDLE (${REST})`);
 
