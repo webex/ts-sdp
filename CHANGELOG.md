@@ -1,3 +1,16 @@
+# [1.3.0](https://github.com/webex/ts-sdp/compare/v1.2.0...v1.3.0) (2022-11-15)
+
+
+### Bug Fixes
+
+* try and fix sem release ([#10](https://github.com/webex/ts-sdp/issues/10)) ([e9c59c0](https://github.com/webex/ts-sdp/commit/e9c59c0920fb892c45b48f8968b2358b2e33152c))
+* update the ci script for release ([#8](https://github.com/webex/ts-sdp/issues/8)) ([ea13ae9](https://github.com/webex/ts-sdp/commit/ea13ae97cd5f7c362b6a9a5656f38330416041aa))
+
+
+### Features
+
+* make mids member inside of BundleGroupLine accessible ([#7](https://github.com/webex/ts-sdp/issues/7)) ([622336a](https://github.com/webex/ts-sdp/commit/622336a62221d7925a26e79fcef9b812cd532f25))
+
 # [1.2.0](https://github.com/webex/ts-sdp/compare/v1.1.0...v1.2.0) (2022-10-25)
 
 
