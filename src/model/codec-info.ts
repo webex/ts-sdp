@@ -18,6 +18,28 @@ import { FmtpLine, Line, RtcpFbLine, RtpMapLine } from '../lines';
 import { SdpBlock } from './sdp-block';
 
 /**
+ * Parse the fmtpParams because SDP has no such util function for that.
+ *
+ * @param fmtpParams -  like `key1=val1;key2=val2;key3=val3".
+ * @returns A JS key-value object.
+ */
+export function parseFmtpParams(fmtpParams: string) {
+  // compatible with Safari, since its `fmtpParams` here contains a prefix as `a=fmtp:{payloadType} `, and separated by space.
+  // eslint-disable-next-line no-param-reassign
+  fmtpParams = fmtpParams.replace(/^a=fmtp:\d+\x20/, '');
+  const fmtpObj = {};
+  fmtpParams.split(';').forEach((param) => {
+    const paramArr = param && param.split('=');
+    if (paramArr.length !== 2 || !paramArr[0] || !paramArr[1]) {
+      throw new Error(`Fmtp params is invalid with ${fmtpParams}`);
+    }
+    // eslint-disable-next-line prefer-destructuring
+    fmtpObj[paramArr[0]] = paramArr[1];
+  });
+  return fmtpObj;
+}
+
+/**
  * Model all information related to a specific codec in an SDP.
  */
 export class CodecInfo implements SdpBlock {
@@ -84,11 +106,20 @@ export class CodecInfo implements SdpBlock {
     this.feedback.forEach((fb) => {
       lines.push(new RtcpFbLine(this.pt, fb));
     });
-    // Now all Fmtp
-    this.fmtParams.forEach((fmt) => {
-      lines.push(new FmtpLine(this.pt, fmt));
-    });
-
+    if (this.fmtParams.length > 0) {
+      const targetFmtpObject = {};
+      this.fmtParams
+        .map((fmt) => parseFmtpParams(fmt))
+        .forEach((fmtpObj) =>
+          Object.keys(fmtpObj).forEach((key) => {
+            targetFmtpObject[key] = fmtpObj[key];
+          })
+        );
+      const newFmtParams = Object.keys(targetFmtpObject)
+        .map((key) => `${key}=${targetFmtpObject[key]}`)
+        .join(';');
+      lines.push(new FmtpLine(this.pt, newFmtParams));
+    }
     return lines;
   }
 }

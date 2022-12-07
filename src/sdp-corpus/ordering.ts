@@ -34,7 +34,7 @@ a=rtpmap:111 opus/48000/2\r
 a=rtcp-fb:111 transport-cc\r
 a=fmtp:111 minptime=10;useinbandfec=1\r
 a=rtpmap:63 red/48000/2\r
-a=fmtp:63 111/111\r
+a=fmtp:63 a=111\r
 a=rtpmap:103 ISAC/16000\r
 a=rtpmap:104 ISAC/32000\r
 a=rtpmap:9 G722/8000\r
@@ -72,7 +72,7 @@ a=rtpmap:111 opus/48000/2\r
 a=rtcp-fb:111 transport-cc\r
 a=fmtp:111 minptime=10;useinbandfec=1\r
 a=rtpmap:63 red/48000/2\r
-a=fmtp:63 111/111\r
+a=fmtp:63 a=111\r
 a=rtpmap:103 ISAC/16000\r
 a=rtpmap:104 ISAC/32000\r
 a=rtpmap:9 G722/8000\r
