@@ -1,4 +1,4 @@
-import { parseFmtpParams } from './codec-info';
+import { parseFmtpParams } from './fmtp-line';
 
 describe('parseFmtpParams', () => {
   it('normal case', async () => {
@@ -13,11 +13,11 @@ describe('parseFmtpParams', () => {
     let fmtpParams = parseFmtpParams(
       'level-asymmetry-allowed=1;max-br=1000000;max-dpb=63600;packetization-mode=1;profile-level-id=420034'
     );
-    expect(fmtpParams).toStrictEqual(expectedValue);
+    expect(Object.fromEntries(fmtpParams)).toStrictEqual(expectedValue);
     fmtpParams = parseFmtpParams(
       'a=fmtp:97 level-asymmetry-allowed=1;max-br=1000000;max-dpb=63600;packetization-mode=1;profile-level-id=420034' // real Safari case.
     );
-    expect(fmtpParams).toStrictEqual(expectedValue);
+    expect(Object.fromEntries(fmtpParams)).toStrictEqual(expectedValue);
   });
   it('exceptional case', async () => {
     expect.hasAssertions();

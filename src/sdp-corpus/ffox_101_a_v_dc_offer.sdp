@@ -67,7 +67,7 @@ a=extmap:1 urn:ietf:params:rtp-hdrext:ssrc-audio-level
 a=extmap:2/recvonly urn:ietf:params:rtp-hdrext:csrc-audio-level
 a=extmap:3 urn:ietf:params:rtp-hdrext:sdes:mid
 a=fmtp:109 maxplaybackrate=48000;stereo=1;useinbandfec=1
-a=fmtp:101 a=15
+a=fmtp:101 0-15
 a=ice-pwd:ee547423969228e0a269b1f14167a48b
 a=ice-ufrag:8a0b6811
 a=mid:1
