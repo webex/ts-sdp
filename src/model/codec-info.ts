@@ -29,7 +29,7 @@ export class CodecInfo implements SdpBlock {
 
   encodingParams?: string;
 
-  fmtParams: Array<string> = [];
+  fmtParams: Map<string, string | undefined> = new Map();
 
   feedback: Array<string> = [];
 
@@ -57,9 +57,12 @@ export class CodecInfo implements SdpBlock {
       return true;
     }
     if (line instanceof FmtpLine) {
-      this.fmtParams.push(line.params);
-      if (line.params.indexOf('apt') !== -1) {
-        const apt = line.params.split('=')[1];
+      this.fmtParams = new Map([
+        ...Array.from(this.fmtParams.entries()),
+        ...Array.from(line.params.entries()),
+      ]);
+      if (line.params.has('apt')) {
+        const apt = line.params.get('apt') as string;
         this.primaryCodecPt = parseInt(apt, 10);
       }
       return true;
@@ -85,10 +88,9 @@ export class CodecInfo implements SdpBlock {
       lines.push(new RtcpFbLine(this.pt, fb));
     });
     // Now all Fmtp
-    this.fmtParams.forEach((fmt) => {
-      lines.push(new FmtpLine(this.pt, fmt));
-    });
-
+    if (this.fmtParams.size > 0) {
+      lines.push(new FmtpLine(this.pt, this.fmtParams));
+    }
     return lines;
   }
 }
