@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/webex/ts-sdp/compare/v1.3.0...v1.3.1) (2022-12-13)
+
+
+### Bug Fixes
+
+* make the fmtp params could be munged in firefox ([#12](https://github.com/webex/ts-sdp/issues/12)) ([6636f37](https://github.com/webex/ts-sdp/commit/6636f373018ea15249a49f8301a125464101e318))
+
 # [1.3.0](https://github.com/webex/ts-sdp/compare/v1.2.0...v1.3.0) (2022-11-15)
 
 
