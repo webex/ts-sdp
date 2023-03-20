@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/webex/ts-sdp/compare/v1.3.1...v1.3.2) (2023-03-20)
+
+
+### Bug Fixes
+
+* handling of SDPs without any rtpmap lines ([#14](https://github.com/webex/ts-sdp/issues/14)) ([b5707fa](https://github.com/webex/ts-sdp/commit/b5707fa059de1c46f5330c793a8f0fae8a9c4d26))
+
 ## [1.3.1](https://github.com/webex/ts-sdp/compare/v1.3.0...v1.3.1) (2022-12-13)
 
 
