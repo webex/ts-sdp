@@ -156,4 +156,13 @@ describe('parsing', () => {
       new ConnectionLine('IN', 'IP6', '2a02:c7f:60d6:2600:4157:2f9c:198b:80a3')
     );
   });
+
+  it('should handle media sections without any rtpmap lines', () => {
+    expect.hasAssertions();
+    const sdpWithoutRtpmapLines = fs.readFileSync('./src/sdp-corpus/without_rtpmap.sdp', 'utf-8');
+    const parsed = parse(sdpWithoutRtpmapLines);
+    const sdpAfterProcessing = parsed.toString();
+
+    compareSdps(sdpAfterProcessing, sdpWithoutRtpmapLines);
+  });
 });

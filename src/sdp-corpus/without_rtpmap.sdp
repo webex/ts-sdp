@@ -1,0 +1,15 @@
+v=0
+o=BroadWorks 16647125 1678951083182 IN IP4 139.177.70.17
+s=-
+c=IN IP4 139.177.70.17
+t=0 0
+a=ice-lite
+m=audio 42520 UDP/TLS/RTP/SAVPF 0
+a=ice-ufrag:tuJU
+a=ice-pwd:3yjQ1o6l7xjrFei8xCPx3N89
+a=candidate:mse 1 UDP 2130706431 139.177.70.17 42520 typ host
+a=candidate:mse 2 UDP 2130706430 139.177.70.17 42521 typ host
+a=fingerprint:sha-256 2C:4C:94:3F:13:58:64:5C:57:3D:3B:88:3F:BB:D3:1D:20:1E:0F:49:D0:EA:8C:EF:EB:F6:E1:B4:21:46:8D:2A
+a=setup:actpass
+a=rtcp-mux
+a=ssrc:2037740846 cname:Xp9fodVPUgfz1DLl

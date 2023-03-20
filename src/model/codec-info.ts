@@ -80,9 +80,11 @@ export class CodecInfo implements SdpBlock {
   toLines(): Array<Line> {
     const lines = [];
     // First the RtpMap
-    lines.push(
-      new RtpMapLine(this.pt, this.name as string, this.clockRate as number, this.encodingParams)
-    );
+    if (this.name && this.clockRate) {
+      lines.push(
+        new RtpMapLine(this.pt, this.name as string, this.clockRate as number, this.encodingParams)
+      );
+    }
     // Now all RtcpFb
     this.feedback.forEach((fb) => {
       lines.push(new RtcpFbLine(this.pt, fb));
