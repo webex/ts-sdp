@@ -16,6 +16,7 @@
 
 import {
   DirectionLine,
+  ExtMapDirection,
   ExtMapLine,
   FingerprintLine,
   FmtpLine,
@@ -37,12 +38,21 @@ import { CodecInfo } from './codec-info';
 import { MediaDescription } from './media-description';
 
 /**
+ * Describes the length being used for header extension IDs.
+ */
+export enum HeaderExtIdMode {
+  OneByte,
+  TwoByte,
+  Mixed,
+}
+
+/**
  * Model a media description with type 'audio' or 'video'.
  */
 export class AvMediaDescription extends MediaDescription {
   pts: Array<number> = [];
 
-  extMaps: Array<ExtMapLine> = [];
+  extMaps: Map<number, ExtMapLine> = new Map();
 
   rids: Array<RidLine> = [];
 
@@ -139,7 +149,12 @@ export class AvMediaDescription extends MediaDescription {
       return true;
     }
     if (line instanceof ExtMapLine) {
-      this.extMaps.push(line);
+      if (this.extMaps.has(line.id)) {
+        throw new Error(
+          `Tried to extension with duplicate ID: an extension already exists with ID ${line.id}`
+        );
+      }
+      this.extMaps.set(line.id, line);
       return true;
     }
     if (line instanceof RidLine) {
@@ -200,5 +215,49 @@ export class AvMediaDescription extends MediaDescription {
       this.codecs.delete(ptToRemove);
     });
     this.pts = this.pts.filter((existingPt) => allPtsToRemove.indexOf(existingPt) === -1);
+  }
+
+  /**
+   * Add the given extension to this mline.
+   *
+   * @param extInfo - Information related to the extension to be added.
+   * @param extInfo.uri - The URI of the extension.
+   * @param extInfo.direction - An optional direction for the extension.
+   * @param extInfo.attributes - Option attributes for the extension.
+   * @param extInfo.id - An optional ID to use for the extension.  If no ID is passed, the first
+   * free (not already present in the map) ID will be used, starting at 1.  If the ID is
+   * invalid or already in use, an error is thrown.
+   */
+  addExtension({
+    uri,
+    direction,
+    attributes,
+    id,
+  }: {
+    uri: string;
+    direction?: ExtMapDirection;
+    attributes?: string;
+    id?: number;
+  }) {
+    // eslint-disable-next-line jsdoc/require-jsdoc
+    const getFirstFreeId = (): number => {
+      const inUseIds = [...this.extMaps.keys()].sort();
+      for (let idx = 0; idx < inUseIds.length; idx += 1) {
+        if (inUseIds[idx] !== idx + 1) {
+          return idx + 1;
+        }
+      }
+      // No 'gaps' in the IDs currently in use, so return the next number
+      return inUseIds.length + 1;
+    };
+
+    const extId = id || getFirstFreeId();
+    if (this.extMaps.has(extId)) {
+      throw new Error(`Extension with ID ${id} already exists`);
+    }
+    if (extId === 0) {
+      throw new Error(`Extension ID 0 is reserved`);
+    }
+    this.extMaps.set(extId, new ExtMapLine(extId, uri, direction, attributes));
   }
 }

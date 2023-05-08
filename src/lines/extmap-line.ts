@@ -17,6 +17,8 @@
 import { NUM, REST, ANY_NON_WS } from '../regex-helpers';
 import { Line } from './line';
 
+export type ExtMapDirection = 'sendonly' | 'recvonly' | 'sendrecv' | 'inactive';
+
 /**
  * Model an extmap line from an SDP as defined by https://datatracker.ietf.org/doc/html/rfc5285#section-5.
  *
@@ -46,12 +48,7 @@ export class ExtMapLine extends Line {
    * @param direction - The stream direction.
    * @param extensionAttributes - The attributes of the extension.
    */
-  constructor(
-    id: number,
-    uri: string,
-    direction?: 'sendonly' | 'recvonly' | 'sendrecv' | 'inactive',
-    extensionAttributes?: string
-  ) {
+  constructor(id: number, uri: string, direction?: ExtMapDirection, extensionAttributes?: string) {
     super();
     this.id = id;
     this.uri = uri;
