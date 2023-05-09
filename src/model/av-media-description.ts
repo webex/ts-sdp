@@ -38,15 +38,6 @@ import { CodecInfo } from './codec-info';
 import { MediaDescription } from './media-description';
 
 /**
- * Describes the length being used for header extension IDs.
- */
-export enum HeaderExtIdMode {
-  OneByte,
-  TwoByte,
-  Mixed,
-}
-
-/**
  * Model a media description with type 'audio' or 'video'.
  */
 export class AvMediaDescription extends MediaDescription {
@@ -241,14 +232,14 @@ export class AvMediaDescription extends MediaDescription {
   }) {
     // eslint-disable-next-line jsdoc/require-jsdoc
     const getFirstFreeId = (): number => {
-      const inUseIds = [...this.extMaps.keys()].sort();
-      for (let idx = 0; idx < inUseIds.length; idx += 1) {
-        if (inUseIds[idx] !== idx + 1) {
-          return idx + 1;
+      let freeId = 1;
+      for (;;) {
+        if (!this.extMaps.has(freeId)) {
+          break;
         }
+        freeId += 1;
       }
-      // No 'gaps' in the IDs currently in use, so return the next number
-      return inUseIds.length + 1;
+      return freeId;
     };
 
     const extId = id || getFirstFreeId();
