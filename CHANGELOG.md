@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/webex/ts-sdp/compare/v1.3.2...v1.4.0) (2023-05-10)
+
+
+### Bug Fixes
+
+* tweak github action workflow file ([#16](https://github.com/webex/ts-sdp/issues/16)) ([dce9e2e](https://github.com/webex/ts-sdp/commit/dce9e2e0fe69a0463c74d37c20a5fc3c0f9429c5))
+
+
+### Features
+
+* add helper for adding extmap lines ([#15](https://github.com/webex/ts-sdp/issues/15)) ([b334ab7](https://github.com/webex/ts-sdp/commit/b334ab72d972aa698b36cdff6f66c6666ae8e458))
+
 ## [1.3.2](https://github.com/webex/ts-sdp/compare/v1.3.1...v1.3.2) (2023-03-20)
 
 
