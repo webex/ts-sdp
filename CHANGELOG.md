@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/webex/ts-sdp/compare/v1.4.0...v1.4.1) (2023-06-26)
+
+
+### Bug Fixes
+
+* allow comma special case in fmtp line ([#17](https://github.com/webex/ts-sdp/issues/17)) ([a11b9a2](https://github.com/webex/ts-sdp/commit/a11b9a2ca49d88535ae255e9c1d3ae673732b3e9))
+
 # [1.4.0](https://github.com/webex/ts-sdp/compare/v1.3.2...v1.4.0) (2023-05-10)
 
 
