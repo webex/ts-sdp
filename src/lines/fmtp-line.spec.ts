@@ -25,8 +25,8 @@ describe('parseFmtpParams', () => {
     expect(Object.fromEntries(fmtpParams)).toStrictEqual({ '0/5': undefined }); // chrome RED
     fmtpParams = parseFmtpParams('a=fmtp:121 0-5');
     expect(Object.fromEntries(fmtpParams)).toStrictEqual({ '0-5': undefined }); // firefox RED
-    fmtpParams = parseFmtpParams('a=fmtp:126 0-15,16');
-    expect(Object.fromEntries(fmtpParams)).toStrictEqual({ '0-15,16': undefined }); // SPARK-440089
+    fmtpParams = parseFmtpParams('a=fmtp:100 0-15,66,70');
+    expect(Object.fromEntries(fmtpParams)).toStrictEqual({ '0-15,66,70': undefined }); // telephone event
   });
   it('exceptional case', async () => {
     expect.hasAssertions();
