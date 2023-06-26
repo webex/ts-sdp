@@ -31,7 +31,8 @@ export function parseFmtpParams(fmtpParams: string) {
   const fmtpObj = new Map<string, string | undefined>();
 
   // compatible with RED，such as `a=fmtp:121 0/5` in chrome and `a=fmtp:121 0-5` in firefox, which can {@link https://www.rfc-editor.org/rfc/rfc2198}
-  if (/^\d+([/-]\d+)+$/.test(fmtpParams)) {
+  // also compatible with telephone event, such as `a=fmtp:100 0-15,66,70`, see {@link https://www.rfc-editor.org/rfc/rfc4733.html#section-2.4.1}
+  if (/^\d+([,/-]\d+)+$/.test(fmtpParams)) {
     fmtpObj.set(fmtpParams, undefined);
     return fmtpObj;
   }
