@@ -19,6 +19,15 @@ describe('parseFmtpParams', () => {
     );
     expect(Object.fromEntries(fmtpParams)).toStrictEqual(expectedValue);
   });
+  it('special case', async () => {
+    expect.hasAssertions();
+    let fmtpParams = parseFmtpParams('a=fmtp:121 0/5');
+    expect(Object.fromEntries(fmtpParams)).toStrictEqual({ '0/5': undefined }); // chrome RED
+    fmtpParams = parseFmtpParams('a=fmtp:121 0-5');
+    expect(Object.fromEntries(fmtpParams)).toStrictEqual({ '0-5': undefined }); // firefox RED
+    fmtpParams = parseFmtpParams('a=fmtp:126 0-15,16');
+    expect(Object.fromEntries(fmtpParams)).toStrictEqual({ '0-15,16': undefined }); // SPARK-440089
+  });
   it('exceptional case', async () => {
     expect.hasAssertions();
     expect(() => {

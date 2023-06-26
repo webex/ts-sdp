@@ -31,7 +31,8 @@ export function parseFmtpParams(fmtpParams: string) {
   const fmtpObj = new Map<string, string | undefined>();
 
   // compatible with RED，such as `a=fmtp:121 0/5` in chrome and `a=fmtp:121 0-5` in firefox, which can {@link https://www.rfc-editor.org/rfc/rfc2198}
-  if (/^\d+([/-]\d+)+$/.test(fmtpParams)) {
+  // also compatible with special case `a=fmtp:126 0-15,16`, see https://jira-eng-gpk2.cisco.com/jira/browse/SPARK-440089.
+  if (/^\d+([,/-]\d+)+$/.test(fmtpParams)) {
     fmtpObj.set(fmtpParams, undefined);
     return fmtpObj;
   }
