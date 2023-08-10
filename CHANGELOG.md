@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/webex/ts-sdp/compare/v1.4.1...v1.5.0) (2023-08-10)
+
+
+### Features
+
+* add retainCodecs and retainCandidates functions ([#18](https://github.com/webex/ts-sdp/issues/18)) ([8bbb081](https://github.com/webex/ts-sdp/commit/8bbb0813d810d8c8fed857be9e5bd0871ec7f2ae))
+
 ## [1.4.1](https://github.com/webex/ts-sdp/compare/v1.4.0...v1.4.1) (2023-06-26)
 
 
