@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AvMediaDescription, CodecInfo, Sdp } from './model';
+import { AvMediaDescription, CodecInfo, MediaDescription, Sdp } from './model';
 
 /**
  * Disable an rtcp-fb value from all media blocks in the given SDP.
@@ -42,17 +42,71 @@ export function disableRemb(sdp: Sdp) {
 
 /**
  * Remove the codec with the given name (as well as any secondary codecs associated with
- * it) from the media blocks in the given SDP.
+ * it) from the media blocks in the given SDP or audio/video media description.
  *
- * @param sdp - The SDP from which to remove the given codec.
- * @param codecName - The name of the codec to filter.
+ * @param sdpOrAv - The {@link Sdp} or {@link AvMediaDescription} from which to remove the given codec.
+ * @param codecName - The name of the codec to remove.
  */
-export function removeCodec(sdp: Sdp, codecName: string) {
-  sdp.avMedia.forEach((media: AvMediaDescription) => {
+export function removeCodec(sdpOrAv: Sdp | AvMediaDescription, codecName: string) {
+  const mediaDescriptions = sdpOrAv instanceof Sdp ? sdpOrAv.avMedia : [sdpOrAv];
+  mediaDescriptions.forEach((media: AvMediaDescription) => {
     const codecInfos = [...media.codecs.entries()].filter(
       ([, ci]) => ci.name?.toLowerCase() === codecName.toLowerCase()
     );
-
     codecInfos.forEach(([pt]) => media.removePt(pt));
   });
+}
+
+/**
+ * Filter out unwanted codecs from the given SDP or audio/video media description.
+ *
+ * Note: Done this way because of a feature not implemented in all browsers, currently missing in
+ * Firefox. Once that is added we can use `RTPSender.getCapabilities` and filter those to call
+ * with `RTCRtpTransceiver.setCodecPreferences` instead of doing this manually.
+ *
+ * @param sdpOrAv - The {@link Sdp} or {@link AvMediaDescription} from which to filter codecs.
+ * @param allowedCodecNames - The names of the codecs that should remain in the SDP.
+ */
+export function filterCodecs(
+  sdpOrAv: Sdp | AvMediaDescription,
+  allowedCodecNames: Array<string>
+): void {
+  const avMediaDescriptions = sdpOrAv instanceof Sdp ? sdpOrAv.avMedia : [sdpOrAv];
+  const allowedLowerCase = allowedCodecNames.map((s) => s.toLowerCase());
+
+  avMediaDescriptions
+    .map((av) => {
+      return [...av.codecs.values()].map((c) => c.name as string);
+    })
+    .flat()
+    .filter((codecName) => !allowedLowerCase.includes(codecName.toLowerCase()))
+    .forEach((unwantedCodec) => removeCodec(sdpOrAv, unwantedCodec));
+}
+
+/**
+ * Filter out unwanted candidates from the given SDP or media description by transport type.
+ *
+ * @param sdpOrMedia - The {@link Sdp} or {@link MediaDescription} from which to filter candidates.
+ * @param allowedTransportTypes - The names of the transport types of the candidates that should remain in the SDP.
+ * @returns A boolean that indicates if some candidates have been filtered out.
+ */
+export function filterCandidates(
+  sdpOrMedia: Sdp | MediaDescription,
+  allowedTransportTypes: Array<string>
+) {
+  const mediaDescriptions = sdpOrMedia instanceof Sdp ? sdpOrMedia.media : [sdpOrMedia];
+  let filtered = false;
+
+  mediaDescriptions.forEach((media) => {
+    // eslint-disable-next-line no-param-reassign
+    media.iceInfo.candidates = media.iceInfo.candidates.filter((candidate) => {
+      if (allowedTransportTypes.includes(candidate.transport.toLowerCase())) {
+        return true;
+      }
+      filtered = true;
+      return false;
+    });
+  });
+
+  return filtered;
 }
