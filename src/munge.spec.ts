@@ -60,8 +60,8 @@ describe('munging', () => {
       expect(validateOfferCodecs(parsed)).toBe(true);
     });
   });
-  describe('filterCodecs', () => {
-    it('should filter codecs correctly when passing in an SDP', () => {
+  describe('retainCodecs', () => {
+    it('should retain codecs correctly when passing in an SDP', () => {
       expect.hasAssertions();
       const offer = fs.readFileSync('./src/sdp-corpus/offer_with_extra_codecs.sdp', 'utf-8');
       const parsed = parse(offer);
@@ -69,7 +69,7 @@ describe('munging', () => {
       retainCodecs(parsed, ['h264', 'opus']);
       expect(validateOfferCodecs(parsed)).toBe(true);
     });
-    it('should filter codecs correctly when passing in an AvMediaDescription', () => {
+    it('should retain codecs correctly when passing in an AvMediaDescription', () => {
       expect.hasAssertions();
       const offer = fs.readFileSync('./src/sdp-corpus/offer_with_extra_codecs.sdp', 'utf-8');
       const parsed = parse(offer);
@@ -81,8 +81,8 @@ describe('munging', () => {
     });
   });
 
-  describe('filterCandidates', () => {
-    it('should filter candidates correctly when passing in an SDP', () => {
+  describe('retainCandidates', () => {
+    it('should retain candidates correctly when passing in an SDP', () => {
       expect.hasAssertions();
       const offer = fs.readFileSync('./src/sdp-corpus/answer_with_extra_candidates.sdp', 'utf-8');
       const parsed = parse(offer);
@@ -100,7 +100,7 @@ describe('munging', () => {
       // should return false when no candidates have been filtered out
       expect(retainCandidates(parsed, ['udp', 'tcp'])).toBeFalsy();
     });
-    it('should filter candidates correctly when passing in an AvMediaDescription', () => {
+    it('should retain candidates correctly when passing in an AvMediaDescription', () => {
       expect.hasAssertions();
       const offer = fs.readFileSync('./src/sdp-corpus/answer_with_extra_candidates.sdp', 'utf-8');
       const parsed = parse(offer);
