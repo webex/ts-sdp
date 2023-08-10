@@ -58,7 +58,8 @@ export function removeCodec(sdpOrAv: Sdp | AvMediaDescription, codecName: string
 }
 
 /**
- * Filter out unwanted codecs from the given SDP or audio/video media description.
+ * Retain specific codecs, filtering out unwanted ones from the given SDP or audio/video media
+ * description.
  *
  * Note: Done this way because of a feature not implemented in all browsers, currently missing in
  * Firefox. Once that is added we can use `RTPSender.getCapabilities` and filter those to call
@@ -67,7 +68,7 @@ export function removeCodec(sdpOrAv: Sdp | AvMediaDescription, codecName: string
  * @param sdpOrAv - The {@link Sdp} or {@link AvMediaDescription} from which to filter codecs.
  * @param allowedCodecNames - The names of the codecs that should remain in the SDP.
  */
-export function filterCodecs(
+export function retainCodecs(
   sdpOrAv: Sdp | AvMediaDescription,
   allowedCodecNames: Array<string>
 ): void {
@@ -84,13 +85,14 @@ export function filterCodecs(
 }
 
 /**
- * Filter out unwanted candidates from the given SDP or media description by transport type.
+ * Retain specific candidates, filtering out unwanted ones from the given SDP or media description
+ * by transport type.
  *
  * @param sdpOrMedia - The {@link Sdp} or {@link MediaDescription} from which to filter candidates.
  * @param allowedTransportTypes - The names of the transport types of the candidates that should remain in the SDP.
  * @returns A boolean that indicates if some candidates have been filtered out.
  */
-export function filterCandidates(
+export function retainCandidates(
   sdpOrMedia: Sdp | MediaDescription,
   allowedTransportTypes: Array<string>
 ) {

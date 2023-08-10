@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { AvMediaDescription, CodecInfo, Sdp } from './model';
-import { filterCandidates, filterCodecs, removeCodec } from './munge';
+import { removeCodec, retainCandidates, retainCodecs } from './munge';
 import { parse } from './parser';
 
 /**
@@ -66,7 +66,7 @@ describe('munging', () => {
       const offer = fs.readFileSync('./src/sdp-corpus/offer_with_extra_codecs.sdp', 'utf-8');
       const parsed = parse(offer);
 
-      filterCodecs(parsed, ['h264', 'opus']);
+      retainCodecs(parsed, ['h264', 'opus']);
       expect(validateOfferCodecs(parsed)).toBe(true);
     });
     it('should filter codecs correctly when passing in an AvMediaDescription', () => {
@@ -75,7 +75,7 @@ describe('munging', () => {
       const parsed = parse(offer);
 
       parsed.avMedia.forEach((av) => {
-        filterCodecs(av, ['h264', 'opus']);
+        retainCodecs(av, ['h264', 'opus']);
       });
       expect(validateOfferCodecs(parsed)).toBe(true);
     });
@@ -88,7 +88,7 @@ describe('munging', () => {
       const parsed = parse(offer);
 
       // should return true when some candidates have been filtered out
-      expect(filterCandidates(parsed, ['udp', 'tcp'])).toBeTruthy();
+      expect(retainCandidates(parsed, ['udp', 'tcp'])).toBeTruthy();
       parsed.media.forEach((mline) => {
         expect(mline.iceInfo.candidates).toHaveLength(4);
         expect(
@@ -98,7 +98,7 @@ describe('munging', () => {
         ).toBeTruthy();
       });
       // should return false when no candidates have been filtered out
-      expect(filterCandidates(parsed, ['udp', 'tcp'])).toBeFalsy();
+      expect(retainCandidates(parsed, ['udp', 'tcp'])).toBeFalsy();
     });
     it('should filter candidates correctly when passing in an AvMediaDescription', () => {
       expect.hasAssertions();
@@ -107,7 +107,7 @@ describe('munging', () => {
 
       parsed.media.forEach((media) => {
         // should return true when some candidates have been filtered out
-        expect(filterCandidates(media, ['udp', 'tcp'])).toBeTruthy();
+        expect(retainCandidates(media, ['udp', 'tcp'])).toBeTruthy();
         expect(media.iceInfo.candidates).toHaveLength(4);
         expect(
           media.iceInfo.candidates.every((candidate) =>
@@ -115,7 +115,7 @@ describe('munging', () => {
           )
         ).toBeTruthy();
         // should return false when no candidates have been filtered out
-        expect(filterCandidates(media, ['udp', 'tcp'])).toBeFalsy();
+        expect(retainCandidates(media, ['udp', 'tcp'])).toBeFalsy();
       });
     });
   });
