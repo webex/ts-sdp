@@ -17,13 +17,14 @@
 import { AvMediaDescription, CodecInfo, MediaDescription, Sdp } from './model';
 
 /**
- * Disable an rtcp-fb value from all media blocks in the given SDP.
+ * Disable an rtcp-fb value from the media blocks in the given SDP or audio/video media description.
  *
- * @param sdp - The SDP from which to filter an rtcp-fb value.
+ * @param sdpOrAv - The {@link Sdp} or {@link AvMediaDescription} from which to filter an rtcp-fb value.
  * @param rtcpFbValue - The rtcp-fb value to filter.
  */
-export function disableRtcpFbValue(sdp: Sdp, rtcpFbValue: string) {
-  sdp.avMedia.forEach((media: AvMediaDescription) => {
+export function disableRtcpFbValue(sdpOrAv: Sdp | AvMediaDescription, rtcpFbValue: string) {
+  const mediaDescriptions = sdpOrAv instanceof Sdp ? sdpOrAv.avMedia : [sdpOrAv];
+  mediaDescriptions.forEach((media: AvMediaDescription) => {
     media.codecs.forEach((codec: CodecInfo) => {
       // eslint-disable-next-line no-param-reassign
       codec.feedback = codec.feedback.filter((fb) => fb !== rtcpFbValue);
@@ -38,6 +39,15 @@ export function disableRtcpFbValue(sdp: Sdp, rtcpFbValue: string) {
  */
 export function disableRemb(sdp: Sdp) {
   disableRtcpFbValue(sdp, 'goog-remb');
+}
+
+/**
+ * Disable REMB from all media blocks in the given SDP.
+ *
+ * @param sdpOrAv - The {@link Sdp} or {@link AvMediaDescription} from which to filter TWCC.
+ */
+export function disableTwcc(sdpOrAv: Sdp | AvMediaDescription) {
+  disableRtcpFbValue(sdpOrAv, 'transport-cc');
 }
 
 /**

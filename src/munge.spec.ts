@@ -1,6 +1,12 @@
 import * as fs from 'fs';
 import { AvMediaDescription, CodecInfo, Sdp } from './model';
-import { removeCodec, retainCandidates, retainCodecs } from './munge';
+import {
+  removeCodec,
+  retainCandidates,
+  retainCodecs,
+  disableRtcpFbValue,
+  disableTwcc,
+} from './munge';
 import { parse } from './parser';
 
 /**
@@ -29,6 +35,29 @@ const validateOfferCodecs = (offer: Sdp): boolean => {
       });
     });
   return true;
+};
+
+/**
+ * Check that the sdp offer contains rtcpFbValue or not.
+ *
+ * @param offer - The {@link Sdp} or {@link AvMediaDescription} to validate.
+ * @param rtcpFbValue - The rtcp-fb value to check.
+ * @returns True if the offer contains rtcp-fb value.
+ */
+const checkOfferContainsRtcpFeedbacks = (
+  offer: Sdp | AvMediaDescription,
+  rtcpFbValue: string
+): boolean => {
+  let bContains = false;
+  const mediaDescriptions = offer instanceof Sdp ? offer.avMedia : [offer];
+  mediaDescriptions.forEach((av: AvMediaDescription) => {
+    av.codecs.forEach((ci: CodecInfo) => {
+      if (ci.feedback.includes(rtcpFbValue)) {
+        bContains = true;
+      }
+    });
+  });
+  return bContains;
 };
 
 describe('munging', () => {
@@ -117,6 +146,49 @@ describe('munging', () => {
         // should return false when no candidates have been filtered out
         expect(retainCandidates(media, ['udp', 'tcp'])).toBeFalsy();
       });
+    });
+  });
+
+  describe('disableRtcpFbValue', () => {
+    it('should remove rtcp feedback correctly when passing in an SDP', () => {
+      expect.hasAssertions();
+      const offer = fs.readFileSync('./src/sdp-corpus/offer_with_rtcp_feedback.sdp', 'utf-8');
+      const parsed = parse(offer);
+
+      disableRtcpFbValue(parsed, 'transport-cc');
+      expect(checkOfferContainsRtcpFeedbacks(parsed, 'transport-cc')).toBe(false);
+      expect(checkOfferContainsRtcpFeedbacks(parsed, 'goog-remb')).toBe(true);
+    });
+    it('should remove rtcp feedback correctly when passing in an AvMediaDescription', () => {
+      expect.hasAssertions();
+      const offer = fs.readFileSync('./src/sdp-corpus/offer_with_rtcp_feedback.sdp', 'utf-8');
+      const parsed = parse(offer);
+
+      parsed.avMedia
+        .filter((av) => av.type === 'audio')
+        .forEach((av) => {
+          disableRtcpFbValue(av, 'transport-cc');
+          expect(checkOfferContainsRtcpFeedbacks(av, 'transport-cc')).toBe(false);
+        });
+      expect(checkOfferContainsRtcpFeedbacks(parsed, 'transport-cc')).toBe(true);
+      expect(checkOfferContainsRtcpFeedbacks(parsed, 'goog-remb')).toBe(true);
+    });
+  });
+
+  describe('disableTwcc', () => {
+    it('should remove rtcp feedback correctly when passing in an AvMediaDescription', () => {
+      expect.hasAssertions();
+      const offer = fs.readFileSync('./src/sdp-corpus/offer_with_rtcp_feedback.sdp', 'utf-8');
+      const parsed = parse(offer);
+
+      parsed.avMedia
+        .filter((av) => av.type === 'audio')
+        .forEach((av) => {
+          disableTwcc(av);
+          expect(checkOfferContainsRtcpFeedbacks(av, 'transport-cc')).toBe(false);
+        });
+      expect(checkOfferContainsRtcpFeedbacks(parsed, 'transport-cc')).toBe(true);
+      expect(checkOfferContainsRtcpFeedbacks(parsed, 'goog-remb')).toBe(true);
     });
   });
 });
