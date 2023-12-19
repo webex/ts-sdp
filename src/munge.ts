@@ -33,16 +33,16 @@ export function disableRtcpFbValue(sdpOrAv: Sdp | AvMediaDescription, rtcpFbValu
 }
 
 /**
- * Disable REMB from all media blocks in the given SDP.
+ * Disable REMB from the media blocks in the given SDP or audio/video media description.
  *
- * @param sdp - The SDP from which to filter REMB.
+ * @param sdpOrAv - The {@link Sdp} or {@link AvMediaDescription} from which to filter REMB.
  */
-export function disableRemb(sdp: Sdp) {
-  disableRtcpFbValue(sdp, 'goog-remb');
+export function disableRemb(sdpOrAv: Sdp | AvMediaDescription) {
+  disableRtcpFbValue(sdpOrAv, 'goog-remb');
 }
 
 /**
- * Disable REMB from all media blocks in the given SDP.
+ * Disable TWCC from the media blocks in the given SDP or audio/video media description.
  *
  * @param sdpOrAv - The {@link Sdp} or {@link AvMediaDescription} from which to filter TWCC.
  */
