@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/webex/ts-sdp/compare/v1.5.0...v1.6.0) (2023-12-20)
+
+
+### Features
+
+* add disableTwcc helper function ([#19](https://github.com/webex/ts-sdp/issues/19)) ([c9ec114](https://github.com/webex/ts-sdp/commit/c9ec1143f028720378c57eb69535b8634e55fa46))
+
 # [1.5.0](https://github.com/webex/ts-sdp/compare/v1.4.1...v1.5.0) (2023-08-10)
 
 
