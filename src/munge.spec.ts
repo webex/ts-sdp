@@ -1,12 +1,15 @@
 import * as fs from 'fs';
+import { CandidateLine } from 'lines';
 import { AvMediaDescription, CodecInfo, Sdp } from './model';
 import {
+  disableRemb,
+  disableRtcpFbValue,
+  disableTwcc,
   removeCodec,
   retainCandidates,
+  retainCandidatesByTransportType,
   retainCodecs,
-  disableRtcpFbValue,
-  disableRemb,
-  disableTwcc,
+  retainCodecsByCodecName,
 } from './munge';
 import { parse } from './parser';
 
@@ -86,24 +89,41 @@ describe('munging', () => {
       expect(validateOfferCodecs(parsed)).toBe(true);
     });
   });
-  describe('retainCodecs', () => {
-    it('should retain codecs correctly when passing in an SDP', () => {
-      expect.hasAssertions();
-      const offer = fs.readFileSync('./src/sdp-corpus/offer_with_extra_codecs.sdp', 'utf-8');
-      const parsed = parse(offer);
 
-      retainCodecs(parsed, ['h264', 'opus']);
-      expect(validateOfferCodecs(parsed)).toBe(true);
-    });
+  describe('retainCodecs', () => {
     it('should retain codecs correctly when passing in an AvMediaDescription', () => {
       expect.hasAssertions();
       const offer = fs.readFileSync('./src/sdp-corpus/offer_with_extra_codecs.sdp', 'utf-8');
       const parsed = parse(offer);
 
+      // eslint-disable-next-line jsdoc/require-jsdoc
+      const predicate = (codecInfo: CodecInfo) =>
+        codecInfo.name === 'h264' || codecInfo.name === 'opus';
+
+      // should return true when some codecs have been filtered out
       parsed.avMedia.forEach((av) => {
-        retainCodecs(av, ['h264', 'opus']);
+        expect(retainCodecs(av, predicate)).toBeTruthy();
       });
       expect(validateOfferCodecs(parsed)).toBe(true);
+      // should return false when no codecs have been filtered out
+      parsed.avMedia.forEach((av) => {
+        expect(retainCodecs(av, predicate)).toBeFalsy();
+      });
+    });
+    it('should retain codecs by name when passing in an AvMediaDescription', () => {
+      expect.hasAssertions();
+      const offer = fs.readFileSync('./src/sdp-corpus/offer_with_extra_codecs.sdp', 'utf-8');
+      const parsed = parse(offer);
+
+      // should return true when some codecs have been filtered out
+      parsed.avMedia.forEach((av) => {
+        expect(retainCodecsByCodecName(av, ['h264', 'opus'])).toBeTruthy();
+      });
+      expect(validateOfferCodecs(parsed)).toBe(true);
+      // should return false when no codecs have been filtered out
+      parsed.avMedia.forEach((av) => {
+        expect(retainCodecsByCodecName(av, ['h264', 'opus'])).toBeFalsy();
+      });
     });
   });
 
@@ -113,35 +133,79 @@ describe('munging', () => {
       const offer = fs.readFileSync('./src/sdp-corpus/answer_with_extra_candidates.sdp', 'utf-8');
       const parsed = parse(offer);
 
+      // eslint-disable-next-line jsdoc/require-jsdoc
+      const predicate = (candidate: CandidateLine) =>
+        candidate.transport === 'UDP' || candidate.transport === 'TCP';
+
       // should return true when some candidates have been filtered out
-      expect(retainCandidates(parsed, ['udp', 'tcp'])).toBeTruthy();
+      expect(retainCandidates(parsed, predicate)).toBeTruthy();
       parsed.media.forEach((mline) => {
         expect(mline.iceInfo.candidates).toHaveLength(4);
         expect(
           mline.iceInfo.candidates.every((candidate) =>
-            ['udp', 'tcp'].includes(candidate.transport.toLowerCase())
+            ['UDP', 'TCP'].includes(candidate.transport)
           )
         ).toBeTruthy();
       });
       // should return false when no candidates have been filtered out
-      expect(retainCandidates(parsed, ['udp', 'tcp'])).toBeFalsy();
+      expect(retainCandidates(parsed, predicate)).toBeFalsy();
     });
-    it('should retain candidates correctly when passing in an AvMediaDescription', () => {
+    it('should retain candidates correctly when passing in a MediaDescription', () => {
+      expect.hasAssertions();
+      const offer = fs.readFileSync('./src/sdp-corpus/answer_with_extra_candidates.sdp', 'utf-8');
+      const parsed = parse(offer);
+
+      // eslint-disable-next-line jsdoc/require-jsdoc
+      const predicate = (candidate: CandidateLine) =>
+        candidate.transport === 'UDP' || candidate.transport === 'TCP';
+
+      parsed.media.forEach((media) => {
+        // should return true when some candidates have been filtered out
+        expect(retainCandidates(media, predicate)).toBeTruthy();
+        expect(media.iceInfo.candidates).toHaveLength(4);
+        expect(
+          media.iceInfo.candidates.every((candidate) =>
+            ['UDP', 'TCP'].includes(candidate.transport)
+          )
+        ).toBeTruthy();
+        // should return false when no candidates have been filtered out
+        expect(retainCandidates(media, predicate)).toBeFalsy();
+      });
+    });
+    it('should retain candidates by transport type when passing in an SDP', () => {
+      expect.hasAssertions();
+      const offer = fs.readFileSync('./src/sdp-corpus/answer_with_extra_candidates.sdp', 'utf-8');
+      const parsed = parse(offer);
+
+      // should return true when some candidates have been filtered out
+      expect(retainCandidatesByTransportType(parsed, ['UDP', 'TCP'])).toBeTruthy();
+      parsed.media.forEach((mline) => {
+        expect(mline.iceInfo.candidates).toHaveLength(4);
+        expect(
+          mline.iceInfo.candidates.every((candidate) =>
+            ['UDP', 'TCP'].includes(candidate.transport)
+          )
+        ).toBeTruthy();
+      });
+      // should return false when no candidates have been filtered out
+      expect(retainCandidatesByTransportType(parsed, ['UDP', 'TCP'])).toBeFalsy();
+    });
+    it('should retain candidates by transport type when passing in a MediaDescription', () => {
       expect.hasAssertions();
       const offer = fs.readFileSync('./src/sdp-corpus/answer_with_extra_candidates.sdp', 'utf-8');
       const parsed = parse(offer);
 
       parsed.media.forEach((media) => {
         // should return true when some candidates have been filtered out
-        expect(retainCandidates(media, ['udp', 'tcp'])).toBeTruthy();
+        expect(retainCandidatesByTransportType(media, ['UDP', 'TCP'])).toBeTruthy();
         expect(media.iceInfo.candidates).toHaveLength(4);
         expect(
           media.iceInfo.candidates.every((candidate) =>
-            ['udp', 'tcp'].includes(candidate.transport.toLowerCase())
+            ['UDP', 'TCP'].includes(candidate.transport)
           )
         ).toBeTruthy();
         // should return false when no candidates have been filtered out
-        expect(retainCandidates(media, ['udp', 'tcp'])).toBeFalsy();
+        expect(retainCandidatesByTransportType(media, ['UDP', 'TCP'])).toBeFalsy();
       });
     });
   });
