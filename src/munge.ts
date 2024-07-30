@@ -114,8 +114,9 @@ export function retainCodecsByCodecName(
 ): boolean {
   const allowedLowerCase = allowedCodecNames.map((s) => s.toLowerCase());
 
-  return retainCodecs(sdpOrAv, (codecInfo) =>
-    allowedLowerCase.includes(codecInfo.name?.toLowerCase() as string)
+  return retainCodecs(
+    sdpOrAv,
+    (codecInfo) => !!codecInfo.name && allowedLowerCase.includes(codecInfo.name.toLowerCase())
   );
 }
 
