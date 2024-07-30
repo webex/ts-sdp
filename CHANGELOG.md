@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/webex/ts-sdp/compare/v1.6.0...v1.7.0) (2024-07-30)
+
+
+### Features
+
+* update retain helpers ([#21](https://github.com/webex/ts-sdp/issues/21)) ([49b5566](https://github.com/webex/ts-sdp/commit/49b5566ea8a47c16415ce48ae698c1bcc00dca45))
+
 # [1.6.0](https://github.com/webex/ts-sdp/compare/v1.5.0...v1.6.0) (2023-12-20)
 
 
