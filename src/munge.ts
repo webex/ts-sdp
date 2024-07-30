@@ -69,53 +69,50 @@ export function removeCodec(sdpOrAv: Sdp | AvMediaDescription, codecName: string
 }
 
 /**
- * Retain specific codecs, filtering out unwanted ones from the given SDP or audio/video media
- * description. The provided predicate should take in a single {@link codecInfo}, and only codecs
- * for which the predicate returns true will be retained.
+ * Retain specific codecs, filtering out unwanted ones from the given audio/video media description.
+ * The provided predicate should take in a single {@link codecInfo}, and only codecs for which the
+ * predicate returns true will be retained.
  *
  * Note: Done this way because of a feature that was only recently implemented in all browsers,
  * previously missing in Firefox. You can also use `RTPSender.getCapabilities` and filter those to
  * call with `RTCRtpTransceiver.setCodecPreferences` instead of doing this manually.
  *
- * @param sdpOrAv - The {@link Sdp} or {@link AvMediaDescription} from which to filter codecs.
+ * @param av - The {@link AvMediaDescription} from which to filter codecs.
  * @param predicate - A function used to determine which codecs should be retained.
  * @returns A boolean that indicates if some codecs have been filtered out.
  */
 export function retainCodecs(
-  sdpOrAv: Sdp | AvMediaDescription,
+  av: AvMediaDescription,
   predicate: (codecInfo: CodecInfo) => boolean
 ): boolean {
-  const avMediaDescriptions = sdpOrAv instanceof Sdp ? sdpOrAv.avMedia : [sdpOrAv];
   let filtered = false;
 
-  avMediaDescriptions.forEach((av) => {
-    av.codecs.forEach((codecInfo) => {
-      if (!predicate(codecInfo)) {
-        av.removePt(codecInfo.pt);
-        filtered = true;
-      }
-    });
+  av.codecs.forEach((codecInfo) => {
+    if (!predicate(codecInfo)) {
+      av.removePt(codecInfo.pt);
+      filtered = true;
+    }
   });
 
   return filtered;
 }
 
 /**
- * Retain specific codecs, filtering out unwanted ones from the given SDP or audio/video media
- * description by codec name.
+ * Retain specific codecs, filtering out unwanted ones from the given audio/video media description
+ * by codec name.
  *
- * @param sdpOrAv - The {@link Sdp} or {@link AvMediaDescription} from which to filter codecs.
- * @param allowedCodecNames - The names of the codecs that should remain in the SDP.
+ * @param av - The {@link AvMediaDescription} from which to filter codecs.
+ * @param allowedCodecNames - The names of the codecs that should remain in the media description.
  * @returns A boolean that indicates if some codecs have been filtered out.
  */
 export function retainCodecsByCodecName(
-  sdpOrAv: Sdp | AvMediaDescription,
+  av: AvMediaDescription,
   allowedCodecNames: Array<string>
 ): boolean {
   const allowedLowerCase = allowedCodecNames.map((s) => s.toLowerCase());
 
   return retainCodecs(
-    sdpOrAv,
+    av,
     (codecInfo) => !!codecInfo.name && allowedLowerCase.includes(codecInfo.name.toLowerCase())
   );
 }

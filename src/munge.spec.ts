@@ -91,21 +91,6 @@ describe('munging', () => {
   });
 
   describe('retainCodecs', () => {
-    it('should retain codecs correctly when passing in an SDP', () => {
-      expect.hasAssertions();
-      const offer = fs.readFileSync('./src/sdp-corpus/offer_with_extra_codecs.sdp', 'utf-8');
-      const parsed = parse(offer);
-
-      // eslint-disable-next-line jsdoc/require-jsdoc
-      const predicate = (codecInfo: CodecInfo) =>
-        codecInfo.name === 'h264' || codecInfo.name === 'opus';
-
-      // should return true when some codecs have been filtered out
-      expect(retainCodecs(parsed, predicate)).toBeTruthy();
-      expect(validateOfferCodecs(parsed)).toBe(true);
-      // should return false when no codecs have been filtered out
-      expect(retainCodecs(parsed, predicate)).toBeFalsy();
-    });
     it('should retain codecs correctly when passing in an AvMediaDescription', () => {
       expect.hasAssertions();
       const offer = fs.readFileSync('./src/sdp-corpus/offer_with_extra_codecs.sdp', 'utf-8');
@@ -124,17 +109,6 @@ describe('munging', () => {
       parsed.avMedia.forEach((av) => {
         expect(retainCodecs(av, predicate)).toBeFalsy();
       });
-    });
-    it('should retain codecs by name when passing in an SDP', () => {
-      expect.hasAssertions();
-      const offer = fs.readFileSync('./src/sdp-corpus/offer_with_extra_codecs.sdp', 'utf-8');
-      const parsed = parse(offer);
-
-      // should return true when some codecs have been filtered out
-      expect(retainCodecsByCodecName(parsed, ['h264', 'opus'])).toBeTruthy();
-      expect(validateOfferCodecs(parsed)).toBe(true);
-      // should return false when no codecs have been filtered out
-      expect(retainCodecsByCodecName(parsed, ['h264', 'opus'])).toBeFalsy();
     });
     it('should retain codecs by name when passing in an AvMediaDescription', () => {
       expect.hasAssertions();
