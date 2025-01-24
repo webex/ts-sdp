@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/webex/ts-sdp/compare/v1.7.0...v1.8.0) (2025-01-24)
+
+
+### Features
+
+* upgrade to node 22 and yarn 1.22.22 ([#22](https://github.com/webex/ts-sdp/issues/22)) ([20a732c](https://github.com/webex/ts-sdp/commit/20a732c1734237e7a03b79882e6dfeb281e8a02a))
+
 # [1.7.0](https://github.com/webex/ts-sdp/compare/v1.6.0...v1.7.0) (2024-07-30)
 
 
