@@ -37,8 +37,13 @@ export function parseFmtpParams(fmtpParams: string) {
     return fmtpObj;
   }
 
+  // Trim any trailing semicolons
+  // eslint-disable-next-line no-param-reassign
+  fmtpParams = fmtpParams.replace(/;$/, '');
+
   fmtpParams.split(';').forEach((param) => {
     const paramArr = param && param.split('=');
+
     if (paramArr.length !== 2 || !paramArr[0] || !paramArr[1]) {
       throw new Error(`Fmtp params is invalid with ${fmtpParams}`);
     }

@@ -27,6 +27,12 @@ describe('parseFmtpParams', () => {
     expect(Object.fromEntries(fmtpParams)).toStrictEqual({ '0-5': undefined }); // firefox RED
     fmtpParams = parseFmtpParams('a=fmtp:100 0-15,66,70');
     expect(Object.fromEntries(fmtpParams)).toStrictEqual({ '0-15,66,70': undefined }); // telephone event
+    fmtpParams = parseFmtpParams('a=fmtp:45 profile=0;level-idx=19;tier=0;');
+    expect(Object.fromEntries(fmtpParams)).toStrictEqual({
+      'level-idx': '19',
+      profile: '0',
+      tier: '0',
+    }); // semicolon at the end case
   });
   it('exceptional case', async () => {
     expect.hasAssertions();
