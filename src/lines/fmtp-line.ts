@@ -37,7 +37,7 @@ export function parseFmtpParams(fmtpParams: string) {
     return fmtpObj;
   }
 
-  // Trim any trailing semicolons
+  // Trailing semicolons are not technically allowed, but we've seen some occurrences and don't want to choke on them, so strip them here
   // eslint-disable-next-line no-param-reassign
   fmtpParams = fmtpParams.replace(/;$/, '');
 
