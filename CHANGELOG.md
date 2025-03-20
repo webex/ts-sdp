@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/webex/ts-sdp/compare/v1.8.0...v1.8.1) (2025-03-20)
+
+
+### Bug Fixes
+
+* handle correctly semicolon on the end of the fmtp line ([#23](https://github.com/webex/ts-sdp/issues/23)) ([f0ce5c4](https://github.com/webex/ts-sdp/commit/f0ce5c48c4c66d8109be3abe92f02b7e8997682e))
+
 # [1.8.0](https://github.com/webex/ts-sdp/compare/v1.7.0...v1.8.0) (2025-01-24)
 
 
