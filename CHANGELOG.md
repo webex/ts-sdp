@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/webex/ts-sdp/compare/v1.8.1...v1.8.2) (2025-07-09)
+
+
+### Bug Fixes
+
+* node engines ([#24](https://github.com/webex/ts-sdp/issues/24)) ([930aeee](https://github.com/webex/ts-sdp/commit/930aeee6d61e41769abccf86962532d43fd05860))
+
 ## [1.8.1](https://github.com/webex/ts-sdp/compare/v1.8.0...v1.8.1) (2025-03-20)
 
 
