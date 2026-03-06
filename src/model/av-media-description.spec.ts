@@ -1,4 +1,4 @@
-import { ExtMapLine, MediaLine } from '../lines';
+import { ExtMapLine, MediaLine, RtcpFbLine } from '../lines';
 import { AvMediaDescription } from './av-media-description';
 
 describe('avMediaDescription', () => {
@@ -46,6 +46,17 @@ describe('avMediaDescription', () => {
       expect(() => avMediaDescription.addExtension({ uri: 'some_ext_uri1', id: 1 })).toThrow(
         'Extension with ID 1 already exists'
       );
+    });
+  });
+  describe('addLine', () => {
+    it('should apply a wildcard rtcp-fb line to all codecs', () => {
+      expect.hasAssertions();
+      const wildcardFb = new RtcpFbLine('*', 'ack ccfb');
+      avMediaDescription.addLine(wildcardFb);
+
+      avMediaDescription.codecs.forEach((codec) => {
+        expect(codec.feedback).toContain('ack ccfb');
+      });
     });
   });
 });

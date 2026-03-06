@@ -162,7 +162,11 @@ export class AvMediaDescription extends MediaDescription {
     }
     // Lines pertaining to a specific codec
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {
-      const codec = this.codecs.get(line.payloadType);
+      if (line instanceof RtcpFbLine && line.payloadType === '*') {
+        this.codecs.forEach((codec) => codec.addLine(line));
+        return true;
+      }
+      const codec = this.codecs.get(line.payloadType as number);
       if (!codec) {
         throw new Error(`Error: got line for unknown codec: ${line.toSdpLine()}`);
       }

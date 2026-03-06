@@ -24,11 +24,11 @@ import { Line } from './line';
  * a=rtcp-fb:96 goog-remb
  */
 export class RtcpFbLine extends Line {
-  payloadType: number;
+  payloadType: number | '*';
 
   feedback: string;
 
-  private static regex = new RegExp(`^rtcp-fb:(${NUM}) (${REST})`);
+  private static regex = new RegExp(`^rtcp-fb:(\\*|${NUM}) (${REST})`);
 
   /**
    * Create an RtcpFbLine from the given values.
@@ -36,7 +36,7 @@ export class RtcpFbLine extends Line {
    * @param payloadType - The payload type.
    * @param feedback - The feedback name.
    */
-  constructor(payloadType: number, feedback: string) {
+  constructor(payloadType: number | '*', feedback: string) {
     super();
     this.payloadType = payloadType;
     this.feedback = feedback;
@@ -53,7 +53,7 @@ export class RtcpFbLine extends Line {
       return undefined;
     }
     const tokens = line.match(RtcpFbLine.regex) as RegExpMatchArray;
-    const payloadType = parseInt(tokens[1], 10);
+    const payloadType = tokens[1] === '*' ? '*' : parseInt(tokens[1], 10);
     const feedback = tokens[2];
 
     return new RtcpFbLine(payloadType, feedback);
