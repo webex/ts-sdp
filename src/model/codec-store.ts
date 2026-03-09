@@ -100,7 +100,10 @@ export class CodecStore {
       throw new Error(`Error: got line for unknown codec: ${line.toSdpLine()}`);
     }
     if (line.payloadType.isWildcard()) {
-      this.wildcardFeedback.push((line as RtcpFbLine).feedback);
+      if (!(line instanceof RtcpFbLine)) {
+        throw new Error(`Error: wildcard payload type is only valid for rtcp-fb lines`);
+      }
+      this.wildcardFeedback.push(line.feedback);
     } else {
       const codec = this.codecs.get(line.payloadType.value as number) as CodecInfo;
       codec.addLine(line);

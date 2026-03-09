@@ -111,6 +111,13 @@ describe('codecStore', () => {
       );
     });
 
+    it('should throw for a wildcard non-RtcpFbLine', () => {
+      expect.hasAssertions();
+      expect(() => store.addLine(new RtpMapLine(new PayloadTypeRef('*'), 'VP8', 90000))).toThrow(
+        /wildcard/i
+      );
+    });
+
     it('should apply wildcard feedback to codecs added after the wildcard line', () => {
       expect.hasAssertions();
       store.addLine(new RtcpFbLine(new PayloadTypeRef('*'), 'goog-remb'));
