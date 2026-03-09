@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { FmtpLine, Line, RtcpFbLine, RtpMapLine } from '../lines';
+import { FmtpLine, Line, PayloadTypeRef, RtcpFbLine, RtpMapLine } from '../lines';
 import { SdpBlock } from './sdp-block';
 
 /**
@@ -82,16 +82,21 @@ export class CodecInfo implements SdpBlock {
     // First the RtpMap
     if (this.name && this.clockRate) {
       lines.push(
-        new RtpMapLine(this.pt, this.name as string, this.clockRate as number, this.encodingParams)
+        new RtpMapLine(
+          new PayloadTypeRef(this.pt),
+          this.name as string,
+          this.clockRate as number,
+          this.encodingParams
+        )
       );
     }
     // Now all RtcpFb
     this.feedback.forEach((fb) => {
-      lines.push(new RtcpFbLine(this.pt, fb));
+      lines.push(new RtcpFbLine(new PayloadTypeRef(this.pt), fb));
     });
     // Now all Fmtp
     if (this.fmtParams.size > 0) {
-      lines.push(new FmtpLine(this.pt, this.fmtParams));
+      lines.push(new FmtpLine(new PayloadTypeRef(this.pt), this.fmtParams));
     }
     return lines;
   }

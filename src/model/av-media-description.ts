@@ -35,6 +35,7 @@ import {
   SsrcLine,
 } from '../lines';
 import { CodecInfo } from './codec-info';
+import { CodecStore } from './codec-store';
 import { MediaDescription } from './media-description';
 
 /**
@@ -49,7 +50,7 @@ export class AvMediaDescription extends MediaDescription {
 
   simulcast?: SimulcastLine;
 
-  codecs: Map<number, CodecInfo> = new Map();
+  codecs: CodecStore = new CodecStore();
 
   direction?: MediaDirection;
 
@@ -115,7 +116,7 @@ export class AvMediaDescription extends MediaDescription {
     if (this.direction) {
       lines.push(new DirectionLine(this.direction as MediaDirection));
     }
-    this.codecs.forEach((codec) => lines.push(...codec.toLines()));
+    lines.push(...this.codecs.toLines());
 
     lines.push(...this.ssrcs);
     lines.push(...this.ssrcGroups);
@@ -162,11 +163,7 @@ export class AvMediaDescription extends MediaDescription {
     }
     // Lines pertaining to a specific codec
     if (line instanceof RtpMapLine || line instanceof FmtpLine || line instanceof RtcpFbLine) {
-      const codec = this.codecs.get(line.payloadType);
-      if (!codec) {
-        throw new Error(`Error: got line for unknown codec: ${line.toSdpLine()}`);
-      }
-      codec.addLine(line);
+      this.codecs.addLine(line);
       return true;
     }
     if (line instanceof SsrcLine) {

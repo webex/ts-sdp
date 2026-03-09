@@ -26,10 +26,7 @@ import { AvMediaDescription, CodecInfo, MediaDescription, Sdp } from './model';
 export function disableRtcpFbValue(sdpOrAv: Sdp | AvMediaDescription, rtcpFbValue: string) {
   const mediaDescriptions = sdpOrAv instanceof Sdp ? sdpOrAv.avMedia : [sdpOrAv];
   mediaDescriptions.forEach((media: AvMediaDescription) => {
-    media.codecs.forEach((codec: CodecInfo) => {
-      // eslint-disable-next-line no-param-reassign
-      codec.feedback = codec.feedback.filter((fb) => fb !== rtcpFbValue);
-    });
+    media.codecs.removeFeedback(rtcpFbValue);
   });
 }
 

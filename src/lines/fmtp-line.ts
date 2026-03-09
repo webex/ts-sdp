@@ -16,6 +16,7 @@
 
 import { NUM, REST } from '../regex-helpers';
 import { Line } from './line';
+import { PayloadTypeRef } from './payload-type-ref';
 
 /**
  * Parse the fmtpParams because SDP has no such util function for that.
@@ -60,7 +61,7 @@ export function parseFmtpParams(fmtpParams: string) {
  * a=fmtp:97 apt=96
  */
 export class FmtpLine extends Line {
-  payloadType: number;
+  payloadType: PayloadTypeRef;
 
   params: Map<string, string | undefined>;
 
@@ -72,7 +73,7 @@ export class FmtpLine extends Line {
    * @param payloadType - The payload type.
    * @param params - The fmtp parameters.
    */
-  constructor(payloadType: number, params: Map<string, string | undefined>) {
+  constructor(payloadType: PayloadTypeRef, params: Map<string, string | undefined>) {
     super();
     this.payloadType = payloadType;
     this.params = params;
@@ -89,7 +90,7 @@ export class FmtpLine extends Line {
       return undefined;
     }
     const tokens = line.match(FmtpLine.regex) as RegExpMatchArray;
-    const payloadType = parseInt(tokens[1], 10);
+    const payloadType = new PayloadTypeRef(parseInt(tokens[1], 10));
     const params = tokens[2];
 
     return new FmtpLine(payloadType, parseFmtpParams(params));

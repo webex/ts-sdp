@@ -16,6 +16,7 @@
 
 import { NUM, REST } from '../regex-helpers';
 import { Line } from './line';
+import { PayloadTypeRef } from './payload-type-ref';
 
 /**
  * Implementation of an rtcp-fb attribute as defined by https://datatracker.ietf.org/doc/html/rfc4585#section-4.2.
@@ -24,11 +25,11 @@ import { Line } from './line';
  * a=rtcp-fb:96 goog-remb
  */
 export class RtcpFbLine extends Line {
-  payloadType: number;
+  payloadType: PayloadTypeRef;
 
   feedback: string;
 
-  private static regex = new RegExp(`^rtcp-fb:(${NUM}) (${REST})`);
+  private static regex = new RegExp(`^rtcp-fb:(${NUM}|\\*) (${REST})`);
 
   /**
    * Create an RtcpFbLine from the given values.
@@ -36,7 +37,7 @@ export class RtcpFbLine extends Line {
    * @param payloadType - The payload type.
    * @param feedback - The feedback name.
    */
-  constructor(payloadType: number, feedback: string) {
+  constructor(payloadType: PayloadTypeRef, feedback: string) {
     super();
     this.payloadType = payloadType;
     this.feedback = feedback;
@@ -53,7 +54,9 @@ export class RtcpFbLine extends Line {
       return undefined;
     }
     const tokens = line.match(RtcpFbLine.regex) as RegExpMatchArray;
-    const payloadType = parseInt(tokens[1], 10);
+    const ptToken = tokens[1];
+    const payloadType =
+      ptToken === '*' ? new PayloadTypeRef('*') : new PayloadTypeRef(parseInt(ptToken, 10));
     const feedback = tokens[2];
 
     return new RtcpFbLine(payloadType, feedback);
