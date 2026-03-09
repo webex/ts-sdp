@@ -234,6 +234,17 @@ describe('munging', () => {
       expect(checkOfferContainsRtcpFeedback(parsed, 'transport-cc')).toBe(true);
       expect(checkOfferContainsRtcpFeedback(parsed, 'goog-remb')).toBe(true);
     });
+    it('should remove wildcard rtcp feedback from serialized output', () => {
+      expect.hasAssertions();
+      const sdp = fs.readFileSync('./src/sdp-corpus/wildcard_rtcpfb.sdp', 'utf-8');
+      const parsed = parse(sdp);
+
+      disableRtcpFbValue(parsed, 'goog-remb');
+      const output = parsed.toString();
+      expect(output).not.toContain('a=rtcp-fb:* goog-remb');
+      expect(output).toContain('a=rtcp-fb:* nack\r\n');
+      expect(output).toContain('a=rtcp-fb:96 ccm fir');
+    });
   });
 
   describe('disableTwcc', () => {
