@@ -157,10 +157,10 @@ describe('parsing', () => {
     );
   });
 
-  describe('answer with wildcard rtcp-fb', () => {
-    it('should parse correctly', () => {
+  describe('wildcard rtcp-fb', () => {
+    it('should round-trip correctly', () => {
       expect.hasAssertions();
-      const file = fs.readFileSync('./src/sdp-corpus/answer_with_extra_candidates.sdp', 'utf-8');
+      const file = fs.readFileSync('./src/sdp-corpus/wildcard_rtcpfb.sdp', 'utf-8');
       const result = parse(file);
       const str = result.toString();
       compareSdps(str, file);
