@@ -1,3 +1,14 @@
+## [2.0.0](https://github.com/webex/ts-sdp/compare/v1.8.2...v2.0.0) (2026-03-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* correctly support wildcard payload types in feedback lines (#27)
+
+### Bug Fixes
+
+* correctly support wildcard payload types in feedback lines ([#27](https://github.com/webex/ts-sdp/issues/27)) ([55a42a9](https://github.com/webex/ts-sdp/commit/55a42a9462309df593da06fdee7facd4136a8d89))
+
 ## [1.8.2](https://github.com/webex/ts-sdp/compare/v1.8.1...v1.8.2) (2025-07-09)
 
 
