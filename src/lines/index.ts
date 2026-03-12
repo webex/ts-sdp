@@ -31,6 +31,7 @@ export * from './max-message-size-line';
 export * from './media-line';
 export * from './mid-line';
 export * from './origin-line';
+export * from './payload-type-ref';
 export * from './rid-line';
 export * from './rtcp-mux-line';
 export * from './rtcpfb-line';

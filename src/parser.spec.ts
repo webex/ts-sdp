@@ -157,6 +157,16 @@ describe('parsing', () => {
     );
   });
 
+  describe('wildcard rtcp-fb', () => {
+    it('should round-trip correctly', () => {
+      expect.hasAssertions();
+      const file = fs.readFileSync('./src/sdp-corpus/wildcard_rtcpfb.sdp', 'utf-8');
+      const result = parse(file);
+      const str = result.toString();
+      compareSdps(str, file);
+    });
+  });
+
   it('should handle media sections without any rtpmap lines', () => {
     expect.hasAssertions();
     const sdpWithoutRtpmapLines = fs.readFileSync('./src/sdp-corpus/without_rtpmap.sdp', 'utf-8');

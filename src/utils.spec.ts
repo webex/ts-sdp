@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { MediaLine, RtpMapLine } from './lines';
+import { MediaLine, PayloadTypeRef, RtpMapLine } from './lines';
 import { AvMediaDescription } from './model';
 import { hasCodec } from './utils';
 
@@ -24,7 +24,7 @@ describe('hasCodec', () => {
     const mLine = new AvMediaDescription(
       new MediaLine('video', 9, 'UDP/TLS/RTP/SAVPF', ['96', '97', '98', '99', '100', '101', '127'])
     );
-    mLine.addLine(new RtpMapLine(96, 'h264', 9000));
+    mLine.addLine(new RtpMapLine(new PayloadTypeRef(96), 'h264', 9000));
 
     expect(hasCodec('h264', mLine)).toBe(true);
     expect(hasCodec('H264', mLine)).toBe(true);

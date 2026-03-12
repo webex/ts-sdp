@@ -16,6 +16,7 @@
 
 import { NUM } from '../regex-helpers';
 import { Line } from './line';
+import { PayloadTypeRef } from './payload-type-ref';
 
 /**
  * Definition of an rtpmap attribute line as defined in https://datatracker.ietf.org/doc/html/rfc4566#section-6.
@@ -24,7 +25,7 @@ import { Line } from './line';
  * a=rtpmap:96 VP8/90000
  */
 export class RtpMapLine extends Line {
-  payloadType: number;
+  payloadType: PayloadTypeRef;
 
   encodingName: string;
 
@@ -52,7 +53,7 @@ export class RtpMapLine extends Line {
    * @param encodingParams - Optional additional encoding parameters.
    */
   constructor(
-    payloadType: number,
+    payloadType: PayloadTypeRef,
     encodingName: string,
     clockRate: number,
     encodingParams?: string
@@ -75,7 +76,7 @@ export class RtpMapLine extends Line {
       return undefined;
     }
     const tokens = line.match(RtpMapLine.regex) as RegExpMatchArray;
-    const payloadType = parseInt(tokens[1], 10);
+    const payloadType = new PayloadTypeRef(parseInt(tokens[1], 10));
     const encodingName = tokens[2];
     const clockRate = parseInt(tokens[3], 10);
     // encodingParams, if present, will be in index 4
