@@ -11,7 +11,7 @@ describe('codecStore', () => {
     store.set(97, new CodecInfo(97));
   });
 
-  describe('basic map operations', () => {
+  describe('codec storage operations', () => {
     it('should get a codec by pt', () => {
       expect.hasAssertions();
       expect(store.get(96)).toBeDefined();
