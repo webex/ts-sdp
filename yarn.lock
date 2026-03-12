@@ -2427,7 +2427,7 @@ conventional-changelog-angular@^5.0.0, conventional-changelog-angular@^5.0.11:
     compare-func "^2.0.0"
     q "^1.5.1"
 
-conventional-changelog-conventionalcommits@^4.3.1:
+conventional-changelog-conventionalcommits@^4.3.1, conventional-changelog-conventionalcommits@^4.6.3:
   version "4.6.3"
   resolved "https://registry.npmjs.org/conventional-changelog-conventionalcommits/-/conventional-changelog-conventionalcommits-4.6.3.tgz"
   integrity sha512-LTTQV4fwOM4oLPad317V/QNQ1FY4Hju5qeBIM1uTHbrnCE+Eg4CdRZ3gO2pUeR+tzWdp80M2j3qFFEDWVqOV4g==
@@ -2435,13 +2435,6 @@ conventional-changelog-conventionalcommits@^4.3.1:
     compare-func "^2.0.0"
     lodash "^4.17.15"
     q "^1.5.1"
-
-conventional-changelog-conventionalcommits@^9.3.0:
-  version "9.3.0"
-  resolved "https://registry.yarnpkg.com/conventional-changelog-conventionalcommits/-/conventional-changelog-conventionalcommits-9.3.0.tgz#763e66613f49c13567f6319987e9f45ae41eda24"
-  integrity sha512-kYFx6gAyjSIMwNtASkI3ZE99U1fuVDJr0yTYgVy+I2QG46zNZfl2her+0+eoviG82c5WQvW1jMt1eOQTeJLodA==
-  dependencies:
-    compare-func "^2.0.0"
 
 conventional-changelog-writer@^5.0.0:
   version "5.0.1"
