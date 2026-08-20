@@ -1,2 +1,6 @@
 # package.json is formatted by package managers, so we ignore it here
 package.json
+
+# Generated API documentation and the repository policy template are maintained separately
+docs/api/
+.github/pull_request_template.md
