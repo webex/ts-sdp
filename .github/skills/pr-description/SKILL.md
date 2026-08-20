@@ -5,7 +5,7 @@ description: Draft accurate ts-sdp pull-request descriptions from the repository
 
 # PR Description
 
-Create a concise pull-request description that helps reviewers understand and verify parser, model, munging, package, and compatibility effects.
+Create a concise, reader-friendly pull-request description that helps reviewers understand why the change matters, what behavior changes, and how it was verified.
 
 ## Sources
 
@@ -31,9 +31,16 @@ Repository files and observed results are authoritative. Do not invent motivatio
 
 ## Description rules
 
-- Under `Description`, start with one to three bullets explaining what changed and why.
+- Under `Description`, start with two to four short bullets that explain the developer or user outcome.
+- Lead with why the change is useful, then explain what changed to achieve it.
+- Use plain language, active voice, and short sentences. Explain an unavoidable technical term the first time it appears.
+- Prefer outcomes such as “documentation commands cannot remove contributor guides” over implementation phrases such as “isolate generated output.”
+- Describe behavior and developer outcomes instead of listing changed files or repeating the diff.
+- Include implementation details only when they help a reviewer evaluate correctness or compatibility.
+- State important non-effects directly, such as “This does not change runtime behavior or the public API.”
 - Add a short `Testing` subsection under `Description` with only commands and manual checks that actually ran.
-- Describe behavior and developer outcomes instead of listing changed files.
+- Summarize warnings or partial results in plain language and identify whether they existed before the change.
+- When manual testing was not needed, explain why in one sentence.
 - Call out accepted SDP forms, round-trip behavior, public API impact, declaration changes, package compatibility, dependency changes, migration steps, or semantic-version impact only when supported by the diff.
 - Preserve the `This change implements...`, breaking-change, certification, and Generative AI sections.
 - Keep checkboxes unchecked when evidence or author input is missing.
@@ -41,6 +48,16 @@ Repository files and observed results are authoritative. Do not invent motivatio
 - Never select a Generative AI disclosure category for the author.
 - Do not add a dedicated risk section.
 - Use only public links in this public repository.
+
+## Wording example
+
+Avoid:
+
+> Preserve maintained documentation by isolating generated TypeDoc output and extend formatting and spelling checks to the new documentation.
+
+Prefer:
+
+> Keep generated API documentation separate from contributor guides so documentation commands cannot remove maintained content. Include the new guides in formatting and spell checks.
 
 ## Output
 
