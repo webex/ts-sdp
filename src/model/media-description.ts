@@ -126,4 +126,48 @@ export abstract class MediaDescription implements SdpBlock {
     // If it didn't match anything else, see if IceInfo wants it.
     return this.iceInfo.addLine(line);
   }
+
+  /**
+   * Remove a line from the media description by key.
+   *
+   * @param key - The key of the line to be removed.
+   * @returns True if a line was removed; false otherwise.
+   */
+  removeLineByKey(key: keyof MediaDescription): boolean {
+    if (key === 'bandwidth' && this.bandwidth) {
+      delete this.bandwidth;
+      return true;
+    }
+    if (key === 'mid' && this.mid) {
+      delete this.mid;
+      return true;
+    }
+    if (key === 'fingerprint' && this.fingerprint) {
+      delete this.fingerprint;
+      return true;
+    }
+    if (key === 'setup' && this.setup) {
+      delete this.setup;
+      return true;
+    }
+    if (key === 'connection' && this.connection) {
+      delete this.connection;
+      return true;
+    }
+    if (key === 'content' && this.content) {
+      delete this.content;
+      return true;
+    }
+
+    // The 'otherLines' key would represent any other line in otherLines.
+    if (key === 'otherLines') {
+      // Here we can implement logic to handle removal from otherLines if needed.
+
+      // For now, we can just return false to indicate no action taken.
+      return false;
+    }
+
+    // If the key is not found, return false.
+    return false;
+  }
 }
